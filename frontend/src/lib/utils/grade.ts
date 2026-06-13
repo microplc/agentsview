@@ -31,21 +31,21 @@ const outcomeIcons: Record<string, string> = {
   completed: "\u2713", // checkmark
   abandoned: "\u26A0", // warning
   errored: "\u2717",   // x
-  unknown: "?",
+  未知: "?",
 };
 
 const outcomeColors: Record<string, string> = {
   completed: "var(--accent-green)",
   abandoned: "var(--accent-amber)",
   errored: "var(--accent-red)",
-  unknown: "var(--text-muted)",
+  未知: "var(--text-muted)",
 };
 
 const outcomeLabels: Record<string, string> = {
-  completed: "Completed",
+  completed: "已完成",
   abandoned: "Abandoned",
-  errored: "Errored",
-  unknown: "Outcome unknown",
+  errored: "错误ed",
+  未知: "Outcome 未知",
 };
 
 export function getOutcomeIcon(outcome: string): string {
@@ -78,7 +78,7 @@ export function getPenaltyLabel(key: string): string {
 
 const basisLabels: Record<string, string> = {
   outcome: "Outcome",
-  tool_health: "Tool health",
+  tool_health: "到ol health",
   context_pressure: "Context pressure",
 };
 
@@ -86,7 +86,7 @@ export function getBasisLabel(key: string): string {
   return basisLabels[key] ?? key;
 }
 
-export function scoreToGrade(score: number): string {
+export function score到Grade(score: number): string {
   if (score >= 90) return "A";
   if (score >= 75) return "B";
   if (score >= 60) return "C";

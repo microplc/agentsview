@@ -1,18 +1,18 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { insights } from "../../stores/insights.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { sync } from "../../stores/sync.svelte.js";
   import { renderMarkdown } from "../../utils/markdown.js";
   import { highlightCodeFences } from "../../utils/highlight-fences.js";
-  import type { InsightType, AgentName } from "../../api/types.js";
-  import ProjectTypeahead from "../layout/ProjectTypeahead.svelte";
+  import type { InsightType, 代理Name } from "../../api/types.js";
+  import 项目Typeahead from "../layout/项目Typeahead.svelte";
   import {
-    LightbulbIcon,
+    浅色bulbIcon,
     MousePointer2Icon,
     PencilIcon,
     PlusIcon,
-    TrashIcon,
+    回收站Icon,
     TriangleAlertIcon,
     XIcon,
   } from "../../icons.js";
@@ -22,19 +22,19 @@
     | "range_activity"
     | "agent_analysis";
 
-  let promptExpanded = $state(false);
-  const readOnly = $derived(
-    sync.serverVersion?.read_only === true,
+  let prompt展开ed = $state(false);
+  const read开ly = $derived(
+    sync.server版本?.read_only === true,
   );
   const generationUnavailable = $derived(
-    sync.serverVersion === null || readOnly,
+    sync.server版本 === null || read开ly,
   );
 
   const uiMode: UIMode = $derived.by(() => {
     if (insights.type === "agent_analysis") {
       return "agent_analysis";
     }
-    if (insights.dateFrom !== insights.dateTo) {
+    if (insights.date从 !== insights.date到) {
       return "range_activity";
     }
     return "daily_activity";
@@ -49,12 +49,12 @@
     const mode = select.value as UIMode;
     if (mode === "range_activity") {
       insights.setType("daily_activity");
-      if (insights.dateFrom === insights.dateTo) {
+      if (insights.date从 === insights.date到) {
         const d = new Date(
-          insights.dateFrom + "T00:00:00",
+          insights.date从 + "T00:00:00",
         );
         d.setDate(d.getDate() + 6);
-        insights.setDateTo(localDateStr(d));
+        insights.setDate到(localDateStr(d));
       }
     } else {
       insights.setType(
@@ -62,29 +62,29 @@
           ? "agent_analysis"
           : "daily_activity",
       );
-      insights.setDateTo(insights.dateFrom);
+      insights.setDate到(insights.date从);
     }
   }
 
   function handleDateChange(e: Event) {
     const input = e.target as HTMLInputElement;
-    insights.setDateFrom(input.value);
-    insights.setDateTo(input.value);
+    insights.setDate从(input.value);
+    insights.setDate到(input.value);
   }
 
-  function handleDateFromChange(e: Event) {
+  function handleDate从Change(e: Event) {
     const input = e.target as HTMLInputElement;
-    insights.setDateFrom(input.value);
-    if (input.value > insights.dateTo) {
-      insights.setDateTo(input.value);
+    insights.setDate从(input.value);
+    if (input.value > insights.date到) {
+      insights.setDate到(input.value);
     }
   }
 
-  function handleDateToChange(e: Event) {
+  function handleDate到Change(e: Event) {
     const input = e.target as HTMLInputElement;
-    insights.setDateTo(input.value);
-    if (input.value < insights.dateFrom) {
-      insights.setDateFrom(input.value);
+    insights.setDate到(input.value);
+    if (input.value < insights.date从) {
+      insights.setDate从(input.value);
     }
   }
 
@@ -92,8 +92,8 @@
     const today = new Date();
     const from = new Date(today);
     from.setDate(from.getDate() - days);
-    insights.setDateFrom(localDateStr(from));
-    insights.setDateTo(localDateStr(today));
+    insights.setDate从(localDateStr(from));
+    insights.setDate到(localDateStr(today));
   }
 
   function localDateStr(d: Date): string {
@@ -103,16 +103,16 @@
     return `${y}-${m}-${day}`;
   }
 
-  function handleProjectChange(value: string) {
-    insights.setProject(value);
+  function handle项目Change(value: string) {
+    insights.set项目(value);
   }
 
-  function handleAgentChange(e: Event) {
+  function handle代理Change(e: Event) {
     const select = e.target as HTMLSelectElement;
-    insights.setAgent(select.value as AgentName);
+    insights.set代理(select.value as 代理Name);
   }
 
-  function handleGenerate() {
+  function handle生成() {
     if (generationUnavailable) return;
     insights.generate();
   }
@@ -155,10 +155,10 @@
     from: string,
     to: string,
   ): string {
-    if (type === "agent_analysis") return "Agent Analysis";
+    if (type === "agent_analysis") return "代理 Analysis";
     return from === to
-      ? "Daily Activity"
-      : "Date Range Activity";
+      ? "每日活动"
+      : "日期范围活动";
   }
 
   function typeShort(
@@ -171,7 +171,7 @@
   }
 
   onMount(() => {
-    sessions.loadProjects();
+    个会话.load项目s();
     insights.load();
   });
 </script>
@@ -184,57 +184,57 @@
         value={uiMode}
         onchange={handleModeChange}
       >
-        <option value="daily_activity">Daily Activity</option>
-        <option value="range_activity">Date Range Activity</option>
-        <option value="agent_analysis">Agent Analysis</option>
+        <option value="daily_activity">每日活动</option>
+        <option value="range_activity">日期范围活动</option>
+        <option value="agent_analysis">代理 Analysis</option>
       </select>
 
       {#if isRangeMode(uiMode)}
         <div class="date-range-group">
           <div class="controls-row">
             <label class="date-label">
-              <span class="date-label-text">From</span>
+              <span class="date-label-text">从</span>
               <input
                 type="date"
                 class="ctrl date-ctrl"
-                value={insights.dateFrom}
-                onchange={handleDateFromChange}
+                value={insights.date从}
+                onchange={handleDate从Change}
               />
             </label>
             <label class="date-label">
-              <span class="date-label-text">To</span>
+              <span class="date-label-text">到</span>
               <input
                 type="date"
                 class="ctrl date-ctrl"
-                value={insights.dateTo}
-                onchange={handleDateToChange}
+                value={insights.date到}
+                onchange={handleDate到Change}
               />
             </label>
           </div>
           <div class="presets-row">
-            <button class="preset-btn" onclick={() => setPreset(6)}>Last 7 days</button>
-            <button class="preset-btn" onclick={() => setPreset(29)}>Last 30 days</button>
+            <button class="preset-btn" onclick={() => setPreset(6)}>最近 7 天</button>
+            <button class="preset-btn" onclick={() => setPreset(29)}>最近 30 天</button>
           </div>
         </div>
       {:else}
         <input
           type="date"
           class="ctrl date-ctrl"
-          value={insights.dateFrom}
+          value={insights.date从}
           onchange={handleDateChange}
         />
       {/if}
 
       <div class="controls-row">
-        <ProjectTypeahead
-          projects={sessions.projects}
+        <项目Typeahead
+          个项目={个会话.个项目}
           value={insights.project}
-          onselect={handleProjectChange}
+          onselect={handle项目Change}
         />
         <select
           class="ctrl agent-ctrl"
           value={insights.agent}
-          onchange={handleAgentChange}
+          onchange={handle代理Change}
         >
           <option value="claude">Claude</option>
           <option value="codex">Codex</option>
@@ -244,10 +244,10 @@
         </select>
       </div>
 
-      {#if promptExpanded}
+      {#if prompt展开ed}
         <textarea
           class="prompt-area"
-          placeholder="Steer the insight with additional context..."
+          placeholder="用额外上下文引导洞察..."
           bind:value={insights.promptText}
           rows="3"
         ></textarea>
@@ -256,29 +256,29 @@
       <div class="action-row">
         <button
           class="prompt-toggle"
-          onclick={() => promptExpanded = !promptExpanded}
-          title={promptExpanded ? "Hide prompt" : "Add custom prompt"}
+          onclick={() => prompt展开ed = !prompt展开ed}
+          title={prompt展开ed ? "隐藏 prompt" : "添加自定义提示"}
         >
           <PencilIcon size="12" strokeWidth="2" aria-hidden="true" />
-          {promptExpanded ? "Hide" : "Prompt"}
+          {prompt展开ed ? "隐藏" : "提示"}
         </button>
         <button
           class="generate-btn"
-          onclick={handleGenerate}
+          onclick={handle生成}
           disabled={insights.loading || generationUnavailable}
-          title={readOnly
-            ? "Unavailable in read-only remote mode"
-            : sync.serverVersion === null
-              ? "Waiting for server version"
-              : "Generate insight"}
+          title={read开ly
+            ? "只读远程模式下不可用"
+            : sync.server版本 === null
+              ? "正在等待 server version"
+              : "生成 insight"}
         >
           <PlusIcon class="generate-icon" size="12" strokeWidth="2.2" aria-hidden="true" />
-          Generate
+          生成
         </button>
       </div>
-      {#if readOnly}
+      {#if read开ly}
         <div class="readonly-note">
-          Read-only remote mode cannot save generated insights.
+          只读远程模式无法保存生成的洞察。
         </div>
       {/if}
     </div>
@@ -290,7 +290,7 @@
             {#if insights.generatingCount > 0}
               <span class="live-dot"></span>
             {/if}
-            Tasks
+            任务
             <span class="active-count">{insights.tasks.length}</span>
           </span>
           {#if insights.generatingCount > 1}
@@ -298,7 +298,7 @@
               class="cancel-all"
               onclick={() => insights.cancelAll()}
             >
-              Stop all
+              全部停止
             </button>
           {/if}
         </div>
@@ -322,13 +322,13 @@
             <div class="task-body">
               <div class="task-main">
                 <span class="task-label">
-                  {typeShort(task.type, task.dateFrom, task.dateTo)}
+                  {typeShort(task.type, task.date从, task.date到)}
                   <span class="task-date">
-                    {formatDateRange(task.dateFrom, task.dateTo)}
+                    {formatDateRange(task.date从, task.date到)}
                   </span>
                 </span>
                 <span class="task-scope">
-                  {task.project || "global"}
+                  {task.project || "全局"}
                 </span>
               </div>
               {#if task.status === "error"}
@@ -348,7 +348,7 @@
                   insights.cancelTask(task.clientId);
                 }
               }}
-              title={task.status === "error" ? "Dismiss" : "Cancel"}
+              title={task.status === "error" ? "忽略" : "取消"}
             >
               <XIcon size="8" strokeWidth="2.4" aria-hidden="true" />
             </button>
@@ -360,20 +360,20 @@
       {/if}
 
       {#if insights.loading}
-        <div class="list-status">Loading...</div>
+        <div class="list-status">加载中...</div>
       {:else if insights.items.length === 0 && insights.tasks.length === 0}
         <div class="empty-state">
           <div class="empty-glyph">
-            <LightbulbIcon size="28" strokeWidth="1.5" aria-hidden="true" />
+            <浅色bulbIcon size="28" strokeWidth="1.5" aria-hidden="true" />
           </div>
           <span class="empty-text">
-            Generate an insight to analyze your sessions
+            生成 an insight to analyze your 个会话
           </span>
         </div>
       {:else}
         {#if insights.tasks.length > 0}
           <div class="list-section-header completed-header">
-            <span class="section-title">Completed</span>
+            <span class="section-title">已完成</span>
           </div>
         {/if}
         {#each insights.items as s (s.id)}
@@ -391,7 +391,7 @@
               <span class="row-title">
                 {typeShort(s.type, s.date_from, s.date_to)}
                 <span class="row-scope">
-                  {s.project || "global"}
+                  {s.project || "全局"}
                 </span>
               </span>
               <span class="row-meta">
@@ -419,18 +419,18 @@
               class:badge-red={task.status === "error"}
               class:badge-blue={task.status !== "error"}
             >
-              {task.status === "error" ? "Error" : "Generating"}
+              {task.status === "error" ? "错误" : "生成中"}
             </span>
             <span class="header-date">
-              {typeShort(task.type, task.dateFrom, task.dateTo)}
-              {formatDateRange(task.dateFrom, task.dateTo)}
+              {typeShort(task.type, task.date从, task.date到)}
+              {formatDateRange(task.date从, task.date到)}
             </span>
             <button
               class="delete-btn"
               onclick={() => task.status === "error"
                 ? insights.dismissTask(task.clientId)
                 : insights.cancelTask(task.clientId)}
-              title={task.status === "error" ? "Dismiss" : "Cancel"}
+              title={task.status === "error" ? "忽略" : "取消"}
             >
               <XIcon size="14" strokeWidth="2.2" aria-hidden="true" />
             </button>
@@ -439,7 +439,7 @@
             {#if task.project}
               <span class="detail-chip">{task.project}</span>
             {:else}
-              <span class="detail-chip muted">global</span>
+              <span class="detail-chip muted">全局</span>
             {/if}
             <span class="detail-text">{task.agent}</span>
           </div>
@@ -453,8 +453,8 @@
         {#if task.logs.length > 0}
           <div class="task-detail-logs" role="log">
             <div class="task-detail-logs-header">
-              Execution Log
-              <span class="log-count">{task.logs.length} lines</span>
+              执行日志
+              <span class="log-count">{task.logs.length} 行</span>
             </div>
             <div class="task-detail-logs-body">
               {#each task.logs as entry}
@@ -474,7 +474,7 @@
               <span class="orbit-ring"></span>
               <span class="orbit-dot"></span>
             </div>
-            <span class="gen-label">Waiting for {task.agent}...</span>
+            <span class="gen-label">正在等待 {task.agent}...</span>
           </div>
         {/if}
       </div>
@@ -503,16 +503,16 @@
                   insights.deleteItem(insights.selectedItem.id);
                 }
               }}
-              title="Delete this insight"
+              title="删除 this insight"
             >
-              <TrashIcon size="14" strokeWidth="1.8" aria-hidden="true" />
+              <回收站Icon size="14" strokeWidth="1.8" aria-hidden="true" />
             </button>
           </div>
           <div class="header-details">
             {#if insights.selectedItem.project}
               <span class="detail-chip">{insights.selectedItem.project}</span>
             {:else}
-              <span class="detail-chip muted">global</span>
+              <span class="detail-chip muted">全局</span>
             {/if}
             <span class="detail-text">
               {insights.selectedItem.agent}
@@ -537,7 +537,7 @@
         {#if insights.items.length > 0}
           <div class="empty-prompt">
             <MousePointer2Icon size="20" strokeWidth="1.5" aria-hidden="true" />
-            <span>Select an insight to view</span>
+            <span>选择要查看的洞察</span>
           </div>
         {:else if insights.tasks.length > 0}
           <div class="content-generating">
@@ -545,12 +545,12 @@
               <span class="orbit-ring"></span>
               <span class="orbit-dot"></span>
             </div>
-            <span class="gen-label">Generating insight...</span>
+            <span class="gen-label">生成中 insight...</span>
           </div>
         {:else}
           <div class="empty-prompt">
-            <LightbulbIcon size="20" strokeWidth="1.5" aria-hidden="true" />
-            <span>Generate an insight to get started</span>
+            <浅色bulbIcon size="20" strokeWidth="1.5" aria-hidden="true" />
+            <span>生成 an insight to get started</span>
           </div>
         {/if}
       </div>
@@ -741,7 +741,7 @@
     box-shadow: none;
   }
 
-  :global(.generate-icon) {
+  :全局(.generate-icon) {
     opacity: 0.9;
   }
 
@@ -950,7 +950,7 @@
     margin-bottom: 20px;
   }
 
-  .task-error-banner :global(svg) {
+  .task-error-banner :全局(svg) {
     flex-shrink: 0;
     margin-top: 2px;
     opacity: 0.8;
@@ -1360,7 +1360,7 @@
     max-width: 720px;
   }
 
-  .markdown-body :global(h1) {
+  .markdown-body :全局(h1) {
     font-size: 20px;
     font-weight: 700;
     margin: 0 0 14px;
@@ -1369,39 +1369,39 @@
     letter-spacing: -0.02em;
   }
 
-  .markdown-body :global(h2) {
+  .markdown-body :全局(h2) {
     font-size: 16px;
     font-weight: 600;
     margin: 28px 0 10px;
     letter-spacing: -0.015em;
   }
 
-  .markdown-body :global(h3) {
+  .markdown-body :全局(h3) {
     font-size: 14px;
     font-weight: 600;
     margin: 20px 0 6px;
     letter-spacing: -0.01em;
   }
 
-  .markdown-body :global(p) {
+  .markdown-body :全局(p) {
     margin: 0 0 10px;
   }
 
-  .markdown-body :global(ul),
-  .markdown-body :global(ol) {
+  .markdown-body :全局(ul),
+  .markdown-body :全局(ol) {
     margin: 0 0 10px;
     padding-left: 20px;
   }
 
-  .markdown-body :global(li) {
+  .markdown-body :全局(li) {
     margin: 3px 0;
   }
 
-  .markdown-body :global(li + li) {
+  .markdown-body :全局(li + li) {
     margin-top: 4px;
   }
 
-  .markdown-body :global(code) {
+  .markdown-body :全局(code) {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 2px 5px;
@@ -1409,7 +1409,7 @@
     border-radius: var(--radius-sm);
   }
 
-  .markdown-body :global(pre) {
+  .markdown-body :全局(pre) {
     background: var(--bg-inset);
     padding: 10px 14px;
     border-radius: var(--radius-md);
@@ -1418,13 +1418,13 @@
     border: 1px solid var(--border-muted);
   }
 
-  .markdown-body :global(pre code) {
+  .markdown-body :全局(pre code) {
     padding: 0;
     background: transparent;
     border: none;
   }
 
-  .markdown-body :global(blockquote) {
+  .markdown-body :全局(blockquote) {
     margin: 0 0 10px;
     padding: 6px 14px;
     border-left: 3px solid var(--accent-blue);
@@ -1437,41 +1437,41 @@
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   }
 
-  .markdown-body :global(strong) {
+  .markdown-body :全局(strong) {
     font-weight: 600;
     color: var(--text-primary);
   }
 
-  .markdown-body :global(a) {
+  .markdown-body :全局(a) {
     color: var(--accent-blue);
     text-decoration: none;
   }
 
-  .markdown-body :global(a:hover) {
+  .markdown-body :全局(a:hover) {
     text-decoration: underline;
   }
 
-  .markdown-body :global(hr) {
+  .markdown-body :全局(hr) {
     border: none;
     border-top: 1px solid var(--border-muted);
     margin: 20px 0;
   }
 
-  .markdown-body :global(table) {
+  .markdown-body :全局(table) {
     width: 100%;
     border-collapse: collapse;
     margin: 0 0 10px;
     font-size: 12px;
   }
 
-  .markdown-body :global(th),
-  .markdown-body :global(td) {
+  .markdown-body :全局(th),
+  .markdown-body :全局(td) {
     padding: 6px 10px;
     border: 1px solid var(--border-muted);
     text-align: left;
   }
 
-  .markdown-body :global(th) {
+  .markdown-body :全局(th) {
     background: var(--bg-inset);
     font-weight: 600;
   }

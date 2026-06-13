@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SettingsSection from "./SettingsSection.svelte";
+  import 设置Section from "./设置Section.svelte";
   import {
     ui,
     ALL_BLOCK_TYPES,
@@ -8,33 +8,33 @@
   } from "../../stores/ui.svelte.js";
 
   const LAYOUT_OPTIONS: { value: MessageLayout; label: string }[] = [
-    { value: "default", label: "Default" },
-    { value: "compact", label: "Compact" },
-    { value: "stream", label: "Stream" },
+    { value: "default", label: "默认" },
+    { value: "compact", label: "紧凑" },
+    { value: "stream", label: "流式" },
   ];
 
   const BLOCK_LABELS: Record<BlockType, string> = {
-    user: "User messages",
-    assistant: "Assistant text",
-    thinking: "Thinking blocks",
-    tool: "Tool calls",
-    code: "Code blocks",
+    user: "User 条消息",
+    assistant: "助手文本",
+    thinking: "思考块",
+    tool: "工具调用",
+    code: "代码块",
   };
 </script>
 
-<SettingsSection
-  title="Appearance"
-  description="Theme, layout, and block visibility preferences."
+<设置Section
+  title="外观"
+  description="主题、布局和块可见性偏好。"
 >
   <div class="setting-row">
-    <span class="setting-label">Theme</span>
-    <button class="setting-toggle" onclick={() => ui.toggleTheme()}>
-      {ui.theme === "light" ? "Light" : "Dark"}
+    <span class="setting-label">主题</span>
+    <button class="setting-toggle" onclick={() => ui.toggle主题()}>
+      {ui.theme === "light" ? "浅色" : "深色"}
     </button>
   </div>
 
   <div class="setting-row">
-    <span class="setting-label">Message layout</span>
+    <span class="setting-label">消息布局</span>
     <div class="setting-options">
       {#each LAYOUT_OPTIONS as opt}
         <button
@@ -49,7 +49,7 @@
   </div>
 
   <div class="setting-row column">
-    <span class="setting-label">Block visibility</span>
+    <span class="setting-label">块可见性</span>
     <div class="block-toggles">
       {#each ALL_BLOCK_TYPES as bt}
         <label class="block-toggle">
@@ -63,7 +63,7 @@
       {/each}
     </div>
   </div>
-</SettingsSection>
+</设置Section>
 
 <style>
   .setting-row {

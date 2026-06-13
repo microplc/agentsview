@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SettingsSection from "./SettingsSection.svelte";
+  import 设置Section from "./设置Section.svelte";
   import { settings } from "../../stores/settings.svelte.js";
 
   const AGENT_LABELS: Record<string, string> = {
@@ -7,15 +7,15 @@
     codex: "Codex",
     copilot: "Copilot",
     gemini: "Gemini",
-    opencode: "OpenCode",
-    openhands: "OpenHands CLI",
+    opencode: "打开Code",
+    openhands: "打开Hands CLI",
     cursor: "Cursor",
     amp: "Amp",
     iflow: "iFlow",
     "vscode-copilot": "VSCode Copilot",
     pi: "Pi",
     qwen: "Qwen Code",
-    openclaw: "OpenClaw",
+    openclaw: "打开Claw",
     qclaw: "QClaw",
     zed: "Zed",
     kimi: "Kimi",
@@ -26,9 +26,9 @@
   };
 </script>
 
-<SettingsSection
-  title="Agent Directories"
-  description="Directories scanned for session data. Configured via environment variables or config file."
+<设置Section
+  title="代理 Directories"
+  description="Directories scanned for session data. 已配置 via environment variables or config file."
 >
   <div class="dir-list">
     {#each Object.entries(settings.agentDirs) as [agent, dirs]}
@@ -36,7 +36,7 @@
         <span class="dir-agent">{AGENT_LABELS[agent] ?? agent}</span>
         <div class="dir-paths">
           {#if dirs.length === 0}
-            <span class="dir-none">Not configured</span>
+            <span class="dir-none">未配置</span>
           {:else}
             {#each dirs as dir}
               <code class="dir-path">{dir}</code>
@@ -46,7 +46,7 @@
       </div>
     {/each}
   </div>
-</SettingsSection>
+</设置Section>
 
 <style>
   .dir-list {

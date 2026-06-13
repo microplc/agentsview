@@ -163,7 +163,7 @@ func printSecretFindingsHuman(w io.Writer, res *service.SecretFindingList) error
 		return nil
 	}
 	fmt.Fprintf(w, "%-40s  %-16s  %-22s  %-18s  %s\n",
-		"SESSION", "PROJECT", "RULE", "LOCATION", "VALUE")
+		"SESSION", "项目", "RULE", "LOCATION", "VALUE")
 	for _, f := range res.Findings {
 		fmt.Fprintf(w, "%-40s  %-16s  %-22s  %-18s  %s\n",
 			sanitizeTerminal(f.SessionID), sanitizeTerminal(f.Project),

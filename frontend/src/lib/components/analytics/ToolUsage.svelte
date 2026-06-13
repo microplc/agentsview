@@ -1,10 +1,10 @@
 <script lang="ts">
   import { analytics } from "../../stores/analytics.svelte.js";
-  import type { ToolCategoryCount } from "../../api/types.js";
+  import type { 到olCategoryCount } from "../../api/types.js";
 
   const CATEGORY_COLORS: Record<string, string> = {
     Read: "#3b82f6",
-    Edit: "#f59e0b",
+    编辑: "#f59e0b",
     Write: "#10b981",
     Bash: "#ef4444",
     Grep: "#8b5cf6",
@@ -49,7 +49,7 @@
     return Math.max((total / trendMax) * 100, 2);
   }
 
-  function trendTotal(byCat: Record<string, number>): number {
+  function trend到tal(byCat: Record<string, number>): number {
     let total = 0;
     for (const v of Object.values(byCat)) {
       total += v;
@@ -70,7 +70,7 @@
 
   function handleCatHover(
     e: MouseEvent,
-    cat: ToolCategoryCount,
+    cat: 到olCategoryCount,
   ) {
     const rect = (
       e.currentTarget as HTMLElement
@@ -89,7 +89,7 @@
     const rect = (
       e.currentTarget as HTMLElement
     ).getBoundingClientRect();
-    const total = trendTotal(entry.by_category);
+    const total = trend到tal(entry.by_category);
     const parts = Object.entries(entry.by_category)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 4)
@@ -108,7 +108,7 @@
 
 <div class="tool-container">
   <div class="tool-header">
-    <h3 class="chart-title">Tool Usage</h3>
+    <h3 class="chart-title">到ol 用量</h3>
     {#if analytics.tools}
       <span class="count">
         {analytics.tools.total_calls.toLocaleString()} calls
@@ -121,9 +121,9 @@
       {analytics.errors.tools}
       <button
         class="retry-btn"
-        onclick={() => analytics.fetchTools()}
+        onclick={() => analytics.fetch到ols()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if categories.length > 0}
@@ -168,7 +168,7 @@
               >
                 <div
                   class="trend-bar"
-                  style="height: {trendBarHeight(trendTotal(entry.by_category))}%"
+                  style="height: {trendBarHeight(trend到tal(entry.by_category))}%"
                 ></div>
                 <span class="trend-label">
                   {formatWeek(entry.date)}
@@ -189,7 +189,7 @@
       </div>
     {/if}
   {:else}
-    <div class="empty">No tool usage data</div>
+    <div class="empty">无工具使用数据</div>
   {/if}
 </div>
 

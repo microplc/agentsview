@@ -157,13 +157,13 @@ func PerformUpdate(
 	if progressFn != nil {
 		fmt.Println()
 	}
-	fmt.Println("Verifying and installing...")
+	fmt.Println("正在验证并安装...")
 	if err := installFromArchive(
 		archivePath, info.Checksum, downloadChecksum,
 	); err != nil {
 		return err
 	}
-	fmt.Println("Update complete.")
+	fmt.Println("更新完成。")
 	return nil
 }
 

@@ -1,26 +1,26 @@
 <script lang="ts">
-  import SettingsSection from "./SettingsSection.svelte";
+  import 设置Section from "./设置Section.svelte";
   import { settings } from "../../stores/settings.svelte.js";
   import {
-    getServerUrl,
-    setServerUrl,
-    getAuthToken,
-    setAuthToken,
-    isRemoteConnection,
+    get服务器Url,
+    set服务器Url,
+    getAuth到ken,
+    setAuth到ken,
+    isRemote连接ion,
   } from "../../api/runtime.js";
 
-  let serverUrl: string = $state(getServerUrl());
-  let tokenInput: string = $state(getAuthToken());
+  let serverUrl: string = $state(get服务器Url());
+  let tokenInput: string = $state(getAuth到ken());
   let testing: boolean = $state(false);
   let testResult: { ok: boolean; message: string } | null = $state(null);
   let saving: boolean = $state(false);
   let saveMsg: string | null = $state(null);
-  let remoteToggling: boolean = $state(false);
+  let remote到ggling: boolean = $state(false);
 
-  let isRemote: boolean = $derived(isRemoteConnection());
+  let isRemote: boolean = $derived(isRemote连接ion());
   let copied: boolean = $state(false);
 
-  async function handleTestConnection() {
+  async function handleTest连接ion() {
     if (!serverUrl.trim()) return;
     testing = true;
     testResult = null;
@@ -28,66 +28,66 @@
       const base = serverUrl.replace(/\/+$/, "");
       const headers: Record<string, string> = {};
       if (tokenInput.trim()) {
-        headers["Authorization"] = `Bearer ${tokenInput.trim()}`;
+        headers["作者ization"] = `Bearer ${tokenInput.trim()}`;
       }
       const res = await fetch(`${base}/api/v1/version`, { headers });
       if (res.ok) {
         const data = await res.json();
         testResult = {
           ok: true,
-          message: `Connected (v${data.version || "unknown"})`,
+          message: `连接ed (v${data.version || "未知"})`,
         };
       } else {
-        testResult = { ok: false, message: `Server returned ${res.status}` };
+        testResult = { ok: false, message: `服务器 returned ${res.status}` };
       }
     } catch (e) {
       testResult = {
         ok: false,
-        message: e instanceof Error ? e.message : "Connection failed",
+        message: e instanceof 错误 ? e.message : "连接ion failed",
       };
     } finally {
       testing = false;
     }
   }
 
-  function handleConnect() {
+  function handle连接() {
     if (!serverUrl.trim()) return;
     const url = serverUrl.replace(/\/+$/, "");
-    setServerUrl(url);
-    setAuthToken(tokenInput.trim());
-    saveMsg = "Connected. Reloading...";
+    set服务器Url(url);
+    setAuth到ken(tokenInput.trim());
+    saveMsg = "连接ed. Reloading...";
     setTimeout(() => window.location.reload(), 500);
   }
 
-  function handleDisconnect() {
-    // Clear the remote token before clearing the URL, so the
+  function handle断开连接() {
+    // 清除 the remote token before clearing the URL, so the
     // scoped key resolves to the remote server's token.
-    setAuthToken("");
-    setServerUrl("");
-    saveMsg = "Disconnected. Reloading...";
+    setAuth到ken("");
+    set服务器Url("");
+    saveMsg = "断开连接ed. Reloading...";
     setTimeout(() => window.location.reload(), 500);
   }
 
-  async function handleToggleRemote() {
-    remoteToggling = true;
+  async function handle到ggleRemote() {
+    remote到ggling = true;
     try {
       await settings.save({ require_auth: !settings.requireAuth });
     } finally {
-      remoteToggling = false;
+      remote到ggling = false;
     }
   }
 
-  function handleCopyToken() {
-    if (!settings.authToken) return;
-    navigator.clipboard.writeText(settings.authToken);
+  function handle复制到ken() {
+    if (!settings.auth到ken) return;
+    navigator.clipboard.writeText(settings.auth到ken);
     copied = true;
     setTimeout(() => (copied = false), 2000);
   }
 </script>
 
-<SettingsSection
-  title="Remote Access"
-  description="Connect to a remote agentsview server or enable remote access for this instance."
+<设置Section
+  title="远程访问"
+  description="连接 to a remote agentsview server or enable remote access for this instance."
 >
   {#if !isRemote}
     <div class="subsection">
@@ -96,18 +96,18 @@
         <button
           class="toggle-btn"
           class:active={settings.requireAuth}
-          disabled={remoteToggling}
-          onclick={handleToggleRemote}
+          disabled={remote到ggling}
+          onclick={handle到ggleRemote}
         >
-          {settings.requireAuth ? "Enabled" : "Disabled"}
+          {settings.requireAuth ? "已启用" : "已禁用"}
         </button>
       </div>
 
       <p class="restart-note">
-        Note: Toggling auth requires a server restart to take effect.
+        Note: 到ggling auth requires a server restart to take effect.
       </p>
 
-      {#if settings.requireAuth && settings.authToken}
+      {#if settings.requireAuth && settings.auth到ken}
         <div class="security-warning">
           Warning: Remote connections use unencrypted HTTP. Use a secure
           tunnel (Tailscale, SSH tunnel, or a reverse proxy with TLS) to
@@ -115,21 +115,21 @@
         </div>
 
         <div class="token-display">
-          <span class="field-label">Auth Token</span>
+          <span class="field-label">身份验证令牌</span>
           <div class="token-row">
-            <code class="token-value">{settings.authToken}</code>
-            <button class="copy-btn" onclick={handleCopyToken}>
-              {copied ? "Copied" : "Copy"}
+            <code class="token-value">{settings.auth到ken}</code>
+            <button class="copy-btn" onclick={handle复制到ken}>
+              {copied ? "已复制" : "复制"}
             </button>
           </div>
         </div>
 
         <div class="server-info">
-          <span class="field-label">Server</span>
+          <span class="field-label">服务器</span>
           {#if settings.host === "0.0.0.0" || settings.host === "::"}
             <span class="info-value">
               Listening on all interfaces (port {settings.port}).
-              Connect using your machine's IP address or hostname.
+              连接 using your machine's IP address or hostname.
             </span>
           {:else}
             <code class="info-value"
@@ -145,20 +145,20 @@
 
   <div class="subsection">
     <span class="subsection-title">
-      {isRemote ? "Remote Connection" : "Connect to Remote Server"}
+      {isRemote ? "远程连接" : "连接 to Remote 服务器"}
     </span>
 
     {#if isRemote}
       <div class="connected-info">
-        <span class="field-label">Connected to</span>
-        <code class="info-value">{getServerUrl()}</code>
+        <span class="field-label">已连接到</span>
+        <code class="info-value">{get服务器Url()}</code>
       </div>
-      <button class="disconnect-btn" onclick={handleDisconnect}>
-        Disconnect
+      <button class="disconnect-btn" onclick={handle断开连接}>
+        断开连接
       </button>
     {:else}
       <div class="field">
-        <label class="field-label" for="remote-url">Server URL</label>
+        <label class="field-label" for="remote-url">服务器 URL</label>
         <input
           id="remote-url"
           class="setting-input"
@@ -169,12 +169,12 @@
       </div>
 
       <div class="field">
-        <label class="field-label" for="remote-token">Auth Token</label>
+        <label class="field-label" for="remote-token">身份验证令牌</label>
         <input
           id="remote-token"
           class="setting-input"
           type="password"
-          placeholder="Paste auth token from server"
+          placeholder="粘贴身份验证令牌 from server"
           bind:value={tokenInput}
         />
       </div>
@@ -183,16 +183,16 @@
         <button
           class="test-btn"
           disabled={testing || !serverUrl.trim()}
-          onclick={handleTestConnection}
+          onclick={handleTest连接ion}
         >
-          {testing ? "Testing..." : "Test Connection"}
+          {testing ? "测试中..." : "测试连接"}
         </button>
         <button
           class="connect-btn"
           disabled={saving || !serverUrl.trim()}
-          onclick={handleConnect}
+          onclick={handle连接}
         >
-          Connect
+          连接
         </button>
       </div>
 
@@ -207,7 +207,7 @@
       {/if}
     {/if}
   </div>
-</SettingsSection>
+</设置Section>
 
 <style>
   .subsection {

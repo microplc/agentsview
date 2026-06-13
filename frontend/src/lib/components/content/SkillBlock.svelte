@@ -27,7 +27,7 @@
     <span class="skill-chevron" class:open={!collapsed}>
       &#9656;
     </span>
-    <span class="skill-label">Skill: {name ?? "unknown"}</span>
+    <span class="skill-label">Skill: {name ?? "未知"}</span>
     {#if collapsed && previewLine}
       <span class="skill-preview">{previewLine}</span>
     {/if}

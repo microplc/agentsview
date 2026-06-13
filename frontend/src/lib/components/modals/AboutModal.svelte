@@ -13,7 +13,7 @@
   }
 
   const buildDate = $derived.by(() => {
-    const raw = sync.serverVersion?.build_date;
+    const raw = sync.server版本?.build_date;
     if (!raw) return null;
     try {
       return new Date(raw).toLocaleDateString(undefined, {
@@ -45,12 +45,12 @@
         <circle cx="18" cy="8.5" r="2" fill="var(--accent-blue, #3b82f6)"/>
         <circle cx="18" cy="8.5" r="1" fill="#1d4ed8"/>
       </svg>
-      <div class="about-name">AgentsView</div>
+      <div class="about-name">代理sView</div>
       <button
         class="close-btn"
         onclick={() => ui.activeModal = null}
-        title="Close about dialog"
-        aria-label="Close about dialog"
+        title="关闭 about dialog"
+        aria-label="关闭 about dialog"
       >
         &times;
       </button>
@@ -58,25 +58,25 @@
 
     <div class="about-body">
       <div class="about-row">
-        <span class="about-label">Author</span>
+        <span class="about-label">作者</span>
         <span class="about-value">Kenn Software LLC</span>
       </div>
-      {#if sync.serverVersion}
+      {#if sync.server版本}
         <div class="about-row">
-          <span class="about-label">Version</span>
+          <span class="about-label">版本</span>
           <span class="about-value mono">
-            {sync.serverVersion.version}
+            {sync.server版本.version}
           </span>
         </div>
         <div class="about-row">
-          <span class="about-label">Commit</span>
+          <span class="about-label">提交</span>
           <span class="about-value mono">
-            {sync.serverVersion.commit}
+            {sync.server版本.commit}
           </span>
         </div>
         {#if buildDate}
           <div class="about-row">
-            <span class="about-label">Build date</span>
+            <span class="about-label">构建日期</span>
             <span class="about-value">{buildDate}</span>
           </div>
         {/if}
@@ -84,7 +84,7 @@
     </div>
 
     <div class="about-footer">
-      Local viewer for AI agent sessions
+      Local viewer for AI agent 个会话
     </div>
   </div>
 </div>

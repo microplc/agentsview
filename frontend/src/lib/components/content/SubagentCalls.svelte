@@ -28,7 +28,7 @@
   // here are never observable but still satisfy CallGroup's
   // required props.
   const noSubagentExpansion: Set<string> = new Set();
-  function noopExpand(_c: CallTiming): void {
+  function noop展开(_c: CallTiming): void {
     /* no-op for nested rows */
   }
 
@@ -95,7 +95,7 @@
           dimmed={categoryFilter !== null &&
             turn.primary_category !== categoryFilter}
           onCallClick={() => {}}
-          onSubagentExpand={noopExpand}
+          onSubagent展开={noop展开}
           expandedSubagentIds={noSubagentExpansion}
         />
       {/if}
@@ -104,9 +104,9 @@
 </div>
 
 <style>
-  /* Copied verbatim from
+  /* 已复制 verbatim from
      docs/superpowers/specs/2026-04-26-session-duration-ux-mockup.html
-     (.sa-expand rules, lines 671–692). */
+     (.sa-expand rules, 行 671–692). */
   .sa-expand {
     background: rgba(196, 90, 90, 0.04);
     border-left: 2px solid #c45a5a;

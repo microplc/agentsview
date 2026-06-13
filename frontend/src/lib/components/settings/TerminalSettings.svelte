@@ -1,16 +1,16 @@
 <script lang="ts">
-  import SettingsSection from "./SettingsSection.svelte";
+  import 设置Section from "./设置Section.svelte";
   import { settings } from "../../stores/settings.svelte.js";
   import {
     ConfigService,
-    TerminalConfigBody,
+    终端ConfigBody,
   } from "../../api/generated/index";
-  import { configureGeneratedClient } from "../../api/runtime.js";
+  import { configure生成dClient } from "../../api/runtime.js";
 
   const MODES = [
-    { value: "auto", label: "Auto-detect" },
-    { value: "custom", label: "Custom" },
-    { value: "clipboard", label: "Clipboard only" },
+    { value: "auto", label: "自动检测" },
+    { value: "custom", label: "自定义" },
+    { value: "clipboard", label: "仅剪贴板" },
   ] as const;
 
   let localMode: string = $state(settings.terminal.mode || "auto");
@@ -23,11 +23,11 @@
     localArgs = settings.terminal.custom_args ?? "";
   });
 
-  async function saveTerminal() {
-    configureGeneratedClient();
-    await ConfigService.postApiV1ConfigTerminal({
+  async function save终端() {
+    configure生成dClient();
+    await ConfigService.postApiV1Config终端({
       requestBody: {
-        mode: localMode as TerminalConfigBody.mode,
+        mode: localMode as 终端ConfigBody.mode,
         custom_bin: localBin || undefined,
         custom_args: localArgs || undefined,
       },
@@ -43,12 +43,12 @@
   );
 </script>
 
-<SettingsSection
-  title="Terminal"
-  description="Configure how sessions are resumed in your terminal."
+<设置Section
+  title="终端"
+  description="Configure how 个会话 are resumed in your terminal."
 >
   <div class="setting-row">
-    <span class="setting-label">Launch mode</span>
+    <span class="setting-label">启动模式</span>
     <div class="setting-options">
       {#each MODES as opt}
         <button
@@ -64,7 +64,7 @@
 
   {#if localMode === "custom"}
     <div class="setting-row column">
-      <label class="setting-label" for="terminal-bin">Terminal binary</label>
+      <label class="setting-label" for="terminal-bin">终端 binary</label>
       <input
         id="terminal-bin"
         class="setting-input"
@@ -76,7 +76,7 @@
 
     <div class="setting-row column">
       <label class="setting-label" for="terminal-args">
-        Arguments <span class="hint">(use {"{cmd}"} as placeholder)</span>
+        参数 <span class="hint">(use {"{cmd}"} as placeholder)</span>
       </label>
       <input
         id="terminal-args"
@@ -93,13 +93,13 @@
       <button
         class="save-btn"
         disabled={settings.saving}
-        onclick={saveTerminal}
+        onclick={save终端}
       >
-        {settings.saving ? "Saving..." : "Save"}
+        {settings.saving ? "保存中..." : "保存"}
       </button>
     </div>
   {/if}
-</SettingsSection>
+</设置Section>
 
 <style>
   .setting-row {

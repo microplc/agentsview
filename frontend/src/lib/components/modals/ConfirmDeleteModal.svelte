@@ -1,20 +1,20 @@
 <script lang="ts">
   import { tick } from "svelte";
   import { ui } from "../../stores/ui.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { truncate } from "../../utils/format.js";
-  import { normalizeMessagePreview } from "../../utils/messages.js";
+  import { normalizeMessagePreview } from "../../utils/条消息.js";
   let deleting = $state(false);
   let deleteBtn = $state<HTMLButtonElement>();
 
   let sessionName = $derived.by(() => {
-    const s = sessions.activeSession;
-    if (!s) return "this session";
+    const s = 个会话.activeSession;
+    if (!s) return "此会话";
     // normalizeMessagePreview can return "" for empty/null input, so use ||
     // (not ??) to fall through to the project/default fallback.
     const raw =
       s.display_name
-      ?? (normalizeMessagePreview(s.first_message) || s.project || "this session");
+      ?? (normalizeMessagePreview(s.first_message) || s.project || "此会话");
     return truncate(raw, 60);
   });
 
@@ -22,12 +22,12 @@
     ui.activeModal = null;
   }
 
-  async function confirmDelete() {
-    const id = sessions.activeSessionId;
+  async function confirm删除() {
+    const id = 个会话.activeSessionId;
     if (!id || deleting) return;
     deleting = true;
     try {
-      await sessions.deleteSession(id);
+      await 个会话.deleteSession(id);
       close();
     } catch {
       // silently fail — toast will show undo option
@@ -57,7 +57,7 @@
 
 <!--
   Overlay is closed via Escape (svelte:window above) and via the
-  Cancel/× buttons inside the modal, so a separate keydown handler
+  取消/× buttons inside the modal, so a separate keydown handler
   here would be redundant.
 -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -65,35 +65,35 @@
 <div class="confirm-overlay" onclick={handleOverlayClick}>
   <div class="confirm-modal">
     <div class="confirm-header">
-      <h3 class="confirm-title">Delete Session</h3>
+      <h3 class="confirm-title">删除 Session</h3>
       <button
         class="close-btn"
         onclick={close}
-        title="Close delete confirmation"
-        aria-label="Close delete confirmation"
+        title="关闭删除确认"
+        aria-label="关闭删除确认"
       >&times;</button>
     </div>
 
     <div class="confirm-body">
       <p class="confirm-message">
-        Move <strong>{sessionName}</strong> to trash?
+        移动 <strong>{sessionName}</strong> 到回收站？
       </p>
       <p class="confirm-hint">
-        You can restore it later from the Trash page.
+        You can restore it later from the 回收站 page.
       </p>
     </div>
 
     <div class="confirm-actions">
-      <button class="cancel-btn" onclick={close}>Cancel</button>
+      <button class="cancel-btn" onclick={close}>取消</button>
       <!-- svelte-ignore a11y_autofocus -->
       <button
         class="delete-btn"
         bind:this={deleteBtn}
-        onclick={confirmDelete}
+        onclick={confirm删除}
         disabled={deleting}
         autofocus
       >
-        {deleting ? "Deleting..." : "Move to Trash"}
+        {deleting ? "删除中..." : "移动 to 回收站"}
       </button>
     </div>
   </div>

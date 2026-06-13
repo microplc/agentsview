@@ -25,12 +25,12 @@
     penalties != null && Object.keys(penalties).length > 0,
   );
   const compactions = $derived(session.compaction_count ?? 0);
-  const midTaskCompactions = $derived(
+  const midTask紧凑ions = $derived(
     session.mid_task_compaction_count ?? 0,
   );
-  const showCompactionChip = $derived(compactions > 0);
+  const show紧凑ionChip = $derived(compactions > 0);
 
-  const outcome = $derived(session.outcome ?? "unknown");
+  const outcome = $derived(session.outcome ?? "未知");
   const outcomeLabel = $derived(getOutcomeLabel(outcome));
   const confidence = $derived(session.outcome_confidence ?? "");
 
@@ -40,7 +40,7 @@
   // chrome that looks like a debug dump.
   const hasUsefulData = $derived(
     session.health_score != null ||
-      outcome !== "unknown" ||
+      outcome !== "未知" ||
       hasPenalties ||
       compactions > 0 ||
       basis.length > 1,
@@ -92,18 +92,18 @@
         </span>
       {/if}
 
-      {#if showCompactionChip}
+      {#if show紧凑ionChip}
         <span
           class="compaction-chip"
-          class:mid-task={midTaskCompactions > 0}
-          title={midTaskCompactions > 0
-            ? `${midTaskCompactions} of ${compactions} interrupted active work`
+          class:mid-task={midTask紧凑ions > 0}
+          title={midTask紧凑ions > 0
+            ? `${midTask紧凑ions} of ${compactions} interrupted active work`
             : "Context compactions in this session"}
         >
           {compactions}
           {compactions === 1 ? "compaction" : "compactions"}
-          {#if midTaskCompactions > 0}
-            &middot; {midTaskCompactions} mid-task
+          {#if midTask紧凑ions > 0}
+            &middot; {midTask紧凑ions} mid-task
           {/if}
         </span>
       {/if}

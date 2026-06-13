@@ -175,7 +175,7 @@
   // scaleY maps a data value in [0, niceMax] onto the plot
   // area [TOP_PAD, h], inverted so 0 is at the bottom. Kept
   // as a function so both buildPaths and yTicks use identical
-  // math and the top tick lines up with the highest bar.
+  // math and the top tick 行 up with the highest bar.
   function scaleY(val: number, max: number, h: number): number {
     const plotH = h - TOP_PAD;
     return h - (val / max) * plotH;
@@ -226,7 +226,7 @@
       color: string;
     }> = [];
 
-    const baselines = new Float64Array(points.length);
+    const base行 = new Float64Array(points.length);
 
     for (const key of keys) {
       let d = "";
@@ -234,14 +234,14 @@
       for (let i = 0; i < points.length; i++) {
         const x = Y_LABEL_W + i * xStep;
         const val = points[i]!.values[key] ?? 0;
-        const top = scaleY(baselines[i]! + val, maxY, h);
+        const top = scaleY(base行[i]! + val, maxY, h);
         d += i === 0 ? `M${x},${top}` : `L${x},${top}`;
       }
 
-      // Close area back along baseline
+      // 关闭 area back along baseline
       for (let i = points.length - 1; i >= 0; i--) {
         const x = Y_LABEL_W + i * xStep;
-        const base = scaleY(baselines[i]!, maxY, h);
+        const base = scaleY(base行[i]!, maxY, h);
         d += `L${x},${base}`;
       }
       d += "Z";
@@ -252,7 +252,7 @@
       result.push({ key, d, color });
 
       for (let i = 0; i < points.length; i++) {
-        baselines[i] = baselines[i]! + (points[i]!.values[key] ?? 0);
+        base行[i] = base行[i]! + (points[i]!.values[key] ?? 0);
       }
     }
 
@@ -341,7 +341,7 @@
         class:active={groupBy === "project"}
         onclick={() => handleGroupByChange("project")}
       >
-        Project
+        项目
       </button>
       <button
         class="toggle-btn"
@@ -355,13 +355,13 @@
         class:active={groupBy === "agent"}
         onclick={() => handleGroupByChange("agent")}
       >
-        Agent
+        代理
       </button>
     </div>
   </div>
 
   {#if seriesData.points.length === 0}
-    <div class="empty">No data for this period</div>
+    <div class="empty">此期间无数据</div>
   {:else}
     <div class="chart-scroll" bind:this={containerEl}>
       <svg

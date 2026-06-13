@@ -5,7 +5,7 @@
     return `$${v.toFixed(2)}`;
   }
 
-  function fmtTokens(v: number): string {
+  function fmt到kens(v: number): string {
     if (v >= 1_000_000_000) {
       const g = Math.floor(v / 100_000_000) / 10;
       return `${g}B`;
@@ -25,22 +25,22 @@
     return `${(v * 100).toFixed(1)}%`;
   }
 
-  const inputTokens = $derived(
-    usage.summary?.totals.inputTokens ?? 0,
+  const input到kens = $derived(
+    usage.summary?.totals.input到kens ?? 0,
   );
 
-  const outputTokens = $derived(
-    usage.summary?.totals.outputTokens ?? 0,
+  const output到kens = $derived(
+    usage.summary?.totals.output到kens ?? 0,
   );
 
   // "cached" here means input tokens that were actually
-  // served from cache, i.e. cacheReadTokens. Cache-creation
+  // served from cache, i.e. cacheRead到kens. Cache-creation
   // tokens are cache writes — fresh input paying the
   // cache-write surcharge rather than being replayed from
   // cache — so folding them in would overstate cache usage
   // on workloads that only warm the cache.
-  const cachedTokens = $derived(
-    usage.summary?.totals.cacheReadTokens ?? 0,
+  const cached到kens = $derived(
+    usage.summary?.totals.cacheRead到kens ?? 0,
   );
 
   const dailyBurn = $derived.by(() => {
@@ -83,20 +83,20 @@
 
   const cards: Card[] = [
     {
-      label: "Total Cost",
+      label: "到tal Cost",
       value: () => fmtCost(usage.summary?.totals.totalCost ?? 0),
       sub: () => vsPrior ?? "",
       featured: true,
     },
     {
-      label: "Input Tokens",
-      value: () => fmtTokens(inputTokens),
+      label: "Input 到kens",
+      value: () => fmt到kens(input到kens),
       sub: () =>
-        cachedTokens > 0 ? `+${fmtTokens(cachedTokens)} cached` : "",
+        cached到kens > 0 ? `+${fmt到kens(cached到kens)} cached` : "",
     },
     {
-      label: "Output Tokens",
-      value: () => fmtTokens(outputTokens),
+      label: "Output 到kens",
+      value: () => fmt到kens(output到kens),
     },
     {
       label: "Daily Burn",
@@ -114,18 +114,18 @@
         fmtPct(usage.summary?.cacheStats.hitRate ?? 0),
     },
     {
-      label: "Projects",
+      label: "项目s",
       value: () =>
         String(
           Object.keys(
-            usage.summary?.sessionCounts.byProject ?? {},
+            usage.summary?.sessionCounts.by项目 ?? {},
           ).length,
         ),
     },
     {
       label: "Models",
       value: () =>
-        String(usage.summary?.modelTotals.length ?? 0),
+        String(usage.summary?.model到tals.length ?? 0),
     },
     {
       label: "Active Days",
@@ -164,7 +164,7 @@
       class="retry-btn"
       onclick={() => usage.fetchSummary()}
     >
-      Retry
+      重试
     </button>
   </div>
 {/if}

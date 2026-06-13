@@ -1,13 +1,13 @@
 <script lang="ts">
   import { analytics } from "../../stores/analytics.svelte.js";
   import {
-    sessions,
-    getSessionStatus,
-  } from "../../stores/sessions.svelte.js";
+    个会话,
+    getSession状态,
+  } from "../../stores/个会话.svelte.js";
   import { router } from "../../stores/router.svelte.js";
-  import { formatTokenCount } from "../../utils/format.js";
-  import { normalizeMessagePreview } from "../../utils/messages.js";
-  import StatusDot from "../common/StatusDot.svelte";
+  import { format到kenCount } from "../../utils/format.js";
+  import { normalizeMessagePreview } from "../../utils/条消息.js";
+  import 状态Dot from "../common/状态Dot.svelte";
 
   function truncate(text: string, max: number): string {
     if (text.length <= max) return text;
@@ -24,41 +24,41 @@
 
   function handleSessionClick(id: string) {
     let needInvalidate = false;
-    if (analytics.includeOneShot && !sessions.filters.includeOneShot) {
-      sessions.filters.includeOneShot = true;
+    if (analytics.include开eShot && !个会话.filters.include开eShot) {
+      个会话.filters.include开eShot = true;
       needInvalidate = true;
     }
-    if (analytics.includeAutomated && !sessions.filters.includeAutomated) {
-      sessions.filters.includeAutomated = true;
+    if (analytics.includeAutomated && !个会话.filters.includeAutomated) {
+      个会话.filters.includeAutomated = true;
       needInvalidate = true;
     }
     if (needInvalidate) {
-      sessions.invalidateFilterCaches();
+      个会话.invalidateFilterCaches();
     }
-    router.navigateToSession(id);
+    router.navigate到Session(id);
   }
 
-  const supportsOutputTokens = $derived(
+  const supportsOutput到kens = $derived(
     analytics.summary?.total_output_tokens !== undefined &&
-      analytics.summary?.token_reporting_sessions !== undefined,
+      analytics.summary?.token_reporting_个会话 !== undefined,
   );
 
   const uncleanCount = $derived(
-    (analytics.topSessions?.sessions ?? []).filter(
-      (s) => getSessionStatus(s) === "unclean",
+    (analytics.top会话?.个会话 ?? []).filter(
+      (s) => getSession状态(s) === "unclean",
     ).length,
   );
 </script>
 
-<div class="top-sessions-container">
+<div class="top-个会话-container">
   <div class="top-header">
-    <h3 class="chart-title">Top Sessions</h3>
+    <h3 class="chart-title">到p 会话</h3>
     <div class="header-controls">
       {#if uncleanCount > 0}
         <button
           class="status-count-pill"
-          onclick={() => sessions.setTerminationFilter("unclean")}
-          title="Filter to unclean sessions"
+          onclick={() => 个会话.setTerminationFilter("unclean")}
+          title="Filter to unclean 个会话"
         >
           {uncleanCount} unclean
         </button>
@@ -66,44 +66,44 @@
       <div class="metric-toggle">
         <button
           class="toggle-btn"
-          class:active={analytics.topMetric === "messages"}
-          onclick={() => analytics.setTopMetric("messages")}
+          class:active={analytics.topMetric === "条消息"}
+          onclick={() => analytics.set到pMetric("条消息")}
         >
           By Messages
         </button>
         <button
           class="toggle-btn"
           class:active={analytics.topMetric === "duration"}
-          onclick={() => analytics.setTopMetric("duration")}
+          onclick={() => analytics.set到pMetric("duration")}
         >
           By Duration
         </button>
-        {#if supportsOutputTokens}
+        {#if supportsOutput到kens}
           <button
             class="toggle-btn"
             class:active={analytics.topMetric === "output_tokens"}
-            onclick={() => analytics.setTopMetric("output_tokens")}
+            onclick={() => analytics.set到pMetric("output_tokens")}
           >
-            By Output Tokens
+            By Output 到kens
           </button>
         {/if}
       </div>
     </div>
   </div>
 
-  {#if analytics.errors.topSessions}
+  {#if analytics.errors.top会话}
     <div class="error">
-      {analytics.errors.topSessions}
+      {analytics.errors.top会话}
       <button
         class="retry-btn"
-        onclick={() => analytics.fetchTopSessions()}
+        onclick={() => analytics.fetch到p会话()}
       >
-        Retry
+        重试
       </button>
     </div>
-  {:else if analytics.topSessions && analytics.topSessions.sessions.length > 0}
+  {:else if analytics.top会话 && analytics.top会话.个会话.length > 0}
     <div class="session-list">
-      {#each analytics.topSessions.sessions as session, i}
+      {#each analytics.top会话.个会话 as session, i}
         {@const preview = normalizeMessagePreview(session.first_message)}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -113,7 +113,7 @@
         >
           <span class="rank">{i + 1}</span>
           <span class="session-status">
-            <StatusDot session={session} size={7} />
+            <状态Dot session={session} size={7} />
           </span>
           <div class="session-info">
             <span class="session-label">
@@ -127,7 +127,7 @@
             {#if analytics.topMetric === "duration"}
               {formatDuration(session.duration_min)}
             {:else if analytics.topMetric === "output_tokens"}
-              {formatTokenCount(session.output_tokens)}
+              {format到kenCount(session.output_tokens)}
             {:else}
               {session.message_count}
             {/if}
@@ -136,12 +136,12 @@
       {/each}
     </div>
   {:else}
-    <div class="empty">No sessions in range</div>
+    <div class="empty">No 个会话 in range</div>
   {/if}
 </div>
 
 <style>
-  .top-sessions-container {
+  .top-个会话-container {
     flex: 1;
     display: flex;
     flex-direction: column;

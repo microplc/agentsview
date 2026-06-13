@@ -204,7 +204,7 @@ func ensureFreshData(
 			Machine:   "local",
 		})
 		fmt.Fprintln(os.Stderr,
-			"Data version changed, running full resync...")
+			"数据版本已更改，正在运行完全重新同步...")
 		t := time.Now()
 		stats := engine.ResyncAll(ctx, printSyncProgressStderr)
 		printSyncSummaryStderr(stats, t)

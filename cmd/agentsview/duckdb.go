@@ -71,7 +71,7 @@ func runDuckDBPush(cfg DuckDBPushConfig) {
 	didResync := runLocalSync(appCfg, database, cfg.Full)
 	forceFull := cfg.Full || didResync
 
-	fmt.Println("Opening DuckDB mirror...")
+	fmt.Println("正在打开 DuckDB 镜像...")
 	connectStart := time.Now()
 	syncer, err := duckdbsync.New(
 		duckCfg.Path, database, duckCfg.MachineName,
@@ -92,7 +92,7 @@ func runDuckDBPush(cfg DuckDBPushConfig) {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	fmt.Println("Preparing DuckDB schema...")
+	fmt.Println("正在准备 DuckDB 架构...")
 	schemaStart := time.Now()
 	if err := syncer.EnsureSchema(ctx); err != nil {
 		fatal("duckdb push schema: %v", err)
@@ -101,7 +101,7 @@ func runDuckDBPush(cfg DuckDBPushConfig) {
 		"DuckDB schema ready in %s\n",
 		time.Since(schemaStart).Round(time.Millisecond),
 	)
-	fmt.Println("Starting DuckDB push...")
+	fmt.Println("正在启动 DuckDB 推送...")
 	result, err := syncer.Push(ctx, forceFull,
 		func(p duckdbsync.PushProgress) {
 			fmt.Printf(
@@ -382,7 +382,7 @@ func runDuckDBQuackServe(cfg DuckDBQuackServeConfig) {
 	} else {
 		fmt.Println("Token:       configured")
 	}
-	fmt.Println("Press Ctrl+C to stop.")
+	fmt.Println("按 Ctrl+C 停止。")
 
 	<-ctx.Done()
 }

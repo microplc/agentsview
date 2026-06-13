@@ -11,14 +11,14 @@
   import { ui } from "../../stores/ui.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import type { Route } from "../../stores/router.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import {
     ChartColumnIcon,
     Grid2x2Icon,
     LayoutGridIcon,
     LogsIcon,
     PinIcon,
-    TrashIcon,
+    回收站Icon,
   } from "../../icons.js";
 
   interface Props {
@@ -44,7 +44,7 @@
     startX: number;
     startWidth: number;
   } | null>(null);
-  let didDragMove = $state(false);
+  let didDrag移动 = $state(false);
   let activePointerId = $state<number | null>(null);
 
   const isDesktop = $derived(
@@ -78,7 +78,7 @@
 
   function mobileNav(route: Route) {
     router.navigate(route);
-    if (route !== "sessions") {
+    if (route !== "个会话") {
       ui.closeSidebar();
     }
   }
@@ -141,7 +141,7 @@
     if (typeof window !== "undefined") {
       window.removeEventListener(
         "pointermove",
-        handlePointerMove,
+        handlePointer移动,
       );
       window.removeEventListener(
         "pointerup",
@@ -149,17 +149,17 @@
       );
       window.removeEventListener(
         "pointercancel",
-        handlePointerCancel,
+        handlePointer取消,
       );
     }
 
     isResizing = false;
     dragState = null;
-    didDragMove = false;
+    didDrag移动 = false;
     activePointerId = null;
   }
 
-  function handlePointerMove(event: PointerEvent) {
+  function handlePointer移动(event: PointerEvent) {
     if (!dragState) return;
     if (!isActiveDragPointer(event)) return;
 
@@ -168,41 +168,41 @@
       return;
     }
 
-    const hasMoved =
-      didDragMove || event.clientX !== dragState.startX;
-    if (!hasMoved) return;
+    const has移动d =
+      didDrag移动 || event.clientX !== dragState.startX;
+    if (!has移动d) return;
 
-    event.preventDefault();
-    didDragMove = true;
+    event.prevent默认();
+    didDrag移动 = true;
     updateSidebarWidth(event.clientX);
   }
 
   function handlePointerUp(event: PointerEvent) {
     if (!dragState || !isActiveDragPointer(event)) return;
 
-    if (didDragMove) {
+    if (didDrag移动) {
       updateSidebarWidth(event.clientX);
     }
 
     stopResizing();
   }
 
-  function handlePointerCancel(event: PointerEvent) {
+  function handlePointer取消(event: PointerEvent) {
     if (!dragState || !isActiveDragPointer(event)) return;
     stopResizing();
   }
 
   function handlePointerDown(event: PointerEvent) {
-    if (!isDesktop || !ui.sidebarOpen || dragState || event.button !== 0) {
+    if (!isDesktop || !ui.sidebar打开 || dragState || event.button !== 0) {
       return;
     }
 
-    event.preventDefault();
+    event.prevent默认();
     dragState = {
       startX: event.clientX,
       startWidth: sidebarWidth,
     };
-    didDragMove = false;
+    didDrag移动 = false;
     activePointerId =
       typeof event.pointerId === "number"
         ? event.pointerId
@@ -224,9 +224,9 @@
       }
     }
 
-    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointermove", handlePointer移动);
     window.addEventListener("pointerup", handlePointerUp);
-    window.addEventListener("pointercancel", handlePointerCancel);
+    window.addEventListener("pointercancel", handlePointer取消);
   }
 
   $effect(() => {
@@ -260,7 +260,7 @@
   });
 
   $effect(() => {
-    if ((!isDesktop || !ui.sidebarOpen) && isResizing) {
+    if ((!isDesktop || !ui.sidebar打开) && isResizing) {
       stopResizing();
     }
   });
@@ -286,27 +286,27 @@
   class:is-resizing={isResizing}
   bind:this={layoutElement}
 >
-  {#if ui.isMobileViewport && ui.sidebarOpen}
+  {#if ui.isMobileViewport && ui.sidebar打开}
     <button
       class="sidebar-backdrop"
-      aria-label="Close sidebar"
+      aria-label="关闭侧边栏"
       onclick={handleBackdropClick}
     ></button>
   {/if}
 
   <aside
     class="sidebar"
-    class:open={ui.sidebarOpen}
+    class:open={ui.sidebar打开}
     style:width={isDesktop ? `${sidebarWidth}px` : undefined}
   >
     <nav class="mobile-nav">
       <button
         class="mobile-nav-btn"
-        class:active={router.route === "sessions"}
-        onclick={() => mobileNav("sessions")}
+        class:active={router.route === "个会话"}
+        onclick={() => mobileNav("个会话")}
       >
         <LayoutGridIcon size="12" strokeWidth="2" aria-hidden="true" />
-        Sessions
+        会话
       </button>
       <button
         class="mobile-nav-btn"
@@ -314,7 +314,7 @@
         onclick={() => mobileNav("usage")}
       >
         <Grid2x2Icon size="12" strokeWidth="2" aria-hidden="true" />
-        Usage
+        用量
       </button>
       <button
         class="mobile-nav-btn"
@@ -322,7 +322,7 @@
         onclick={() => mobileNav("trends")}
       >
         <ChartColumnIcon size="12" strokeWidth="2" aria-hidden="true" />
-        Trends
+        趋势
       </button>
       <button
         class="mobile-nav-btn"
@@ -330,7 +330,7 @@
         onclick={() => mobileNav("pinned")}
       >
         <PinIcon size="12" strokeWidth="2" aria-hidden="true" />
-        Pinned
+        已固定
       </button>
       <button
         class="mobile-nav-btn"
@@ -338,27 +338,27 @@
         onclick={() => mobileNav("insights")}
       >
         <LogsIcon size="12" strokeWidth="2" aria-hidden="true" />
-        Insights
+        洞察
       </button>
       <button
         class="mobile-nav-btn"
         class:active={router.route === "trash"}
         onclick={() => mobileNav("trash")}
       >
-        <TrashIcon size="12" strokeWidth="2" aria-hidden="true" />
-        Trash
+        <回收站Icon size="12" strokeWidth="2" aria-hidden="true" />
+        回收站
       </button>
     </nav>
     {@render sidebar()}
   </aside>
 
-  {#if isDesktop && ui.sidebarOpen}
+  {#if isDesktop && ui.sidebar打开}
     <div
       class="resize-handle"
       bind:this={resizeHandleElement}
       data-testid="sidebar-resize-handle"
       role="separator"
-      aria-label="Resize sidebar"
+      aria-label="调整侧边栏宽度"
       aria-orientation="vertical"
       aria-valuemin={SIDEBAR_WIDTH_MIN}
       aria-valuemax={SIDEBAR_WIDTH_STORAGE_MAX}
@@ -372,7 +372,7 @@
     {@render content()}
   </main>
 
-  {#if vitals && isDesktop && ui.vitalsOpen && sessions.activeSessionId}
+  {#if vitals && isDesktop && ui.vitals打开 && 个会话.activeSessionId}
     <aside class="vitals">
       {@render vitals()}
     </aside>
@@ -478,7 +478,7 @@
     display: none;
   }
 
-  :global(body.sidebar-resizing) {
+  :全局(body.sidebar-resizing) {
     cursor: col-resize;
     user-select: none;
     -webkit-user-select: none;

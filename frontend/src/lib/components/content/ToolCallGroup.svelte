@@ -3,29 +3,29 @@
   import type { CallTiming, TurnTiming } from "../../api/types/timing.js";
   import { formatTimestamp } from "../../utils/format.js";
   import { formatDuration } from "../../utils/duration.js";
-  import { copyToClipboard } from "../../utils/clipboard.js";
-  import { formatMessageForCopy } from "../../utils/copy-message.js";
+  import { copy到Clipboard } from "../../utils/clipboard.js";
+  import { formatMessageFor复制 } from "../../utils/copy-message.js";
   import {
     parseContent,
     enrichSegments,
   } from "../../utils/content-parser.js";
   import { sessionTiming } from "../../stores/sessionTiming.svelte.js";
   import { liveTick } from "../../stores/liveTick.svelte.js";
-  import ToolBlock from "./ToolBlock.svelte";
+  import 到olBlock from "./到olBlock.svelte";
   import ParallelGroup from "./ParallelGroup.svelte";
-  import CopyButton from "../shared/CopyButton.svelte";
-  import { displayToolName } from "../../utils/toolDisplay.js";
-  import { SettingsIcon } from "../../icons.js";
+  import 复制Button from "../shared/复制Button.svelte";
+  import { display到olName } from "../../utils/toolDisplay.js";
+  import { 设置Icon } from "../../icons.js";
 
   interface Props {
-    messages: Message[];
+    条消息: Message[];
     timestamp: string;
     highlightQuery?: string;
     isCurrentHighlight?: boolean;
   }
 
   let {
-    messages,
+    条消息,
     timestamp,
     highlightQuery = "",
     isCurrentHighlight = false,
@@ -37,7 +37,7 @@
    *  `tool_calls` when present, falling back to parsed tool
    *  segments so legacy transcripts (e.g. `[Bash]...` markers
    *  with no structured calls) still match the rendering path. */
-  function messageToolCount(m: Message): number {
+  function message到olCount(m: Message): number {
     const structured = m.tool_calls?.length ?? 0;
     if (structured > 0) return structured;
     return enrichSegments(
@@ -47,7 +47,7 @@
   }
 
   let totalCalls = $derived(
-    messages.reduce((n, m) => n + messageToolCount(m), 0),
+    条消息.reduce((n, m) => n + message到olCount(m), 0),
   );
 
   let label = $derived(
@@ -64,7 +64,7 @@
   });
 
   /** Index call timings by tool_use_id for O(1) lookup. */
-  let callByToolUseID = $derived.by(() => {
+  let callBy到olUseID = $derived.by(() => {
     const m = new Map<string, CallTiming>();
     for (const t of sessionTiming.timing?.turns ?? []) {
       for (const c of t.calls) m.set(c.tool_use_id, c);
@@ -74,7 +74,7 @@
 
   /** Resolve the duration badge for a solo (non-grouped) tool call.
    *  Sub-agent calls show their exact duration; non-sub-agent solo
-   *  calls inherit the turn's wall-clock duration. Running turns
+   *  calls inherit the turn's wall-clock duration. 运行ning turns
    *  synthesize a live `running …+` label from the turn's
    *  `started_at`, ticked once per second by `liveTick`. */
   function soloDurationLabel(
@@ -101,7 +101,7 @@
 
   /** A turn is running iff the session is active AND its
    *  duration isn't yet known. */
-  function isRunningTurn(msg: Message): boolean {
+  function is运行ningTurn(msg: Message): boolean {
     if (!sessionTiming.timing?.running) return false;
     const turn = turnByMessage.get(msg.id);
     return turn != null && turn.duration_ms == null;
@@ -109,9 +109,9 @@
 
   let copyTimer: ReturnType<typeof setTimeout>;
 
-  async function handleCopy() {
-    const combined = messages.map((m) => formatMessageForCopy(m)).join("\n\n");
-    const ok = await copyToClipboard(combined);
+  async function handle复制() {
+    const combined = 条消息.map((m) => formatMessageFor复制(m)).join("\n\n");
+    const ok = await copy到Clipboard(combined);
     if (ok) {
       clearTimeout(copyTimer);
       copied = true;
@@ -123,16 +123,16 @@
 <div class="tool-group">
   <div class="tool-group-header">
     <span class="gear-icon">
-      <SettingsIcon size="12" strokeWidth="2" aria-hidden="true" />
+      <设置Icon size="12" strokeWidth="2" aria-hidden="true" />
     </span>
     <span class="group-label">{label}</span>
-    <CopyButton
+    <复制Button
       {copied}
-      ariaLabel="Copy tool calls"
-      copiedAriaLabel="Copied tool calls"
-      title="Copy tool calls"
-      copiedTitle="Copied!"
-      onclick={handleCopy}
+      ariaLabel="复制 tool calls"
+      copiedAriaLabel="工具调用已复制"
+      title="复制 tool calls"
+      copiedTitle="已复制！"
+      onclick={handle复制}
     />
     <span class="group-timestamp">
       {formatTimestamp(timestamp)}
@@ -140,39 +140,39 @@
   </div>
 
   <div class="tool-group-body">
-    {#each messages as message (message.ordinal)}
+    {#each 条消息 as message (message.ordinal)}
       {@const calls = message.tool_calls ?? []}
       {@const turn = turnByMessage.get(message.id)}
       {#if calls.length === 1}
         {@const soloCall = calls[0]!}
-        <ToolBlock
+        <到olBlock
           toolCall={soloCall}
           content=""
-          label={displayToolName(soloCall)}
+          label={display到olName(soloCall)}
           durationLabel={soloDurationLabel(
-            callByToolUseID.get(soloCall.tool_use_id ?? ""),
+            callBy到olUseID.get(soloCall.tool_use_id ?? ""),
             turn,
             message,
           )}
-          isRunning={isRunningTurn(message)}
+          is运行ning={is运行ningTurn(message)}
           {highlightQuery}
           {isCurrentHighlight}
         />
       {:else if calls.length >= 2}
         <ParallelGroup
           toolCalls={calls}
-          callTimingByID={callByToolUseID}
+          callTimingByID={callBy到olUseID}
           turnDurationMs={turn?.duration_ms ?? null}
-          isRunning={isRunningTurn(message)}
+          is运行ning={is运行ningTurn(message)}
           {highlightQuery}
           {isCurrentHighlight}
         />
       {:else}
-        <!-- Fallback for messages with `has_tool_use` but no
+        <!-- Fallback for 条消息 with `has_tool_use` but no
              structured tool_calls — parse the content for tool
              markers (legacy/synthetic transcripts). -->
         {#each enrichSegments(parseContent(message.content, message.has_tool_use, message.id, message.content_length), message.tool_calls).filter((s) => s.type === "tool") as seg, segIdx (`${message.id}-${segIdx}`)}
-          <ToolBlock
+          <到olBlock
             content={seg.content}
             label={seg.label}
             toolCall={seg.toolCall}
@@ -219,7 +219,7 @@
     margin-left: auto;
   }
 
-  .tool-group:hover :global(.copy-btn) {
+  .tool-group:hover :全局(.copy-btn) {
     opacity: 1;
   }
 
@@ -229,7 +229,7 @@
     gap: 2px;
   }
 
-  .tool-group-body :global(.tool-block) {
+  .tool-group-body :全局(.tool-block) {
     margin: 0;
     border-left: none;
     border-radius: 0;

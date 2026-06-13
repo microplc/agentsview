@@ -5,39 +5,39 @@
     ChevronDownIcon,
     CirclePlayIcon,
     CodeIcon,
-    CopyIcon,
+    复制Icon,
     EllipsisVerticalIcon,
     FileTextIcon,
     FolderIcon,
     LinkIcon,
     SearchIcon,
-    SquareTerminalIcon,
+    Square终端Icon,
   } from "../../icons.js";
   import { onMount } from "svelte";
   import type { Session } from "../../api/types.js";
   import {
-    OpenersService,
-    SessionsService,
-    type ResumeRequest,
-    type ResumeResponse,
+    打开ersService,
+    会话Service,
+    type 恢复Request,
+    type 恢复Response,
   } from "../../api/generated/index";
-  import { configureGeneratedClient } from "../../api/runtime.js";
-  import { copyToClipboard } from "../../utils/clipboard.js";
+  import { configure生成dClient } from "../../api/runtime.js";
+  import { copy到Clipboard } from "../../utils/clipboard.js";
   import { agentColor, agentLabel } from "../../utils/agents.js";
-  import { formatCost, formatTokenUsage } from "../../utils/format.js";
-  import { normalizeMessagePreview } from "../../utils/messages.js";
+  import { formatCost, format到ken用量 } from "../../utils/format.js";
+  import { normalizeMessagePreview } from "../../utils/条消息.js";
   import { getGradeStyle, getGradeLabel } from "../../utils/grade.js";
   import SignalPanel from "../content/SignalPanel.svelte";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import {
-    supportsResume,
-    buildResumeCommand,
-    formatResumeResponseCommand,
+    supports恢复,
+    build恢复Command,
+    format恢复ResponseCommand,
   } from "../../utils/resume.js";
 
   import { inSessionSearch } from "../../stores/inSessionSearch.svelte.js";
-  import { messages as messagesStore } from "../../stores/messages.svelte.js";
+  import { 条消息 as 条消息Store } from "../../stores/条消息.svelte.js";
   import { ui } from "../../stores/ui.svelte.js";
 
   interface Props {
@@ -47,27 +47,27 @@
 
   let { session, onBack }: Props = $props();
   let copiedSessionId = $state("");
-  let menuOpen = $state(false);
+  let menu打开 = $state(false);
   let renaming = $state(false);
   let renameValue = $state("");
   let renameInput = $state<HTMLInputElement | null>(null);
   let menuBtnEl = $state<HTMLButtonElement | null>(null);
   let menuEl = $state<HTMLDivElement | null>(null);
-  let showOpenMenu = $state(false);
-  let openers: Opener[] = $state([]);
+  let show打开Menu = $state(false);
+  let openers: 打开er[] = $state([]);
   let openFeedback = $state("");
   let feedbackTimer: ReturnType<typeof setTimeout> | undefined;
   let sessionDir = $state<string | null>(null);
 
-  interface Opener {
+  interface 打开er {
     id: string;
     name: string;
     kind: "editor" | "terminal" | "files" | "action";
     bin: string;
   }
 
-  interface OpenersResponse {
-    openers: Opener[];
+  interface 打开ersResponse {
+    openers: 打开er[];
   }
 
   interface SessionDirectoryResponse {
@@ -75,10 +75,10 @@
   }
 
   onMount(() => {
-    configureGeneratedClient();
-    OpenersService.getApiV1Openers()
+    configure生成dClient();
+    打开ersService.getApiV1打开ers()
       .then((res) => {
-        openers = (res as unknown as OpenersResponse).openers;
+        openers = (res as 未知 as 打开ersResponse).openers;
       })
       .catch(() => {});
   });
@@ -93,8 +93,8 @@
     const id = session.id;
     if (id === resolvedSessionDirId) return;
     sessionDir = null;
-    configureGeneratedClient();
-    SessionsService.getApiV1SessionsIdDirectory({ id })
+    configure生成dClient();
+    会话Service.getApiV1会话IdDirectory({ id })
       .then(({ path }) => {
         if (session?.id === id) {
           sessionDir = (path as SessionDirectoryResponse["path"]) || null;
@@ -147,8 +147,8 @@
     if (key === costFetchKey) return;
     costSessionId = id;
     const seq = ++costRequestSeq;
-    configureGeneratedClient();
-    SessionsService.getApiV1SessionsIdUsage({ id })
+    configure生成dClient();
+    会话Service.getApiV1会话Id用量({ id })
       .then((res) => {
         if (seq !== costRequestSeq) return;
         costFetchKey = key;
@@ -164,32 +164,32 @@
     sessionCost !== null ? formatCost(sessionCost) : null,
   );
 
-  let sessionContextTokens = $derived(session?.peak_context_tokens ?? 0);
-  let sessionOutputTokens = $derived(session?.total_output_tokens ?? 0);
-  let sessionHasContextTokens = $derived(
+  let sessionContext到kens = $derived(session?.peak_context_tokens ?? 0);
+  let sessionOutput到kens = $derived(session?.total_output_tokens ?? 0);
+  let sessionHasContext到kens = $derived(
     session
       ? (session.has_peak_context_tokens ?? session.peak_context_tokens > 0)
       : false,
   );
-  let sessionHasOutputTokens = $derived(
+  let sessionHasOutput到kens = $derived(
     session
       ? (session.has_total_output_tokens ?? session.total_output_tokens > 0)
       : false,
   );
-  let sessionTokenSummary = $derived(
+  let session到kenSummary = $derived(
     session
-      ? formatTokenUsage(
-          sessionContextTokens,
-          sessionHasContextTokens,
-          sessionOutputTokens,
-          sessionHasOutputTokens,
+      ? format到ken用量(
+          sessionContext到kens,
+          sessionHasContext到kens,
+          sessionOutput到kens,
+          sessionHasOutput到kens,
         )
       : null,
   );
 
   let mainModel = $derived(
-    messagesStore.sessionId === session?.id
-      ? messagesStore.mainModel
+    条消息Store.sessionId === session?.id
+      ? 条消息Store.mainModel
       : "",
   );
 
@@ -198,8 +198,8 @@
   );
 
   $effect(() => {
-    if (ui.signalPanelOpen && session?.id) {
-      sessions.fetchSignalDetail(session.id);
+    if (ui.signalPanel打开 && session?.id) {
+      个会话.fetchSignalDetail(session.id);
     }
   });
 
@@ -212,7 +212,7 @@
     rawId: string,
     sessionId: string,
   ) {
-    const ok = await copyToClipboard(rawId);
+    const ok = await copy到Clipboard(rawId);
     if (!ok) return;
     copiedSessionId = sessionId;
     setTimeout(() => {
@@ -229,7 +229,7 @@
     const id = session.id;
     const href = router.buildSessionHref(id);
     const url = window.location.origin + href;
-    const ok = await copyToClipboard(url);
+    const ok = await copy到Clipboard(url);
     if (!ok) return;
     copiedLinkId = id;
     clearTimeout(copiedLinkTimer);
@@ -239,14 +239,14 @@
   }
 
   function toggleMenu() {
-    menuOpen = !menuOpen;
+    menu打开 = !menu打开;
   }
 
   function closeMenu() {
-    menuOpen = false;
+    menu打开 = false;
   }
 
-  function startRename() {
+  function start重命名() {
     if (!session) return;
     renameValue =
       session.display_name
@@ -257,26 +257,26 @@
     requestAnimationFrame(() => renameInput?.select());
   }
 
-  async function submitRename() {
+  async function submit重命名() {
     if (!renaming || !session) return;
     renaming = false;
     const name = renameValue.trim() || null;
     try {
-      await sessions.renameSession(session.id, name);
+      await 个会话.renameSession(session.id, name);
     } catch {
       // name reverts in UI
     }
   }
 
-  function cancelRename() {
+  function cancel重命名() {
     renaming = false;
   }
 
-  async function handleDelete() {
+  async function handle删除() {
     if (!session) return;
     closeMenu();
     try {
-      await sessions.deleteSession(session.id);
+      await 个会话.deleteSession(session.id);
     } catch {
       // silently fail
     }
@@ -288,162 +288,162 @@
     feedbackTimer = setTimeout(() => { openFeedback = ""; }, 2000);
   }
 
-  async function handleResumeIn(opener: Opener) {
+  async function handle恢复In(opener: 打开er) {
     if (!session) return;
-    showOpenMenu = false;
+    show打开Menu = false;
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       const resp =
-        await SessionsService.postApiV1SessionsIdResume({
+        await 会话Service.postApiV1会话Id恢复({
           id: session.id,
           requestBody: {
             opener_id: opener.id,
-          } satisfies ResumeRequest,
-        }) as ResumeResponse;
+          } satisfies 恢复Request,
+        }) as 恢复Response;
       if (resp.launched) {
-        showFeedback(`Resumed in ${resp.terminal ?? opener.name}`);
+        showFeedback(`恢复d in ${resp.terminal ?? opener.name}`);
         return;
       }
       // Launch failed — fall back to clipboard copy.
       if (resp.command) {
-        const cmd = formatResumeResponseCommand(session.agent, resp);
-        const ok = cmd ? await copyToClipboard(cmd) : false;
-        showFeedback(ok ? "Command copied!" : "Failed");
+        const cmd = format恢复ResponseCommand(session.agent, resp);
+        const ok = cmd ? await copy到Clipboard(cmd) : false;
+        showFeedback(ok ? "命令已复制！" : "失败");
         return;
       }
     } catch {
       // Fall back to local command build.
     }
-    const cmd = buildResumeCommand(session.agent, session.id);
+    const cmd = build恢复Command(session.agent, session.id);
     if (cmd) {
-      const ok = await copyToClipboard(cmd);
-      showFeedback(ok ? "Command copied!" : "Failed");
+      const ok = await copy到Clipboard(cmd);
+      showFeedback(ok ? "命令已复制！" : "失败");
     } else {
-      showFeedback("Not supported");
+      showFeedback("不支持");
     }
   }
 
-  async function handleCopyResumeCommand() {
+  async function handle复制恢复Command() {
     if (!session) return;
-    showOpenMenu = false;
+    show打开Menu = false;
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       const resp =
-        await SessionsService.postApiV1SessionsIdResume({
+        await 会话Service.postApiV1会话Id恢复({
           id: session.id,
-          requestBody: { command_only: true } satisfies ResumeRequest,
-        }) as ResumeResponse;
+          requestBody: { command_only: true } satisfies 恢复Request,
+        }) as 恢复Response;
       if (resp.command) {
-        const cmd = formatResumeResponseCommand(session.agent, resp);
-        const ok = cmd ? await copyToClipboard(cmd) : false;
-        showFeedback(ok ? "Command copied!" : "Failed");
+        const cmd = format恢复ResponseCommand(session.agent, resp);
+        const ok = cmd ? await copy到Clipboard(cmd) : false;
+        showFeedback(ok ? "命令已复制！" : "失败");
         return;
       }
     } catch {
       // Fall back to local build.
     }
-    const cmd = buildResumeCommand(session.agent, session.id);
+    const cmd = build恢复Command(session.agent, session.id);
     if (cmd) {
-      const ok = await copyToClipboard(cmd);
-      showFeedback(ok ? "Command copied!" : "Failed");
+      const ok = await copy到Clipboard(cmd);
+      showFeedback(ok ? "命令已复制！" : "失败");
     } else {
-      showFeedback("Not supported");
+      showFeedback("不支持");
     }
   }
 
-  async function handleCopyFilePath() {
-    showOpenMenu = false;
+  async function handle复制FilePath() {
+    show打开Menu = false;
     if (!sessionDir) {
-      showFeedback("No path available");
+      showFeedback("路径不可用");
       return;
     }
-    const ok = await copyToClipboard(sessionDir);
-    showFeedback(ok ? "Path copied!" : "Failed");
+    const ok = await copy到Clipboard(sessionDir);
+    showFeedback(ok ? "路径已复制！" : "失败");
   }
 
-  async function handleOpenIn(opener: Opener) {
+  async function handle打开In(opener: 打开er) {
     if (!session) return;
-    showOpenMenu = false;
+    show打开Menu = false;
     try {
-      configureGeneratedClient();
-      await SessionsService.postApiV1SessionsIdOpen({
+      configure生成dClient();
+      await 会话Service.postApiV1会话Id打开({
         id: session.id,
         requestBody: { opener_id: opener.id },
       });
-      showFeedback(`Opened in ${opener.name}`);
+      showFeedback(`打开ed in ${opener.name}`);
     } catch {
-      showFeedback("Failed to open");
+      showFeedback("失败 to open");
     }
   }
 
-  async function handleResumeDefault() {
+  async function handle恢复默认() {
     if (!session) return;
-    showOpenMenu = false;
+    show打开Menu = false;
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       const resp =
-        await SessionsService.postApiV1SessionsIdResume({
+        await 会话Service.postApiV1会话Id恢复({
           id: session.id,
           requestBody: {},
-        }) as ResumeResponse;
+        }) as 恢复Response;
       if (resp.launched) {
         showFeedback(
-          `Resumed in ${resp.terminal ?? "terminal"}`,
+          `恢复d in ${resp.terminal ?? "terminal"}`,
         );
         return;
       }
       if (resp.command) {
-        const cmd = formatResumeResponseCommand(session.agent, resp);
-        const ok = cmd ? await copyToClipboard(cmd) : false;
-        showFeedback(ok ? "Command copied!" : "Failed");
+        const cmd = format恢复ResponseCommand(session.agent, resp);
+        const ok = cmd ? await copy到Clipboard(cmd) : false;
+        showFeedback(ok ? "命令已复制！" : "失败");
         return;
       }
     } catch {
       // Fall back to local command build.
     }
-    const cmd = buildResumeCommand(session.agent, session.id);
+    const cmd = build恢复Command(session.agent, session.id);
     if (cmd) {
-      const ok = await copyToClipboard(cmd);
-      showFeedback(ok ? "Command copied!" : "Failed");
+      const ok = await copy到Clipboard(cmd);
+      showFeedback(ok ? "命令已复制！" : "失败");
     } else {
-      showFeedback("Not supported");
+      showFeedback("不支持");
     }
   }
 
-  // Remote sessions have host-prefixed IDs (host~rawID).
+  // Remote 个会话 have host-prefixed IDs (host~rawID).
   const isLocal = $derived(
     !session?.id.includes("~"),
   );
 
-  const canResume = $derived(
+  const can恢复 = $derived(
     session
-      ? supportsResume(session.agent) && isLocal
+      ? supports恢复(session.agent) && isLocal
       : false,
   );
 
-  const terminalOpeners = $derived(
+  const terminal打开ers = $derived(
     openers.filter((o) => o.kind === "terminal"),
   );
 
-  const claudeDesktopOpener = $derived(
+  const claudeDesktop打开er = $derived(
     session?.agent === "claude"
       ? openers.find((o) => o.id === "claude-desktop") ?? null
       : null,
   );
 
-  const editorOpeners = $derived(
+  const editor打开ers = $derived(
     openers.filter((o) => o.kind === "editor"),
   );
 
-  const fileOpeners = $derived(
+  const file打开ers = $derived(
     openers.filter((o) => o.kind === "files"),
   );
 
   const showDropdown = $derived(
-    canResume ||
+    can恢复 ||
     (isLocal && (
-      editorOpeners.length > 0 ||
-      fileOpeners.length > 0 ||
+      editor打开ers.length > 0 ||
+      file打开ers.length > 0 ||
       (sessionDir !== null && !!session?.file_path)
     )),
   );
@@ -451,23 +451,23 @@
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === "Escape") {
       if (renaming) {
-        cancelRename();
-      } else if (menuOpen) {
+        cancel重命名();
+      } else if (menu打开) {
         closeMenu();
-      } else if (showOpenMenu) {
-        showOpenMenu = false;
-        e.preventDefault();
+      } else if (show打开Menu) {
+        show打开Menu = false;
+        e.prevent默认();
       }
       return;
     }
-    if (showOpenMenu && isLocal) {
+    if (show打开Menu && isLocal) {
       // Number key shortcuts (1-9) for quick selection.
       const num = parseInt(e.key);
       if (num >= 1 && num <= 9) {
         const idx = num - 1;
-        if (idx < terminalOpeners.length) {
-          e.preventDefault();
-          handleResumeIn(terminalOpeners[idx]!);
+        if (idx < terminal打开ers.length) {
+          e.prevent默认();
+          handle恢复In(terminal打开ers[idx]!);
         }
       }
     }
@@ -475,8 +475,8 @@
 
   function handleClickOutside(e: MouseEvent) {
     const target = e.target as Node;
-    // Close actions menu
-    if (menuOpen) {
+    // 关闭 actions menu
+    if (menu打开) {
       if (
         !menuEl?.contains(target) &&
         !menuBtnEl?.contains(target)
@@ -484,9 +484,9 @@
         closeMenu();
       }
     }
-    // Close open menu
+    // 关闭 open menu
     if (!(target as HTMLElement).closest?.(".open-group")) {
-      showOpenMenu = false;
+      show打开Menu = false;
     }
   }
 </script>
@@ -501,9 +501,9 @@
   <button
     class="breadcrumb-link"
     onclick={onBack}
-    title="Back to sessions"
+    title="Back to 个会话"
   >
-    Sessions
+    会话
   </button>
   <span class="breadcrumb-sep">/</span>
   {#if renaming}
@@ -513,10 +513,10 @@
       bind:value={renameValue}
       bind:this={renameInput}
       onkeydown={(e) => {
-        if (e.key === "Enter") submitRename();
-        if (e.key === "Escape") cancelRename();
+        if (e.key === "Enter") submit重命名();
+        if (e.key === "Escape") cancel重命名();
       }}
-      onblur={submitRename}
+      onblur={submit重命名}
     />
   {:else}
     <span class="breadcrumb-current">
@@ -547,7 +547,7 @@
         style:color={gradeStyle.text}
         style:border-color={gradeStyle.border}
         onclick={() => ui.toggleSignalPanel()}
-        title="Session health"
+        title="会话健康度"
       >
         {getGradeLabel(session.health_grade)}
       </button>
@@ -556,58 +556,58 @@
           <button
             class="resume-btn"
             class:has-feedback={openFeedback !== ""}
-            onclick={(e) => { e.stopPropagation(); showOpenMenu = !showOpenMenu; }}
-            title={canResume ? "Resume session in terminal" : "Session actions"}
-            aria-label={canResume ? "Resume session" : "Session actions"}
+            onclick={(e) => { e.stopPropagation(); show打开Menu = !show打开Menu; }}
+            title={can恢复 ? "在终端中恢复会话" : "会话操作"}
+            aria-label={can恢复 ? "恢复会话" : "会话操作"}
           >
             {#if openFeedback}
               <CheckIcon size="11" strokeWidth="2.4" aria-hidden="true" />
               {openFeedback}
             {:else}
-              {canResume ? "Resume" : "Open"}
+              {can恢复 ? "恢复" : "打开"}
               <ChevronDownIcon size="8" strokeWidth="2.6" aria-hidden="true" />
             {/if}
           </button>
-          {#if showOpenMenu}
+          {#if show打开Menu}
             <div class="open-menu">
-              {#if canResume}
-                {#each terminalOpeners as opener, i (opener.id)}
+              {#if can恢复}
+                {#each terminal打开ers as opener, i (opener.id)}
                   <button
                     class="open-menu-item"
-                    onclick={() => handleResumeIn(opener)}
+                    onclick={() => handle恢复In(opener)}
                   >
                     <span class="open-menu-num">{i + 1}</span>
                     <span class="open-menu-name">{opener.name}</span>
                   </button>
                 {/each}
-                <button class="open-menu-item" onclick={handleResumeDefault}>
+                <button class="open-menu-item" onclick={handle恢复默认}>
                   <span class="open-menu-num">
-                    <SquareTerminalIcon size="10" strokeWidth="2" aria-hidden="true" />
+                    <Square终端Icon size="10" strokeWidth="2" aria-hidden="true" />
                   </span>
-                  <span class="open-menu-name">Default terminal</span>
+                  <span class="open-menu-name">默认终端</span>
                 </button>
                 <div class="open-menu-divider"></div>
-                <button class="open-menu-item" onclick={handleCopyResumeCommand}>
+                <button class="open-menu-item" onclick={handle复制恢复Command}>
                   <span class="open-menu-num">
-                    <CopyIcon size="10" strokeWidth="2" aria-hidden="true" />
+                    <复制Icon size="10" strokeWidth="2" aria-hidden="true" />
                   </span>
-                  <span class="open-menu-name">Copy command</span>
+                  <span class="open-menu-name">复制命令</span>
                 </button>
               {/if}
               {#if isLocal}
-              <button class="open-menu-item" onclick={handleCopyFilePath}>
+              <button class="open-menu-item" onclick={handle复制FilePath}>
                 <span class="open-menu-num">
                   <FileTextIcon size="10" strokeWidth="2" aria-hidden="true" />
                 </span>
-                <span class="open-menu-name">Copy directory path</span>
+                <span class="open-menu-name">复制目录路径</span>
               </button>
-              {#if editorOpeners.length > 0 || fileOpeners.length > 0}
+              {#if editor打开ers.length > 0 || file打开ers.length > 0}
                 <div class="open-menu-divider"></div>
-                <div class="open-menu-section">Open in</div>
-                {#each editorOpeners as opener (opener.id)}
+                <div class="open-menu-section">打开 in</div>
+                {#each editor打开ers as opener (opener.id)}
                   <button
                     class="open-menu-item"
-                    onclick={() => handleOpenIn(opener)}
+                    onclick={() => handle打开In(opener)}
                   >
                     <span class="open-menu-num">
                       <CodeIcon size="10" strokeWidth="2" aria-hidden="true" />
@@ -615,10 +615,10 @@
                     <span class="open-menu-name">{opener.name}</span>
                   </button>
                 {/each}
-                {#each fileOpeners as opener (opener.id)}
+                {#each file打开ers as opener (opener.id)}
                   <button
                     class="open-menu-item"
-                    onclick={() => handleOpenIn(opener)}
+                    onclick={() => handle打开In(opener)}
                   >
                     <span class="open-menu-num">
                       <FolderIcon size="10" strokeWidth="2" aria-hidden="true" />
@@ -628,11 +628,11 @@
                 {/each}
               {/if}
               {/if}
-              {#if canResume && claudeDesktopOpener}
+              {#if can恢复 && claudeDesktop打开er}
                 <div class="open-menu-divider"></div>
                 <button
                   class="open-menu-item"
-                  onclick={() => handleResumeIn(claudeDesktopOpener)}
+                  onclick={() => handle恢复In(claudeDesktop打开er)}
                 >
                   <span class="open-menu-num">
                     <CirclePlayIcon size="10" strokeWidth="2" aria-hidden="true" />
@@ -648,28 +648,28 @@
         {@const rawId = sessionDisplayId(session.id)}
         <button
           class="session-id"
-          title="Copy session ID: {rawId}"
+          title="复制会话 ID: {rawId}"
           onclick={() => copySessionId(rawId, session.id)}
-          aria-label="Copy session ID"
+          aria-label="复制会话 ID"
         >
           {copiedSessionId === session.id
-            ? "Copied!"
+            ? "已复制！"
             : rawId.slice(0, 8)}
         </button>
       {/if}
-      {#if sessionTokenSummary}
+      {#if session到kenSummary}
         <span class="token-badge token-badge--desktop">
-          {sessionTokenSummary}
+          {session到kenSummary}
         </span>
         <span
           class="token-badge token-badge--mobile"
-          title={sessionTokenSummary}
+          title={session到kenSummary}
         >
-          {sessionTokenSummary}
+          {session到kenSummary}
         </span>
       {/if}
       {#if sessionCostLabel}
-        <span class="cost-badge" title="Estimated session cost">
+        <span class="cost-badge" title="预估会话费用">
           {sessionCostLabel}
         </span>
       {/if}
@@ -680,9 +680,9 @@
         <button
           class="link-btn"
           class:link-btn--copied={copiedLinkId === session?.id}
-          title="Copy link to session"
+          title="复制会话链接"
           onclick={copySessionLink}
-          aria-label="Copy link to session"
+          aria-label="复制会话链接"
         >
           {#if copiedLinkId === session?.id}
             <CheckIcon size="13" strokeWidth="2.4" aria-hidden="true" />
@@ -692,48 +692,48 @@
         </button>
         <button
           class="minimap-btn"
-          class:minimap-btn--active={ui.vitalsOpen}
-          title={ui.vitalsOpen
-            ? "Hide session analysis"
-            : "Show session analysis"}
+          class:minimap-btn--active={ui.vitals打开}
+          title={ui.vitals打开
+            ? "隐藏会话分析"
+            : "显示会话分析"}
           onclick={() => ui.toggleVitals()}
-          aria-label={ui.vitalsOpen
-            ? "Hide session analysis"
-            : "Show session analysis"}
+          aria-label={ui.vitals打开
+            ? "隐藏会话分析"
+            : "显示会话分析"}
         >
           <ChartColumnIcon size="13" strokeWidth="2" aria-hidden="true" />
         </button>
         <button
           class="find-btn"
-          class:find-btn--active={inSessionSearch.isOpen}
-          title="Find in session (/)"
+          class:find-btn--active={inSessionSearch.is打开}
+          title="在会话中查找 (/)"
           onclick={() => inSessionSearch.toggle()}
-          aria-label="Find in session"
+          aria-label="在会话中查找"
         >
           <SearchIcon size="13" strokeWidth="2" aria-hidden="true" />
         </button>
         <button
           class="actions-btn"
-          title="Session actions"
-          aria-label="Session actions"
+          title="会话操作"
+          aria-label="会话操作"
           bind:this={menuBtnEl}
           onclick={toggleMenu}
         >
           <EllipsisVerticalIcon size="14" strokeWidth="2.4" aria-hidden="true" />
         </button>
-        {#if menuOpen}
+        {#if menu打开}
           <div class="actions-menu" bind:this={menuEl}>
             <button
               class="actions-menu-item"
-              onclick={startRename}
+              onclick={start重命名}
             >
-              Rename
+              重命名
             </button>
             <button
               class="actions-menu-item danger"
-              onclick={handleDelete}
+              onclick={handle删除}
             >
-              Delete
+              删除
             </button>
           </div>
         {/if}
@@ -742,7 +742,7 @@
   {/if}
 </div>
 
-{#if ui.signalPanelOpen && session}
+{#if ui.signalPanel打开 && session}
   <SignalPanel {session} />
 {/if}
 

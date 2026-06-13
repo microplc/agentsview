@@ -8,7 +8,7 @@
   let { distribution }: Props = $props();
 
   const outcomes = [
-    "completed", "abandoned", "errored", "unknown",
+    "completed", "abandoned", "errored", "未知",
   ] as const;
 
   const total = $derived(
@@ -51,7 +51,7 @@
       {/each}
     </div>
   {:else}
-    <div class="empty">No data</div>
+    <div class="empty">无数据</div>
   {/if}
 </div>
 

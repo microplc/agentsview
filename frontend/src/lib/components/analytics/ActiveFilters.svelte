@@ -9,18 +9,18 @@
   } from "../../icons.js";
   import { agentColor, agentLabel } from "../../utils/agents.js";
 
-  const selectedAgents = $derived(
+  const selected代理s = $derived(
     analytics.agent
       ? analytics.agent.split(",")
       : [],
   );
-  const selectedMachines = $derived(
+  const selected机器s = $derived(
     analytics.machine
       ? analytics.machine.split(",")
       : [],
   );
 
-  const selectedStatuses = $derived(
+  const selected状态es = $derived(
     analytics.termination
       ? analytics.termination.split(",").filter((s) => s.length > 0)
       : [],
@@ -67,11 +67,11 @@
   const filterCount = $derived(
     (analytics.selectedDate !== null ? 1 : 0) +
     (analytics.project !== "" ? 1 : 0) +
-    selectedMachines.length +
-    selectedAgents.length +
-    selectedStatuses.length +
+    selected机器s.length +
+    selected代理s.length +
+    selected状态es.length +
     (analytics.minUserMessages > 0 ? 1 : 0) +
-    (!analytics.includeOneShot ? 1 : 0) +
+    (!analytics.include开eShot ? 1 : 0) +
     (analytics.includeAutomated ? 1 : 0) +
     (analytics.recentlyActive ? 1 : 0) +
     (hasTime ? 1 : 0)
@@ -86,7 +86,7 @@
       <button
         class="filter-chip"
         onclick={() => analytics.clearDate()}
-        title="Clear date filter"
+        title="清除 date filter"
       >
         <span class="chip-icon">
           <CalendarIcon size="10" strokeWidth="1.8" aria-hidden="true" />
@@ -99,8 +99,8 @@
     {#if analytics.project}
       <button
         class="filter-chip"
-        onclick={() => analytics.clearProject()}
-        title="Clear project filter"
+        onclick={() => analytics.clear项目()}
+        title="清除 project filter"
       >
         <span class="chip-icon">
           <FolderIcon size="10" strokeWidth="1.8" aria-hidden="true" />
@@ -110,10 +110,10 @@
       </button>
     {/if}
 
-    {#each selectedMachines as machine (machine)}
+    {#each selected机器s as machine (machine)}
       <button
         class="filter-chip"
-        onclick={() => analytics.removeMachine(machine)}
+        onclick={() => analytics.remove机器(machine)}
         title="Remove {machine} filter"
       >
         <span class="chip-icon">
@@ -124,10 +124,10 @@
       </button>
     {/each}
 
-    {#each selectedAgents as agent (agent)}
+    {#each selected代理s as agent (agent)}
       <button
         class="filter-chip"
-        onclick={() => analytics.toggleAgent(agent)}
+        onclick={() => analytics.toggle代理(agent)}
         title="Remove {agentLabel(agent)} filter"
       >
         <span
@@ -143,7 +143,7 @@
       <button
         class="filter-chip"
         onclick={() => analytics.clearMinUserMessages()}
-        title="Clear min prompts filter"
+        title="清除 min prompts filter"
       >
         <span class="chip-icon">
           <MessageSquareTextIcon size="10" strokeWidth="1.8" aria-hidden="true" />
@@ -157,7 +157,7 @@
       <button
         class="filter-chip"
         onclick={() => analytics.clearRecentlyActive()}
-        title="Clear recently active filter"
+        title="清除 recently active filter"
       >
         <span class="chip-icon">
           <ClockIcon size="10" strokeWidth="1.8" aria-hidden="true" />
@@ -167,22 +167,22 @@
       </button>
     {/if}
 
-    {#each selectedStatuses as status (status)}
+    {#each selected状态es as status (status)}
       <button
         class="filter-chip"
-        onclick={() => analytics.toggleTerminationStatus(status)}
+        onclick={() => analytics.toggleTermination状态(status)}
         title="Remove {STATUS_LABEL[status] ?? status} from status filter"
       >
-        Status: {STATUS_LABEL[status] ?? status}
+        状态: {STATUS_LABEL[status] ?? status}
         <span class="chip-x">&times;</span>
       </button>
     {/each}
 
-    {#if !analytics.includeOneShot}
+    {#if !analytics.include开eShot}
       <button
         class="filter-chip"
-        onclick={() => analytics.clearIncludeOneShot()}
-        title="Clear single-turn filter"
+        onclick={() => analytics.clearInclude开eShot()}
+        title="清除 single-turn filter"
       >
         Single-turn hidden
         <span class="chip-x">&times;</span>
@@ -193,7 +193,7 @@
       <button
         class="filter-chip"
         onclick={() => analytics.clearIncludeAutomated()}
-        title="Clear automated filter"
+        title="清除 automated filter"
       >
         Automated included
         <span class="chip-x">&times;</span>
@@ -204,7 +204,7 @@
       <button
         class="filter-chip"
         onclick={() => analytics.clearTimeFilter()}
-        title="Clear time filter"
+        title="清除 time filter"
       >
         <span class="chip-icon">
           <ClockIcon size="10" strokeWidth="1.8" aria-hidden="true" />
@@ -218,9 +218,9 @@
       <button
         class="clear-all"
         onclick={() => analytics.clearAllFilters()}
-        title="Clear all filters"
+        title="清除 all filters"
       >
-        Clear all
+        清除 all
       </button>
     {/if}
   </div>

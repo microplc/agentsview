@@ -2,14 +2,14 @@
   import { analytics } from "../../stores/analytics.svelte.js";
   import { router } from "../../stores/router.svelte.js";
 
-  interface AgentRow {
+  interface 代理Row {
     name: string;
-    sessions: number;
-    messages: number;
+    个会话: number;
+    条消息: number;
     turnCycleP50: number;
     msgsPerMin: number;
     toolsPerMin: number;
-    totalToolCalls: number;
+    total到olCalls: number;
     topCategories: string[];
   }
 
@@ -27,38 +27,38 @@
     return val.toFixed(1);
   }
 
-  const agents = $derived.by((): AgentRow[] => {
+  const agents = $derived.by((): 代理Row[] => {
     const names = new Set<string>();
 
-    const summaryAgents = analytics.summary?.agents;
-    if (summaryAgents) {
-      for (const k of Object.keys(summaryAgents)) {
+    const summary代理s = analytics.summary?.agents;
+    if (summary代理s) {
+      for (const k of Object.keys(summary代理s)) {
         names.add(k);
       }
     }
 
-    const velocityAgents = analytics.velocity?.by_agent;
-    if (velocityAgents) {
-      for (const bd of velocityAgents) {
+    const velocity代理s = analytics.velocity?.by_agent;
+    if (velocity代理s) {
+      for (const bd of velocity代理s) {
         names.add(bd.label);
       }
     }
 
-    const toolAgents = analytics.tools?.by_agent;
-    if (toolAgents) {
-      for (const ta of toolAgents) {
+    const tool代理s = analytics.tools?.by_agent;
+    if (tool代理s) {
+      for (const ta of tool代理s) {
         names.add(ta.agent);
       }
     }
 
     const sorted = [...names].sort();
 
-    return sorted.map((name): AgentRow => {
-      const sa = summaryAgents?.[name];
-      const vb = velocityAgents?.find(
+    return sorted.map((name): 代理Row => {
+      const sa = summary代理s?.[name];
+      const vb = velocity代理s?.find(
         (b) => b.label === name,
       );
-      const ta = toolAgents?.find(
+      const ta = tool代理s?.find(
         (a) => a.agent === name,
       );
 
@@ -69,15 +69,15 @@
 
       return {
         name,
-        sessions: sa?.sessions ?? 0,
-        messages: sa?.messages ?? 0,
+        个会话: sa?.个会话 ?? 0,
+        条消息: sa?.条消息 ?? 0,
         turnCycleP50:
           vb?.overview.turn_cycle_sec.p50 ?? 0,
         msgsPerMin:
           vb?.overview.msgs_per_active_min ?? 0,
         toolsPerMin:
           vb?.overview.tool_calls_per_active_min ?? 0,
-        totalToolCalls: ta?.total ?? 0,
+        total到olCalls: ta?.total ?? 0,
         topCategories: topCats,
       };
     });
@@ -85,7 +85,7 @@
 </script>
 
 <div class="agent-comparison">
-  <h3 class="chart-title">Agent Comparison</h3>
+  <h3 class="chart-title">代理 Comparison</h3>
 
   {#if analytics.errors.velocity || analytics.errors.summary || analytics.errors.tools}
     <div class="error">
@@ -95,10 +95,10 @@
         onclick={() => {
           analytics.fetchVelocity();
           analytics.fetchSummary();
-          analytics.fetchTools();
+          analytics.fetch到ols();
         }}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if agents.length < 2}
@@ -108,28 +108,28 @@
   {:else}
     <div class="comparison-table">
       <div class="table-header">
-        <span class="col-agent">Agent</span>
-        <span class="col-num">Sessions</span>
+        <span class="col-agent">代理</span>
+        <span class="col-num">会话</span>
         <span class="col-num">Messages</span>
         <span class="col-num">Cycle p50</span>
         <span class="col-num">Msgs/min</span>
-        <span class="col-num">Tools/min</span>
-        <span class="col-num">Tool Calls</span>
-        <span class="col-cats">Top Categories</span>
+        <span class="col-num">到ols/min</span>
+        <span class="col-num">到ol Calls</span>
+        <span class="col-cats">到p Categories</span>
       </div>
       {#each agents as agent}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div
           class="table-row"
-          onclick={() => router.navigate("sessions", { agent: agent.name })}
+          onclick={() => router.navigate("个会话", { agent: agent.name })}
         >
           <span class="col-agent">{agent.name}</span>
           <span class="col-num">
-            {agent.sessions.toLocaleString()}
+            {agent.个会话.toLocaleString()}
           </span>
           <span class="col-num">
-            {agent.messages.toLocaleString()}
+            {agent.条消息.toLocaleString()}
           </span>
           <span class="col-num">
             {formatDuration(agent.turnCycleP50)}
@@ -141,7 +141,7 @@
             {formatRate(agent.toolsPerMin)}
           </span>
           <span class="col-num">
-            {agent.totalToolCalls.toLocaleString()}
+            {agent.total到olCalls.toLocaleString()}
           </span>
           <span class="col-cats">
             {agent.topCategories.join(", ") || "-"}

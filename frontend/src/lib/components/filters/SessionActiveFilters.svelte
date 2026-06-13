@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import {
     agentColor,
     agentLabel,
@@ -8,58 +8,58 @@
   interface Props {
     projectFilters?: string[];
     modelFilters?: string[];
-    onRemoveProject?: (project: string) => void;
-    onClearProjects?: () => void;
+    onRemove项目?: (project: string) => void;
+    on清除项目s?: () => void;
     onRemoveModel?: (model: string) => void;
-    onClearModels?: () => void;
+    on清除Models?: () => void;
   }
 
   let {
     projectFilters = [],
     modelFilters = [],
-    onRemoveProject,
-    onClearProjects,
+    onRemove项目,
+    on清除项目s,
     onRemoveModel,
-    onClearModels,
+    on清除Models,
   }: Props = $props();
 
-  const selectedAgents = $derived(
-    sessions.filters.agent
-      ? sessions.filters.agent.split(",")
+  const selected代理s = $derived(
+    个会话.filters.agent
+      ? 个会话.filters.agent.split(",")
       : [],
   );
-  const selectedMachines = $derived(
-    sessions.filters.machine
-      ? sessions.filters.machine.split(",")
+  const selected机器s = $derived(
+    个会话.filters.machine
+      ? 个会话.filters.machine.split(",")
       : [],
   );
 
   const hasFilters = $derived(
-    !!sessions.filters.project ||
-      sessions.hasActiveFilters ||
+    !!个会话.filters.project ||
+      个会话.hasActiveFilters ||
       projectFilters.length > 0 ||
       modelFilters.length > 0,
   );
 
-  function clearProject() {
-    sessions.filters.project = "";
-    sessions.activeSessionId = null;
-    sessions.load();
+  function clear项目() {
+    个会话.filters.project = "";
+    个会话.activeSessionId = null;
+    个会话.load();
   }
 
-  function removeMachine(machine: string) {
-    sessions.toggleMachineFilter(machine);
+  function remove机器(machine: string) {
+    个会话.toggle机器Filter(machine);
   }
 
-  function removeAgent(agent: string) {
-    sessions.toggleAgentFilter(agent);
+  function remove代理(agent: string) {
+    个会话.toggle代理Filter(agent);
   }
 
   function clearAll() {
-    sessions.filters.project = "";
-    sessions.clearSessionFilters();
-    onClearProjects?.();
-    onClearModels?.();
+    个会话.filters.project = "";
+    个会话.clearSessionFilters();
+    on清除项目s?.();
+    on清除Models?.();
   }
 </script>
 
@@ -67,21 +67,21 @@
   <div class="active-filters">
     <span class="filters-label">Filters:</span>
 
-    {#if sessions.filters.project}
+    {#if 个会话.filters.project}
       <button
         class="filter-chip"
-        onclick={clearProject}
-        title="Clear project filter"
+        onclick={clear项目}
+        title="清除 project filter"
       >
-        {sessions.filters.project}
+        {个会话.filters.project}
         <span class="chip-x">&times;</span>
       </button>
     {/if}
 
-    {#each selectedMachines as machine (machine)}
+    {#each selected机器s as machine (machine)}
       <button
         class="filter-chip"
-        onclick={() => removeMachine(machine)}
+        onclick={() => remove机器(machine)}
         title="Remove {machine} filter"
       >
         {machine}
@@ -89,10 +89,10 @@
       </button>
     {/each}
 
-    {#each selectedAgents as agent (agent)}
+    {#each selected代理s as agent (agent)}
       <button
         class="filter-chip"
-        onclick={() => removeAgent(agent)}
+        onclick={() => remove代理(agent)}
         title="Remove {agentLabel(agent)} filter"
       >
         <span
@@ -104,33 +104,33 @@
       </button>
     {/each}
 
-    {#if sessions.filters.minUserMessages > 0}
+    {#if 个会话.filters.minUserMessages > 0}
       <button
         class="filter-chip"
-        onclick={() => sessions.setMinUserMessagesFilter(0)}
-        title="Clear min prompts filter"
+        onclick={() => 个会话.setMinUserMessagesFilter(0)}
+        title="清除 min prompts filter"
       >
-        &ge;{sessions.filters.minUserMessages} prompts
+        &ge;{个会话.filters.minUserMessages} prompts
         <span class="chip-x">&times;</span>
       </button>
     {/if}
 
-    {#if sessions.filters.recentlyActive}
+    {#if 个会话.filters.recentlyActive}
       <button
         class="filter-chip"
-        onclick={() => sessions.setRecentlyActiveFilter(false)}
-        title="Clear recently active filter"
+        onclick={() => 个会话.setRecentlyActiveFilter(false)}
+        title="清除 recently active filter"
       >
         Active 24h
         <span class="chip-x">&times;</span>
       </button>
     {/if}
 
-    {#if sessions.filters.hideUnknownProject}
+    {#if 个会话.filters.hideUnknown项目}
       <button
         class="filter-chip"
-        onclick={() => sessions.setHideUnknownProjectFilter(false)}
-        title="Clear hidden unknown project filter"
+        onclick={() => 个会话.set隐藏Unknown项目Filter(false)}
+        title="清除 hidden 未知 project filter"
       >
         Unknown hidden
         <span class="chip-x">&times;</span>
@@ -140,7 +140,7 @@
     {#each projectFilters as project (project)}
       <button
         class="filter-chip"
-        onclick={() => onRemoveProject?.(project)}
+        onclick={() => onRemove项目?.(project)}
         title="Remove {project} project filter"
       >
         {project}
@@ -148,22 +148,22 @@
       </button>
     {/each}
 
-    {#if !sessions.filters.includeOneShot}
+    {#if !个会话.filters.include开eShot}
       <button
         class="filter-chip"
-        onclick={() => sessions.setIncludeOneShotFilter(true)}
-        title="Clear single-turn filter"
+        onclick={() => 个会话.setInclude开eShotFilter(true)}
+        title="清除 single-turn filter"
       >
         Single-turn hidden
         <span class="chip-x">&times;</span>
       </button>
     {/if}
 
-    {#if sessions.filters.includeAutomated}
+    {#if 个会话.filters.includeAutomated}
       <button
         class="filter-chip"
-        onclick={() => sessions.setIncludeAutomatedFilter(false)}
-        title="Clear automated filter"
+        onclick={() => 个会话.setIncludeAutomatedFilter(false)}
+        title="清除 automated filter"
       >
         Automated included
         <span class="chip-x">&times;</span>
@@ -184,9 +184,9 @@
     <button
       class="clear-all"
       onclick={clearAll}
-      title="Clear all filters"
+      title="清除 all filters"
     >
-      Clear all
+      清除 all
     </button>
   </div>
 {/if}

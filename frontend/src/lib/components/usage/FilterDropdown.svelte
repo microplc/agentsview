@@ -12,7 +12,7 @@
     items: FilterItem[];
     /** Comma-separated list of EXCLUDED item names. */
     excludedCsv: string;
-    onToggle: (name: string) => void;
+    on到ggle: (name: string) => void;
     onSelectAll?: () => void;
     onDeselectAll?: () => void;
     color?: (name: string) => string;
@@ -23,7 +23,7 @@
     label,
     items,
     excludedCsv,
-    onToggle,
+    on到ggle,
     onSelectAll,
     onDeselectAll,
     color,
@@ -127,7 +127,7 @@
         <input
           class="dropdown-search"
           type="text"
-          placeholder="Search..."
+          placeholder="搜索..."
           bind:value={search}
         />
       {/if}
@@ -172,7 +172,7 @@
             style:--item-color={color
               ? color(item.name)
               : "var(--accent-blue)"}
-            onclick={() => onToggle(item.name)}
+            onclick={() => on到ggle(item.name)}
           >
             <span
               class="item-check"
@@ -195,7 +195,7 @@
           </button>
         {/each}
         {#if filtered.length === 0}
-          <div class="dropdown-empty">No matches</div>
+          <div class="dropdown-empty">无匹配es</div>
         {/if}
       </div>
     </div>
@@ -241,12 +241,12 @@
     text-overflow: ellipsis;
   }
 
-  :global(.chevron) {
+  :全局(.chevron) {
     flex-shrink: 0;
     transition: transform 0.15s;
   }
 
-  :global(.chevron.open) {
+  :全局(.chevron.open) {
     transform: rotate(180deg);
   }
 

@@ -5,7 +5,7 @@
     ArrowUpNarrowWideIcon,
     CheckIcon,
     CloudUploadIcon,
-    CopyIcon,
+    复制Icon,
     DownloadIcon,
     EllipsisIcon,
     FunnelIcon,
@@ -14,15 +14,15 @@
     LayoutGridIcon,
     LayoutListIcon,
     LinkIcon,
-    ListCollapseIcon,
+    List折叠Icon,
     LockIcon,
     LogsIcon,
     MenuIcon,
     MoonIcon,
-    MoreHorizontalIcon,
-    RefreshCwIcon,
+    更多HorizontalIcon,
+    刷新CwIcon,
     SearchIcon,
-    SettingsIcon,
+    设置Icon,
     SunIcon,
     UploadIcon,
   } from "../../icons.js";
@@ -32,21 +32,21 @@
     type BlockType,
     type TranscriptMode,
   } from "../../stores/ui.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { sync } from "../../stores/sync.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import {
     downloadExport,
     getMarkdownExportUrl,
   } from "../../api/client.js";
-  import { copyToClipboard } from "../../utils/clipboard.js";
-  import ProjectTypeahead from "./ProjectTypeahead.svelte";
-  import ImportModal from "../import/ImportModal.svelte";
+  import { copy到Clipboard } from "../../utils/clipboard.js";
+  import 项目Typeahead from "./项目Typeahead.svelte";
+  import 导入Modal from "../import/导入Modal.svelte";
 
   const isMac = navigator.platform.toUpperCase().includes("MAC");
   const modKey = isMac ? "Cmd" : "Ctrl";
 
-  let showImportModal = $state(false);
+  let show导入Modal = $state(false);
   let showBlockFilter = $state(false);
   let showExportMenu = $state(false);
   let showPublishMenu = $state(false);
@@ -55,7 +55,7 @@
   let copiedMarkdownLinkTimer:
     | ReturnType<typeof setTimeout>
     | undefined;
-  let moreOpen = $state(false);
+  let more打开 = $state(false);
   let filterBtnRef: HTMLButtonElement | undefined =
     $state(undefined);
   let filterDropRef: HTMLDivElement | undefined =
@@ -78,11 +78,11 @@
     $state(undefined);
 
   const BLOCK_LABELS: Record<BlockType, string> = {
-    user: "User messages",
-    assistant: "Assistant text",
-    thinking: "Thinking blocks",
-    tool: "Tool calls",
-    code: "Code blocks",
+    user: "User 条消息",
+    assistant: "助手文本",
+    thinking: "思考块",
+    tool: "工具调用",
+    code: "代码块",
   };
 
   const BLOCK_COLORS: Record<BlockType, string> = {
@@ -94,22 +94,22 @@
   };
 
   async function handleExport() {
-    if (sessions.activeSessionId) {
+    if (个会话.activeSessionId) {
       try {
-        await downloadExport(sessions.activeSessionId);
+        await downloadExport(个会话.activeSessionId);
       } catch (e) {
         console.error("Export failed:", e);
       }
     }
   }
 
-  async function handleCopyMarkdownExportLink() {
-    if (!sessions.activeSessionId) return;
+  async function handle复制MarkdownExportLink() {
+    if (!个会话.activeSessionId) return;
     const url = new URL(
-      getMarkdownExportUrl(sessions.activeSessionId),
+      getMarkdownExportUrl(个会话.activeSessionId),
       window.location.origin,
     ).toString();
-    const ok = await copyToClipboard(url);
+    const ok = await copy到Clipboard(url);
     if (!ok) return;
     copiedMarkdownLink = true;
     clearTimeout(copiedMarkdownLinkTimer);
@@ -120,10 +120,10 @@
     showOverflow = false;
   }
 
-  async function handleCopySourceFilePath() {
-    const filePath = sessions.activeSession?.file_path;
+  async function handle复制SourceFilePath() {
+    const filePath = 个会话.activeSession?.file_path;
     if (!filePath) return;
-    const ok = await copyToClipboard(filePath);
+    const ok = await copy到Clipboard(filePath);
     if (!ok) return;
     showExportMenu = false;
     showOverflow = false;
@@ -137,13 +137,13 @@
   }
 
   const hasActiveSession = $derived(
-    sessions.activeSessionId !== null,
+    个会话.activeSessionId !== null,
   );
   const activeSessionFilePath = $derived(
-    sessions.activeSession?.file_path ?? "",
+    个会话.activeSession?.file_path ?? "",
   );
 
-  // Close block filter dropdown on outside click
+  // 关闭 block filter dropdown on outside click
   $effect(() => {
     if (!showBlockFilter) return;
     function onClickOutside(e: MouseEvent) {
@@ -164,7 +164,7 @@
       );
   });
 
-  // Close export menu on outside click
+  // 关闭 export menu on outside click
   $effect(() => {
     if (!showExportMenu) return;
     function onClickOutside(e: MouseEvent) {
@@ -185,7 +185,7 @@
       );
   });
 
-  // Close publish menu on outside click
+  // 关闭 publish menu on outside click
   $effect(() => {
     if (!showPublishMenu) return;
     function onClickOutside(e: MouseEvent) {
@@ -206,7 +206,7 @@
       );
   });
 
-  // Close overflow dropdown on outside click
+  // 关闭 overflow dropdown on outside click
   $effect(() => {
     if (!showOverflow) return;
     function onClickOutside(e: MouseEvent) {
@@ -227,9 +227,9 @@
       );
   });
 
-  // Close More dropdown on outside click or Escape
+  // 关闭 更多 dropdown on outside click or Escape
   $effect(() => {
-    if (!moreOpen) return;
+    if (!more打开) return;
     function onClickOutside(e: MouseEvent) {
       const target = e.target as Node;
       if (
@@ -237,10 +237,10 @@
         moreDropRef?.contains(target)
       )
         return;
-      moreOpen = false;
+      more打开 = false;
     }
     function onKeydown(e: KeyboardEvent) {
-      if (e.key === "Escape") moreOpen = false;
+      if (e.key === "Escape") more打开 = false;
     }
     document.addEventListener("click", onClickOutside, true);
     document.addEventListener("keydown", onKeydown);
@@ -259,7 +259,7 @@
   {#if ui.messageLayout === "default"}
     <LayoutListIcon {size} strokeWidth="2" aria-hidden="true" />
   {:else if ui.messageLayout === "compact"}
-    <ListCollapseIcon {size} strokeWidth="2" aria-hidden="true" />
+    <List折叠Icon {size} strokeWidth="2" aria-hidden="true" />
   {:else}
     <LogsIcon {size} strokeWidth="2" aria-hidden="true" />
   {/if}
@@ -270,22 +270,22 @@
     <button
       class="hamburger"
       onclick={() => {
-        if (ui.isMobileViewport && router.route !== "sessions") {
-          router.navigate("sessions");
-          ui.sidebarOpen = true;
+        if (ui.isMobileViewport && router.route !== "个会话") {
+          router.navigate("个会话");
+          ui.sidebar打开 = true;
         } else {
           ui.toggleSidebar();
         }
       }}
-      title="Toggle sidebar (b)"
-      aria-label="Toggle sidebar"
+      title="切换侧边栏 (b)"
+      aria-label="切换侧边栏"
     >
       <MenuIcon size="16" strokeWidth="2" aria-hidden="true" />
     </button>
     <button
       class="header-home"
-      onclick={() => router.navigate("sessions")}
-      title="Home"
+      onclick={() => router.navigate("个会话")}
+      title="首页"
     >
       <svg class="header-logo" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true">
         <rect width="32" height="32" rx="6" fill="var(--accent-blue, #3b82f6)"/>
@@ -294,71 +294,71 @@
         <circle cx="18" cy="8.5" r="2" fill="var(--accent-blue, #3b82f6)"/>
         <circle cx="18" cy="8.5" r="1" fill="#1d4ed8"/>
       </svg>
-      <span class="header-title">AgentsView</span>
+      <span class="header-title">代理sView</span>
     </button>
 
-    <ProjectTypeahead
-      projects={sessions.projects}
-      value={sessions.filters.project}
-      onselect={(v) => sessions.setProjectFilter(v)}
+    <项目Typeahead
+      个项目={个会话.个项目}
+      value={个会话.filters.project}
+      onselect={(v) => 个会话.set项目Filter(v)}
     />
 
     <button
       class="nav-btn"
-      class:active={router.route === "sessions"}
-      onclick={() => router.navigate("sessions")}
-      title="Sessions"
-      aria-label="Sessions"
+      class:active={router.route === "个会话"}
+      onclick={() => router.navigate("个会话")}
+      title="会话"
+      aria-label="会话"
     >
       <LayoutGridIcon size="12" strokeWidth="2" aria-hidden="true" />
-      <span class="nav-label">Sessions</span>
+      <span class="nav-label">会话</span>
     </button>
 
     <button
       class="nav-btn"
       class:active={router.route === "usage"}
       onclick={() => router.navigate("usage")}
-      title="Token Usage"
-      aria-label="Usage"
+      title="到ken 用量"
+      aria-label="用量"
     >
       <Grid2x2Icon size="12" strokeWidth="2" aria-hidden="true" />
-      <span class="nav-label">Usage</span>
+      <span class="nav-label">用量</span>
     </button>
 
     <div class="more-wrap">
       <button
         class="nav-btn"
-        class:active={router.route === "trends" || router.route === "pinned" || router.route === "insights" || router.route === "trash" || moreOpen}
+        class:active={router.route === "trends" || router.route === "pinned" || router.route === "insights" || router.route === "trash" || more打开}
         bind:this={moreBtnRef}
-        onclick={() => { moreOpen = !moreOpen; }}
-        title="More navigation"
-        aria-label="More navigation"
-        aria-expanded={moreOpen}
+        onclick={() => { more打开 = !more打开; }}
+        title="更多导航"
+        aria-label="更多导航"
+        aria-expanded={more打开}
       >
         <EllipsisIcon size="12" strokeWidth="2.4" aria-hidden="true" />
-        <span class="nav-label">More</span>
+        <span class="nav-label">更多</span>
       </button>
-      {#if moreOpen}
+      {#if more打开}
         <div class="more-dropdown" role="menu" bind:this={moreDropRef}>
           <button class="more-item" role="menuitem"
             class:active={router.route === "trends"}
-            onclick={() => { router.navigate("trends"); moreOpen = false; }}>
-            Trends
+            onclick={() => { router.navigate("trends"); more打开 = false; }}>
+            趋势
           </button>
           <button class="more-item" role="menuitem"
             class:active={router.route === "pinned"}
-            onclick={() => { router.navigate("pinned"); moreOpen = false; }}>
-            Pinned
+            onclick={() => { router.navigate("pinned"); more打开 = false; }}>
+            已固定
           </button>
           <button class="more-item" role="menuitem"
             class:active={router.route === "insights"}
-            onclick={() => { router.navigate("insights"); moreOpen = false; }}>
-            Insights
+            onclick={() => { router.navigate("insights"); more打开 = false; }}>
+            洞察
           </button>
           <button class="more-item" role="menuitem"
             class:active={router.route === "trash"}
-            onclick={() => { router.navigate("trash"); moreOpen = false; }}>
-            Trash
+            onclick={() => { router.navigate("trash"); more打开 = false; }}>
+            回收站
           </button>
         </div>
       {/if}
@@ -368,10 +368,10 @@
   <button
     class="search-hint"
     onclick={() => (ui.activeModal = "commandPalette")}
-    title="Search sessions ({modKey}+K)"
+    title="Search 个会话 ({modKey}+K)"
   >
     <SearchIcon size="12" strokeWidth="2" aria-hidden="true" />
-    <span class="search-hint-text">Search sessions...</span>
+    <span class="search-hint-text">Search 个会话...</span>
     <kbd class="search-hint-kbd">{modKey}+K</kbd>
   </button>
 
@@ -383,19 +383,19 @@
           class="pill"
           class:active={ui.transcriptMode === "normal"}
           onclick={() => ui.setTranscriptMode("normal")}
-          title="Normal transcript — show all messages"
-          aria-label="Normal transcript mode"
+          title="普通 transcript — show all 条消息"
+          aria-label="普通模式"
         >
-          <span class="pill-label">Normal</span>
+          <span class="pill-label">普通</span>
         </button>
         <button
           class="pill"
           class:active={ui.transcriptMode === "focused"}
           onclick={() => ui.setTranscriptMode("focused")}
-          title="Focused transcript — user prompts and final answers only"
-          aria-label="Focused transcript mode"
+          title="聚焦模式 — 仅显示用户提示和最终回答"
+          aria-label="聚焦模式"
         >
-          <span class="pill-label">Focused</span>
+          <span class="pill-label">聚焦</span>
         </button>
 
         <span class="strip-divider"></span>
@@ -406,8 +406,8 @@
             class:filter-active={ui.hasBlockFilters}
             bind:this={filterBtnRef}
             onclick={() => (showBlockFilter = !showBlockFilter)}
-            title="Filter block types"
-            aria-label="Filter block types"
+            title="过滤块类型"
+            aria-label="过滤块类型"
           >
             <FunnelIcon size="12" strokeWidth="2" aria-hidden="true" />
             {#if ui.hasBlockFilters}
@@ -417,7 +417,7 @@
 
           {#if showBlockFilter}
             <div class="block-filter-dropdown" bind:this={filterDropRef}>
-              <div class="block-filter-title">Block Visibility</div>
+              <div class="block-filter-title">块可见性</div>
               {#each ALL_BLOCK_TYPES as bt}
                 {@const visible = ui.isBlockVisible(bt)}
                 <button
@@ -442,7 +442,7 @@
                   class="block-filter-reset"
                   onclick={() => ui.showAllBlocks()}
                 >
-                  Show all
+                  显示全部
                 </button>
               {/if}
             </div>
@@ -454,8 +454,8 @@
         class="header-btn"
         class:active={ui.followLatest}
         onclick={() => ui.toggleFollowLatest()}
-        title="Follow latest messages"
-        aria-label="Follow latest messages"
+        title="Follow latest 条消息"
+        aria-label="Follow latest 条消息"
         aria-pressed={ui.followLatest}
       >
         <ArrowDownIcon size="14" strokeWidth="2" aria-hidden="true" />
@@ -464,8 +464,8 @@
       <button
         class="header-btn"
         onclick={() => ui.toggleSort()}
-        title="Toggle sort order (o)"
-        aria-label="Toggle sort order"
+        title="切换排序顺序 (o)"
+        aria-label="切换排序顺序"
       >
         {#if ui.sortNewestFirst}
           <ArrowDownWideNarrowIcon size="14" strokeWidth="2" aria-hidden="true" />
@@ -479,7 +479,7 @@
         class="header-btn collapsible"
         onclick={() => ui.cycleLayout()}
         title="Cycle layout: {ui.messageLayout} (l)"
-        aria-label="Cycle message layout"
+        aria-label="切换消息布局"
       >
         {@render messageLayoutIcon("14")}
       </button>
@@ -492,9 +492,9 @@
             showExportMenu = !showExportMenu;
             showOverflow = false;
           }}
-          disabled={!sessions.activeSessionId}
-          title="Export session options"
-          aria-label="Export session"
+          disabled={!个会话.activeSessionId}
+          title="导出会话选项"
+          aria-label="导出会话"
           aria-expanded={showExportMenu}
         >
           <CloudUploadIcon size="14" strokeWidth="2" aria-hidden="true" />
@@ -510,11 +510,11 @@
               }}
             >
               <CloudUploadIcon size="13" strokeWidth="2" aria-hidden="true" />
-              <span>Download HTML export</span>
+              <span>下载 HTML 导出</span>
             </button>
             <button
               class="overflow-item"
-              onclick={handleCopyMarkdownExportLink}
+              onclick={handle复制MarkdownExportLink}
             >
               {#if copiedMarkdownLink}
                 <CheckIcon size="13" strokeWidth="2.4" aria-hidden="true" />
@@ -523,19 +523,19 @@
               {/if}
               <span>
                 {#if copiedMarkdownLink}
-                  Copied markdown link
+                  已复制 Markdown 链接
                 {:else}
-                  Copy markdown export link
+                  复制 Markdown 导出链接
                 {/if}
               </span>
             </button>
             {#if activeSessionFilePath}
               <button
                 class="overflow-item"
-                onclick={handleCopySourceFilePath}
+                onclick={handle复制SourceFilePath}
               >
-                <CopyIcon size="13" strokeWidth="2" aria-hidden="true" />
-                <span>Copy source file path</span>
+                <复制Icon size="13" strokeWidth="2" aria-hidden="true" />
+                <span>复制源文件路径</span>
               </button>
             {/if}
           </div>
@@ -551,9 +551,9 @@
             showExportMenu = false;
             showOverflow = false;
           }}
-          disabled={!sessions.activeSessionId}
-          title="Publish to Gist (p)"
-          aria-label="Publish to Gist"
+          disabled={!个会话.activeSessionId}
+          title="发布到 Gist (p)"
+          aria-label="发布到 Gist"
           aria-expanded={showPublishMenu}
         >
           <UploadIcon size="14" strokeWidth="2" aria-hidden="true" />
@@ -566,14 +566,14 @@
               onclick={() => openPublish(false)}
             >
               <GlobeIcon size="13" strokeWidth="2" aria-hidden="true" />
-              <span>Publish public Gist</span>
+              <span>发布公开 Gist</span>
             </button>
             <button
               class="overflow-item"
               onclick={() => openPublish(true)}
             >
               <LockIcon size="13" strokeWidth="2" aria-hidden="true" />
-              <span>Publish secret Gist</span>
+              <span>发布私密 Gist</span>
             </button>
           </div>
         {/if}
@@ -585,10 +585,10 @@
           class="header-btn overflow-btn"
           bind:this={overflowBtnRef}
           onclick={() => (showOverflow = !showOverflow)}
-          title="More actions"
-          aria-label="More actions"
+          title="更多 actions"
+          aria-label="更多 actions"
         >
-          <MoreHorizontalIcon size="14" strokeWidth="2.4" aria-hidden="true" />
+          <更多HorizontalIcon size="14" strokeWidth="2.4" aria-hidden="true" />
         </button>
 
         {#if showOverflow}
@@ -605,11 +605,11 @@
               onclick={() => { handleExport(); showOverflow = false; }}
             >
               <CloudUploadIcon size="13" strokeWidth="2" aria-hidden="true" />
-              <span>Download HTML export</span>
+              <span>下载 HTML 导出</span>
             </button>
             <button
               class="overflow-item"
-              onclick={handleCopyMarkdownExportLink}
+              onclick={handle复制MarkdownExportLink}
             >
               {#if copiedMarkdownLink}
                 <CheckIcon size="13" strokeWidth="2.4" aria-hidden="true" />
@@ -618,19 +618,19 @@
               {/if}
               <span>
                 {#if copiedMarkdownLink}
-                  Copied markdown link
+                  已复制 Markdown 链接
                 {:else}
-                  Copy markdown export link
+                  复制 Markdown 导出链接
                 {/if}
               </span>
             </button>
             {#if activeSessionFilePath}
               <button
                 class="overflow-item"
-                onclick={handleCopySourceFilePath}
+                onclick={handle复制SourceFilePath}
               >
-                <CopyIcon size="13" strokeWidth="2" aria-hidden="true" />
-                <span>Copy source file path</span>
+                <复制Icon size="13" strokeWidth="2" aria-hidden="true" />
+                <span>复制源文件路径</span>
               </button>
             {/if}
             <button
@@ -638,14 +638,14 @@
               onclick={() => openPublish(false)}
             >
               <UploadIcon size="13" strokeWidth="2" aria-hidden="true" />
-              <span>Publish public Gist</span>
+              <span>发布公开 Gist</span>
             </button>
             <button
               class="overflow-item"
               onclick={() => openPublish(true)}
             >
               <LockIcon size="13" strokeWidth="2" aria-hidden="true" />
-              <span>Publish secret Gist</span>
+              <span>发布私密 Gist</span>
             </button>
           </div>
         {/if}
@@ -657,34 +657,34 @@
       class:syncing={sync.syncing}
       onclick={() => sync.triggerSync()}
       disabled={sync.syncing}
-      title={sync.readOnly ? "Refresh data (r)" : "Sync sessions (r)"}
-      aria-label={sync.readOnly ? "Refresh data" : "Sync sessions"}
+      title={sync.read开ly ? "刷新数据 (r)" : "Sync 个会话 (r)"}
+      aria-label={sync.read开ly ? "刷新数据" : "Sync 个会话"}
     >
-      <RefreshCwIcon size="14" strokeWidth="2" aria-hidden="true" />
+      <刷新CwIcon size="14" strokeWidth="2" aria-hidden="true" />
     </button>
 
     <button
       class="import-btn"
       onclick={() => {
-        if (!sync.readOnly) showImportModal = true;
+        if (!sync.read开ly) show导入Modal = true;
       }}
-      disabled={sync.readOnly}
-      title={sync.readOnly
-        ? "Import unavailable in read-only mode"
-        : "Import conversations"}
-      aria-label="Import conversations"
+      disabled={sync.read开ly}
+      title={sync.read开ly
+        ? "只读模式下无法导入"
+        : "导入对话"}
+      aria-label="导入对话"
     >
       <DownloadIcon size="12" strokeWidth="2" aria-hidden="true" />
-      <span class="import-label">Import</span>
+      <span class="import-label">导入</span>
     </button>
 
     <span class="header-divider"></span>
 
     <button
       class="header-btn"
-      onclick={() => ui.toggleTheme()}
-      title="Toggle theme"
-      aria-label="Toggle theme"
+      onclick={() => ui.toggle主题()}
+      title="切换主题"
+      aria-label="切换主题"
     >
       {#if ui.theme === "light"}
         <MoonIcon size="14" strokeWidth="2" aria-hidden="true" />
@@ -697,29 +697,29 @@
       class="header-btn"
       class:active={router.route === "settings"}
       onclick={() => router.navigate("settings")}
-      title="Settings"
-      aria-label="Settings"
+      title="设置"
+      aria-label="设置"
     >
-      <SettingsIcon size="14" strokeWidth="2" aria-hidden="true" />
+      <设置Icon size="14" strokeWidth="2" aria-hidden="true" />
     </button>
 
     <button
       class="header-btn"
       onclick={() => (ui.activeModal = "shortcuts")}
-      title="Keyboard shortcuts (?)"
-      aria-label="Keyboard shortcuts"
+      title="键盘快捷键 (?)"
+      aria-label="键盘快捷键"
     >
       ?
     </button>
   </div>
 </header>
 
-<ImportModal
-  bind:open={showImportModal}
-  onclose={() => showImportModal = false}
+<导入Modal
+  bind:open={show导入Modal}
+  onclose={() => show导入Modal = false}
   onimported={() => {
-    sessions.invalidateFilterCaches();
-    sessions.load();
+    个会话.invalidateFilterCaches();
+    个会话.load();
   }}
 />
 
@@ -1105,7 +1105,7 @@
     animation: spin 1s linear infinite;
   }
 
-  /* ── Import button (icon + label) ── */
+  /* ── 导入 button (icon + label) ── */
   .import-btn {
     height: 26px;
     display: flex;
@@ -1220,14 +1220,14 @@
     color: var(--text-primary);
   }
 
-  .overflow-item :global(svg) {
+  .overflow-item :全局(svg) {
     flex-shrink: 0;
     color: var(--text-muted);
   }
 
   /* ── Responsive ── */
 
-  /* 1024px: Hide nav button labels + search text/kbd */
+  /* 1024px: 隐藏 nav button labels + search text/kbd */
   @media (max-width: 1023px) {
     .nav-label,
     .import-label {
@@ -1247,19 +1247,19 @@
     }
   }
 
-  /* 767px: Hide nav buttons and typeahead */
+  /* 767px: 隐藏 nav buttons and typeahead */
   @media (max-width: 767px) {
     .header-left .nav-btn,
     .header-left .more-wrap {
       display: none;
     }
 
-    .header-left :global(.typeahead) {
+    .header-left :全局(.typeahead) {
       display: none;
     }
   }
 
-  /* 699px: Collapse layout/export/publish into overflow menu */
+  /* 699px: 折叠 layout/export/publish into overflow menu */
   @media (max-width: 699px) {
     .collapsible {
       display: none;
@@ -1275,12 +1275,12 @@
 
     /* Show first letter only via data attrs */
     .pill:nth-child(1) .pill-label::after {
-      content: "N";
+      content: "普";
       font-size: 11px;
     }
 
     .pill:nth-child(2) .pill-label::after {
-      content: "F";
+      content: "聚";
       font-size: 11px;
     }
 
@@ -1309,7 +1309,7 @@
     }
   }
 
-  /* Touch targets for coarse pointers */
+  /* 到uch targets for coarse pointers */
   @media (pointer: coarse) {
     .header-btn,
     .nav-btn,

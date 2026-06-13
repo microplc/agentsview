@@ -70,7 +70,7 @@ func runHealthList(
 	}
 
 	if len(page.Sessions) == 0 {
-		fmt.Println("No sessions found.")
+		fmt.Println("未找到会话。")
 		return
 	}
 	printHealthList(os.Stdout, page.Sessions)
@@ -208,7 +208,7 @@ func printHealthDetail(w io.Writer, s db.Session) {
 		s.MessageCount, s.UserMessageCount)
 	fmt.Fprintln(w)
 
-	fmt.Fprintln(w, "Health")
+	fmt.Fprintln(w, "健康度")
 	fmt.Fprintf(w, "  Grade:   %s%s\n",
 		gradeCell(s.HealthGrade),
 		formatScore(s.HealthScore))
@@ -217,7 +217,7 @@ func printHealthDetail(w io.Writer, s db.Session) {
 		formatConfidence(s.OutcomeConfidence, s.EndedWithRole))
 	fmt.Fprintln(w)
 
-	fmt.Fprintln(w, "Signals")
+	fmt.Fprintln(w, "信号")
 	fmt.Fprintf(w, "  Tool failures:        %d\n",
 		s.ToolFailureSignalCount)
 	fmt.Fprintf(w, "  Tool retries:         %d\n", s.ToolRetryCount)

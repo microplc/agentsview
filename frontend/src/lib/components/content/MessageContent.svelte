@@ -7,27 +7,27 @@
   } from "../../utils/content-parser.js";
   import {
     formatTimestamp,
-    formatTokenUsage,
+    format到ken用量,
   } from "../../utils/format.js";
   import { formatDuration } from "../../utils/duration.js";
-  import { copyToClipboard } from "../../utils/clipboard.js";
-  import { formatMessageForCopy } from "../../utils/copy-message.js";
-  import { messages as messagesStore } from "../../stores/messages.svelte.js";
+  import { copy到Clipboard } from "../../utils/clipboard.js";
+  import { formatMessageFor复制 } from "../../utils/copy-message.js";
+  import { 条消息 as 条消息Store } from "../../stores/条消息.svelte.js";
   import { sessionTiming } from "../../stores/sessionTiming.svelte.js";
   import { liveTick } from "../../stores/liveTick.svelte.js";
   import ThinkingBlock from "./ThinkingBlock.svelte";
-  import ToolBlock from "./ToolBlock.svelte";
+  import 到olBlock from "./到olBlock.svelte";
   import ParallelGroup from "./ParallelGroup.svelte";
   import CodeBlock from "./CodeBlock.svelte";
   import SkillBlock from "./SkillBlock.svelte";
-  import CopyButton from "../shared/CopyButton.svelte";
+  import 复制Button from "../shared/复制Button.svelte";
   import { ui } from "../../stores/ui.svelte.js";
   import { pins } from "../../stores/pins.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { applyHighlight } from "../../utils/highlight.js";
   import { highlightCodeFences } from "../../utils/highlight-fences.js";
   import { renderMarkdown } from "../../utils/markdown.js";
-  import { displayToolName } from "../../utils/toolDisplay.js";
+  import { display到olName } from "../../utils/toolDisplay.js";
   import { PinIcon } from "../../icons.js";
   import type { Session } from "../../api/types.js";
 
@@ -58,8 +58,8 @@
 
   let mainModel = $derived(
     !isSubagentContext &&
-    messagesStore.sessionId === message.session_id
-      ? messagesStore.mainModel
+    条消息Store.sessionId === message.session_id
+      ? 条消息Store.mainModel
       : "",
   );
 
@@ -68,27 +68,27 @@
     return message.model !== mainModel ? message.model : "";
   });
 
-  let hasContextTokens = $derived(
+  let hasContext到kens = $derived(
     message.has_context_tokens ?? message.context_tokens > 0,
   );
 
-  let hasOutputTokens = $derived(
+  let hasOutput到kens = $derived(
     message.has_output_tokens ?? message.output_tokens > 0,
   );
 
   let tokenSummary = $derived(
-    formatTokenUsage(
+    format到ken用量(
       message.context_tokens,
-      hasContextTokens,
+      hasContext到kens,
       message.output_tokens,
-      hasOutputTokens,
+      hasOutput到kens,
     ),
   );
 
   /** Resolve the session that owns this message, falling back to activeSession. */
   let owningSession = $derived(
-    sessions.sessions.find((s) => s.id === message.session_id) ??
-      sessions.activeSession,
+    个会话.个会话.find((s) => s.id === message.session_id) ??
+      个会话.activeSession,
   );
 
   /** Walk the parent chain to check if any ancestor has the teammate tag. */
@@ -127,7 +127,7 @@
   let sessionKind = $derived.by((): "teammate" | "subagent" | "user" => {
     const s = owningSession;
     if (!s) return "user";
-    const all = sessions.sessions;
+    const all = 个会话.个会话;
     if (isSubagentAncestry(s, all)) return "subagent";
     if (isTeammateAncestry(s, all)) return "teammate";
     return "user";
@@ -136,9 +136,9 @@
   /** Context-aware role labels based on session type. */
   let roleLabel = $derived.by(() => {
     if (!isUser) return "Assistant";
-    if (isSubagentContext) return "Agent";
+    if (isSubagentContext) return "代理";
     if (sessionKind === "teammate") return "Teammate";
-    if (sessionKind === "subagent") return "Agent";
+    if (sessionKind === "subagent") return "代理";
     return "User";
   });
 
@@ -165,7 +165,7 @@
     isUser ? "var(--user-bg)" : "var(--assistant-bg)",
   );
 
-  let pinned = $derived(pins.isPinned(message.id));
+  let pinned = $derived(pins.is已固定(message.id));
   let pinFeedback = $state("");
 
   /** Index turn timings by message id for O(1) lookup. */
@@ -178,7 +178,7 @@
   });
 
   /** Index call timings by tool_use_id for O(1) lookup. */
-  let callByToolUseID = $derived.by(() => {
+  let callBy到olUseID = $derived.by(() => {
     const m = new Map<string, CallTiming>();
     for (const t of sessionTiming.timing?.turns ?? []) {
       for (const c of t.calls) m.set(c.tool_use_id, c);
@@ -189,7 +189,7 @@
   /** Resolve the duration badge for a solo (non-grouped) tool call.
    *  Sub-agent calls show their exact duration; non-sub-agent solo
    *  calls inherit the turn's wall-clock duration since per-call
-   *  timing isn't available without tool_result deltas. Running
+   *  timing isn't available without tool_result deltas. 运行ning
    *  turns synthesize a live `running …+` label from the turn's
    *  `started_at`, ticked once per second by `liveTick`. */
   function soloDurationLabel(
@@ -216,7 +216,7 @@
 
   /** A turn is running iff the session is active AND its
    *  duration isn't yet known. */
-  function isRunningTurn(msg: Message): boolean {
+  function is运行ningTurn(msg: Message): boolean {
     if (!sessionTiming.timing?.running) return false;
     const turn = turnByMessage.get(msg.id);
     return turn != null && turn.duration_ms == null;
@@ -253,8 +253,8 @@
   let copyTimer: ReturnType<typeof setTimeout>;
   let pinTimer: ReturnType<typeof setTimeout>;
 
-  async function handleCopy() {
-    const ok = await copyToClipboard(formatMessageForCopy(message));
+  async function handle复制() {
+    const ok = await copy到Clipboard(formatMessageFor复制(message));
     if (ok) {
       clearTimeout(copyTimer);
       copied = true;
@@ -262,8 +262,8 @@
     }
   }
 
-  async function handleTogglePin() {
-    const wasPinned = pinned;
+  async function handle到gglePin() {
+    const was已固定 = pinned;
     try {
       await pins.togglePin(
         message.session_id,
@@ -271,7 +271,7 @@
         message.ordinal,
       );
       clearTimeout(pinTimer);
-      pinFeedback = wasPinned ? "Unpinned" : "Pinned";
+      pinFeedback = was已固定 ? "已取消固定" : "已固定";
       pinTimer = setTimeout(() => { pinFeedback = ""; }, 1500);
     } catch {
       // silently fail
@@ -298,20 +298,20 @@
     >
       {roleLabel}
     </span>
-    <CopyButton
+    <复制Button
       {copied}
-      ariaLabel="Copy message"
-      copiedAriaLabel="Copied message"
-      title="Copy message"
-      copiedTitle="Copied!"
-      onclick={handleCopy}
+      ariaLabel="复制 message"
+      copiedAriaLabel="消息已复制"
+      title="复制 message"
+      copiedTitle="已复制！"
+      onclick={handle复制}
     />
     <button
       type="button"
       class="pin-btn"
       class:pinned
-      title={pinned ? "Unpin message" : "Pin message"}
-      onclick={handleTogglePin}
+      title={pinned ? "取消固定消息" : "固定消息"}
+      onclick={handle到gglePin}
     >
       <PinIcon size="14" strokeWidth="1.8" aria-hidden="true" />
     </button>
@@ -355,7 +355,7 @@
           />
         {/if}
       {:else if segment.type === "tool"}
-        <!-- Tool segments are rendered after the loop so contiguous
+        <!-- 到ol segments are rendered after the loop so contiguous
              tool_calls can be grouped into a single ParallelGroup
              (v1 simplification: text first, then all tools). -->
       {:else if segment.type === "code"}
@@ -397,36 +397,36 @@
       {@const structuredCalls = message.tool_calls ?? []}
       {#if structuredCalls.length === 1}
         {@const soloCall = structuredCalls[0]!}
-        <ToolBlock
+        <到olBlock
           toolCall={soloCall}
           content=""
-          label={displayToolName(soloCall)}
+          label={display到olName(soloCall)}
           durationLabel={soloDurationLabel(
-            callByToolUseID.get(soloCall.tool_use_id ?? ""),
+            callBy到olUseID.get(soloCall.tool_use_id ?? ""),
             turn,
             message,
           )}
-          isRunning={isRunningTurn(message)}
+          is运行ning={is运行ningTurn(message)}
           highlightQuery={highlightQuery}
           isCurrentHighlight={isCurrentHighlight}
         />
       {:else if structuredCalls.length >= 2}
         <ParallelGroup
           toolCalls={structuredCalls}
-          callTimingByID={callByToolUseID}
+          callTimingByID={callBy到olUseID}
           turnDurationMs={turn?.duration_ms ?? null}
-          isRunning={isRunningTurn(message)}
+          is运行ning={is运行ningTurn(message)}
           highlightQuery={highlightQuery}
           isCurrentHighlight={isCurrentHighlight}
         />
       {:else}
-        <!-- Fallback for messages with `has_tool_use` but no
+        <!-- Fallback for 条消息 with `has_tool_use` but no
              structured tool_calls — render parsed tool segments
              so legacy/synthetic transcripts (e.g. `[Bash]...`
              markers) keep their tool blocks. Mirrors
-             ToolCallGroup.svelte's fallback path. -->
+             到olCallGroup.svelte's fallback path. -->
         {#each segments.filter((s) => s.type === "tool") as seg, segIdx (`${message.id}-${segIdx}`)}
-          <ToolBlock
+          <到olBlock
             content={seg.content}
             label={seg.label}
             toolCall={seg.toolCall}
@@ -529,7 +529,7 @@
     animation: duration-pulse 1.6s ease-in-out infinite;
   }
 
-  .message:hover :global(.copy-btn) {
+  .message:hover :全局(.copy-btn) {
     opacity: 1;
   }
 
@@ -601,46 +601,46 @@
   }
 
   /* Markdown prose styles */
-  .markdown :global(p) {
+  .markdown :全局(p) {
     margin: 0.5em 0;
   }
 
-  .markdown :global(p:first-child) {
+  .markdown :全局(p:first-child) {
     margin-top: 0;
   }
 
-  .markdown :global(p:last-child) {
+  .markdown :全局(p:last-child) {
     margin-bottom: 0;
   }
 
-  .markdown :global(h1),
-  .markdown :global(h2),
-  .markdown :global(h3),
-  .markdown :global(h4),
-  .markdown :global(h5),
-  .markdown :global(h6) {
+  .markdown :全局(h1),
+  .markdown :全局(h2),
+  .markdown :全局(h3),
+  .markdown :全局(h4),
+  .markdown :全局(h5),
+  .markdown :全局(h6) {
     margin: 0.8em 0 0.4em;
     line-height: 1.3;
     font-weight: 600;
   }
 
-  .markdown :global(h1) { font-size: 1.35em; }
-  .markdown :global(h2) { font-size: 1.2em; }
-  .markdown :global(h3) { font-size: 1.1em; }
-  .markdown :global(h4),
-  .markdown :global(h5),
-  .markdown :global(h6) { font-size: 1em; }
+  .markdown :全局(h1) { font-size: 1.35em; }
+  .markdown :全局(h2) { font-size: 1.2em; }
+  .markdown :全局(h3) { font-size: 1.1em; }
+  .markdown :全局(h4),
+  .markdown :全局(h5),
+  .markdown :全局(h6) { font-size: 1em; }
 
-  .markdown :global(a) {
+  .markdown :全局(a) {
     color: var(--accent-blue);
     text-decoration: none;
   }
 
-  .markdown :global(a:hover) {
+  .markdown :全局(a:hover) {
     text-decoration: underline;
   }
 
-  .markdown :global(code) {
+  .markdown :全局(code) {
     font-family: var(--font-mono);
     font-size: 0.85em;
     background: var(--bg-inset);
@@ -649,7 +649,7 @@
     padding: 0.15em 0.4em;
   }
 
-  .markdown :global(pre) {
+  .markdown :全局(pre) {
     background: var(--code-bg);
     color: var(--code-text);
     border-radius: var(--radius-md);
@@ -658,7 +658,7 @@
     margin: 0.5em 0;
   }
 
-  .markdown :global(pre code) {
+  .markdown :全局(pre code) {
     background: none;
     border: none;
     padding: 0;
@@ -666,55 +666,55 @@
     color: inherit;
   }
 
-  .markdown :global(blockquote) {
+  .markdown :全局(blockquote) {
     border-left: 3px solid var(--border-default);
     margin: 0.5em 0;
     padding: 0.3em 1em;
     color: var(--text-secondary);
   }
 
-  .markdown :global(ul),
-  .markdown :global(ol) {
+  .markdown :全局(ul),
+  .markdown :全局(ol) {
     padding-left: 1.6em;
     margin: 0.5em 0;
   }
 
-  .markdown :global(li) {
+  .markdown :全局(li) {
     margin: 0.2em 0;
     line-height: 1.65;
   }
 
-  .markdown :global(hr) {
+  .markdown :全局(hr) {
     border: none;
     border-top: 1px solid var(--border-muted);
     margin: 0.8em 0;
   }
 
-  .markdown :global(table) {
+  .markdown :全局(table) {
     border-collapse: collapse;
     margin: 0.5em 0;
     width: auto;
     font-size: 13px;
   }
 
-  .markdown :global(th),
-  .markdown :global(td) {
+  .markdown :全局(th),
+  .markdown :全局(td) {
     border: 1px solid var(--border-muted);
     padding: 6px 10px;
     text-align: left;
   }
 
-  .markdown :global(th) {
+  .markdown :全局(th) {
     background: var(--bg-inset);
     font-weight: 600;
   }
 
-  .markdown :global(img) {
+  .markdown :全局(img) {
     max-width: 100%;
     border-radius: var(--radius-sm);
   }
 
-  .markdown :global(strong) {
+  .markdown :全局(strong) {
     font-weight: 600;
   }
 </style>

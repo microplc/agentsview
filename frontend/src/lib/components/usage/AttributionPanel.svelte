@@ -39,19 +39,19 @@
     }> = [];
 
     if (groupBy === "project") {
-      items = s.projectTotals.map((p) => ({
+      items = s.project到tals.map((p) => ({
         id: p.project,
         label: p.project,
         cost: p.cost,
       }));
     } else if (groupBy === "model") {
-      items = s.modelTotals.map((m) => ({
+      items = s.model到tals.map((m) => ({
         id: m.model,
         label: m.model,
         cost: m.cost,
       }));
     } else {
-      items = s.agentTotals.map((a) => ({
+      items = s.agent到tals.map((a) => ({
         id: a.agent,
         label: a.agent,
         cost: a.cost,
@@ -84,9 +84,9 @@
 
   function handleSelect(id: string) {
     if (groupBy === "project") {
-      usage.toggleProject(id);
+      usage.toggle项目(id);
     } else if (groupBy === "agent") {
-      usage.toggleAgent(id);
+      usage.toggle代理(id);
     } else {
       usage.toggleModel(id);
     }
@@ -111,7 +111,7 @@
           class:active={groupBy === "project"}
           onclick={() => handleGroupByChange("project")}
         >
-          Project
+          项目
         </button>
         <button
           class="toggle-btn"
@@ -125,7 +125,7 @@
           class:active={groupBy === "agent"}
           onclick={() => handleGroupByChange("agent")}
         >
-          Agent
+          代理
         </button>
       </div>
       <div class="segment-toggle">
@@ -148,7 +148,7 @@
   </div>
 
   {#if rows.length === 0}
-    <div class="empty">No data for this period</div>
+    <div class="empty">此期间无数据</div>
   {:else}
     <div class="hint">Click to hide from chart</div>
     {#if view === "treemap"}

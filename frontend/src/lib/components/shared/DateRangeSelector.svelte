@@ -33,14 +33,14 @@
     onChange(range.from, range.to);
   }
 
-  function handleFromChange(
+  function handle从Change(
     e: Event & { currentTarget: HTMLInputElement },
   ) {
     const val = e.currentTarget.value;
     if (val) onChange(val, to);
   }
 
-  function handleToChange(
+  function handle到Change(
     e: Event & { currentTarget: HTMLInputElement },
   ) {
     const val = e.currentTarget.value;
@@ -71,14 +71,14 @@
       type="date"
       class="date-input"
       value={from}
-      onchange={handleFromChange}
+      onchange={handle从Change}
     />
     <span class="date-sep">-</span>
     <input
       type="date"
       class="date-input"
       value={to}
-      onchange={handleToChange}
+      onchange={handle到Change}
     />
   </div>
 

@@ -138,9 +138,9 @@ func printSessionDetailHuman(w io.Writer, s *service.SessionDetail) error {
 			grade = *s.HealthGrade
 		}
 		fmt.Fprintf(w, "%s %d (%s)\n",
-			label("Health"), *s.HealthScore, sanitizeTerminal(grade))
+			label("健康度"), *s.HealthScore, sanitizeTerminal(grade))
 	} else {
-		fmt.Fprintf(w, "%s -\n", label("Health"))
+		fmt.Fprintf(w, "%s -\n", label("健康度"))
 	}
 	if s.SecretLeakCount > 0 {
 		fmt.Fprintf(w, "%s %d\n", label("Secrets"), s.SecretLeakCount)

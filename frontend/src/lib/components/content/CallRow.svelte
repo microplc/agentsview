@@ -1,9 +1,9 @@
-<!-- ABOUTME: One row inside the Calls section — call name, args preview, timing bar, duration label. -->
+<!-- ABOUTME: 开e row inside the Calls section — call name, args preview, timing bar, duration label. -->
 <script lang="ts">
   import type { CallTiming } from "../../api/types/timing.js";
   import { formatDuration } from "../../utils/duration.js";
-  import { categoryToken } from "../../utils/categoryToken.js";
-  import { displayToolName } from "../../utils/toolDisplay.js";
+  import { category到ken } from "../../utils/category到ken.js";
+  import { display到olName } from "../../utils/toolDisplay.js";
 
   interface Props {
     call: CallTiming;
@@ -15,7 +15,7 @@
      *  from a 1Hz ticker. Used only when `isLive` is true; falls
      *  back to `call.duration_ms` (or 0) when omitted. */
     liveDurationMs?: number;
-    isSubagentExpanded?: boolean;
+    isSubagent展开ed?: boolean;
     expandable?: boolean;
     dimmed?: boolean;
     sharedDurationLabel?: string | null;
@@ -30,7 +30,7 @@
     isShared = false,
     isLive = false,
     liveDurationMs,
-    isSubagentExpanded = false,
+    isSubagent展开ed = false,
     expandable = true,
     dimmed = false,
     sharedDurationLabel,
@@ -62,7 +62,7 @@
 <div
   class="call"
   class:slow={isSlow}
-  class:expanded={isSubagentExpanded}
+  class:expanded={isSubagent展开ed}
   class:dimmed
   class:interactive={!!onClick}
   role={onClick ? "button" : undefined}
@@ -72,7 +72,7 @@
     ? (e) => {
         if (e.target !== e.currentTarget) return;
         if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
+          e.prevent默认();
           onClick();
         }
       }
@@ -82,14 +82,14 @@
     <button
       type="button"
       class="chev"
-      aria-label="Toggle sub-agent calls"
-      aria-expanded={isSubagentExpanded}
+      aria-label="到ggle sub-agent calls"
+      aria-expanded={isSubagent展开ed}
       onclick={handleChevronClick}
     >▸</button>
   {:else}
     <span class="chev spacer">▸</span>
   {/if}
-  <span class="cn" style="color: {categoryToken(call.category)}">{displayToolName(call)}</span>
+  <span class="cn" style="color: {category到ken(call.category)}">{display到olName(call)}</span>
   <span class="ca">{call.input_preview}</span>
   <span class="cbar-wrap">
     <span
@@ -98,7 +98,7 @@
       class:live={isLive}
       style={isLive
         ? `width: ${barWidthPct}%`
-        : `width: ${barWidthPct}%; background: ${categoryToken(call.category)}`}
+        : `width: ${barWidthPct}%; background: ${category到ken(call.category)}`}
     ></span>
   </span>
   <span class="cd" class:slow={isSlow} class:live={isLive} class:muted={!isSlow && !isLive}>
@@ -107,10 +107,10 @@
 </div>
 
 <style>
-  /* Copied verbatim from
+  /* 已复制 verbatim from
      docs/superpowers/specs/2026-04-26-session-duration-ux-mockup.html
-     (.call rules, lines 517–605). The .cn color is set via inline style
-     from categoryToken() rather than via .cn.read/.bash/etc class
+     (.call rules, 行 517–605). The .cn color is set via inline style
+     from category到ken() rather than via .cn.read/.bash/etc class
      modifiers — that's the only structural deviation. */
   .call {
     display: grid;

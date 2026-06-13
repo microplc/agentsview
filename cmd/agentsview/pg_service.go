@@ -163,7 +163,7 @@ func runServiceInstall() {
 	}
 
 	fmt.Println()
-	fmt.Println("Service installed and started.")
+	fmt.Println("服务已安装并启动。")
 	fmt.Println("View logs with: agentsview pg service logs -f")
 }
 
@@ -203,7 +203,7 @@ func runServiceSimple(action string) {
 		if err := mgr.uninstall(ctx); err != nil {
 			fatal("pg service uninstall: %v", err)
 		}
-		fmt.Println("Service stopped and removed.")
+		fmt.Println("服务已停止并移除。")
 	case "start":
 		if err := mgr.start(ctx); err != nil {
 			fatal("pg service start: %v", err)

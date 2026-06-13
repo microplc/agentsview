@@ -1,6 +1,6 @@
 <script lang="ts">
   import { analytics } from "../../stores/analytics.svelte.js";
-  import type { ProjectAnalytics } from "../../api/types.js";
+  import type { 项目Analytics } from "../../api/types.js";
 
   const MAX_PROJECTS = 15;
   const BAR_HEIGHT = 20;
@@ -8,25 +8,25 @@
   const LABEL_WIDTH = 140;
 
   const rows = $derived.by(() => {
-    const projects = analytics.projects?.projects;
-    if (!projects || projects.length === 0) return [];
+    const 个项目 = analytics.个项目?.个项目;
+    if (!个项目 || 个项目.length === 0) return [];
 
-    const sorted = [...projects].sort(
-      (a, b) => b.messages - a.messages,
+    const sorted = [...个项目].sort(
+      (a, b) => b.条消息 - a.条消息,
     );
 
     if (sorted.length <= MAX_PROJECTS) return sorted;
 
     const top = sorted.slice(0, MAX_PROJECTS);
     const rest = sorted.slice(MAX_PROJECTS);
-    const other: ProjectAnalytics = {
+    const other: 项目Analytics = {
       name: `Other (${rest.length})`,
-      sessions: rest.reduce((s, p) => s + p.sessions, 0),
-      messages: rest.reduce((s, p) => s + p.messages, 0),
+      个会话: rest.reduce((s, p) => s + p.个会话, 0),
+      条消息: rest.reduce((s, p) => s + p.条消息, 0),
       first_session: "",
       last_session: "",
-      avg_messages: 0,
-      median_messages: 0,
+      avg_条消息: 0,
+      median_条消息: 0,
       agents: {},
       daily_trend: 0,
     };
@@ -35,12 +35,12 @@
 
   const maxMessages = $derived(
     rows.length > 0
-      ? Math.max(...rows.map((r) => r.messages), 1)
+      ? Math.max(...rows.map((r) => r.条消息), 1)
       : 1,
   );
 
-  function barWidth(messages: number): number {
-    return (messages / maxMessages) * 100;
+  function barWidth(条消息: number): number {
+    return (条消息 / maxMessages) * 100;
   }
 
   function truncateName(name: string, max: number): string {
@@ -48,9 +48,9 @@
     return name.slice(0, max - 1) + "\u2026";
   }
 
-  function handleClick(project: ProjectAnalytics) {
+  function handleClick(project: 项目Analytics) {
     if (project.name.startsWith("Other (")) return;
-    analytics.setProject(project.name);
+    analytics.set项目(project.name);
   }
 
   let tooltip = $state<{
@@ -61,7 +61,7 @@
 
   function handleHover(
     e: MouseEvent,
-    project: ProjectAnalytics,
+    project: 项目Analytics,
   ) {
     const rect = (
       e.currentTarget as HTMLElement
@@ -71,8 +71,8 @@
       .map(([name, count]) => `${name}: ${count}`)
       .join(", ");
     const parts = [
-      `${project.messages.toLocaleString()} messages`,
-      `${project.sessions} sessions`,
+      `${project.条消息.toLocaleString()} 条消息`,
+      `${project.个会话} 个会话`,
     ];
     if (agents) parts.push(agents);
     tooltip = {
@@ -89,20 +89,20 @@
 
 <div class="breakdown-container">
   <div class="breakdown-header">
-    <h3 class="chart-title">Projects</h3>
+    <h3 class="chart-title">项目s</h3>
     {#if rows.length > 0}
-      <span class="count">{analytics.projects?.projects.length ?? 0} total</span>
+      <span class="count">{analytics.个项目?.个项目.length ?? 0} total</span>
     {/if}
   </div>
 
-  {#if analytics.errors.projects}
+  {#if analytics.errors.个项目}
     <div class="error">
-      {analytics.errors.projects}
+      {analytics.errors.个项目}
       <button
         class="retry-btn"
-        onclick={() => analytics.fetchProjects()}
+        onclick={() => analytics.fetch项目s()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if rows.length > 0}
@@ -125,11 +125,11 @@
           <div class="bar-track">
             <div
               class="bar-fill"
-              style="width: {barWidth(project.messages)}%"
+              style="width: {barWidth(project.条消息)}%"
             ></div>
           </div>
           <span class="bar-value">
-            {project.messages.toLocaleString()}
+            {project.条消息.toLocaleString()}
           </span>
         </div>
       {/each}
@@ -144,7 +144,7 @@
       </div>
     {/if}
   {:else}
-    <div class="empty">No project data</div>
+    <div class="empty">无项目数据</div>
   {/if}
 </div>
 

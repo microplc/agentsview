@@ -6,28 +6,28 @@
   const mod = isMac ? "Cmd" : "Ctrl";
 
   const baseShortcuts = [
-    { key: `${mod}+K`, action: "Open command palette" },
-    { key: `${mod}+F / /`, action: "Find in session" },
-    { key: "Esc", action: "Close palette / modal / find" },
-    { key: "j / \u2193", action: "Next message" },
-    { key: "k / \u2191", action: "Previous message" },
-    { key: "]", action: "Next session" },
-    { key: "[", action: "Previous session" },
-    { key: "o", action: "Toggle sort order" },
-    { key: "l", action: "Cycle message layout" },
-    { key: "r", action: "Trigger sync" },
-    { key: "s", action: "Star / unstar session" },
-    { key: "e", action: "Export session" },
-    { key: "p", action: "Publish to Gist" },
-    { key: "c", action: "Copy resume command" },
-    { key: "Del", action: "Delete session" },
-    { key: "?", action: "Show this modal" },
+    { key: `${mod}+K`, action: "打开 command palette" },
+    { key: `${mod}+F / /`, action: "在会话中查找" },
+    { key: "Esc", action: "关闭 palette / modal / find" },
+    { key: "j / \u2193", action: "下一条消息" },
+    { key: "k / \u2191", action: "上一条消息" },
+    { key: "]", action: "下一个会话" },
+    { key: "[", action: "上一个会话" },
+    { key: "o", action: "切换排序顺序" },
+    { key: "l", action: "切换消息布局" },
+    { key: "r", action: "触发同步" },
+    { key: "s", action: "标记/取消标记会话" },
+    { key: "e", action: "导出会话" },
+    { key: "p", action: "发布到 Gist" },
+    { key: "c", action: "复制恢复命令" },
+    { key: "Del", action: "删除 session" },
+    { key: "?", action: "显示此模态框" },
   ];
 
   const zoomShortcuts = [
-    { key: `${mod}++`, action: "Zoom in" },
-    { key: `${mod}+-`, action: "Zoom out" },
-    { key: `${mod}+0`, action: "Reset zoom" },
+    { key: `${mod}++`, action: "放大" },
+    { key: `${mod}+-`, action: "缩小" },
+    { key: `${mod}+0`, action: "重置缩放" },
   ];
 
   const shortcuts = sync.isDesktop
@@ -55,12 +55,12 @@
 >
   <div class="shortcuts-modal">
     <div class="shortcuts-header">
-      <h3 class="shortcuts-title">Keyboard Shortcuts</h3>
+      <h3 class="shortcuts-title">键盘快捷键</h3>
       <button
         class="close-btn"
         onclick={() => ui.activeModal = null}
-        title="Close shortcuts"
-        aria-label="Close shortcuts"
+        title="关闭 shortcuts"
+        aria-label="关闭 shortcuts"
       >
         &times;
       </button>

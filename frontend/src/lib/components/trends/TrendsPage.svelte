@@ -2,9 +2,9 @@
   import { onMount } from "svelte";
   import { trends } from "../../stores/trends.svelte.js";
   import { getBasePath } from "../../stores/router.svelte.js";
-  import type { TrendsGranularity } from "../../api/types.js";
+  import type { 趋势Granularity } from "../../api/types.js";
   import TermTable from "./TermTable.svelte";
-  import TrendsLineChart from "./TrendsLineChart.svelte";
+  import 趋势LineChart from "./趋势LineChart.svelte";
 
   const TREND_PALETTE = [
     "var(--trend-blue)",
@@ -27,7 +27,7 @@
     return TREND_PALETTE[index % TREND_PALETTE.length]!;
   }
 
-  function isGranularity(value: string | null): value is TrendsGranularity {
+  function isGranularity(value: string | null): value is 趋势Granularity {
     return value === "day" || value === "week" || value === "month";
   }
 
@@ -71,17 +71,17 @@
     await trends.fetchTerms();
   }
 
-  async function setFromDate(event: Event) {
+  async function set从Date(event: Event) {
     trends.from = (event.currentTarget as HTMLInputElement).value;
     await refresh();
   }
 
-  async function setToDate(event: Event) {
+  async function set到Date(event: Event) {
     trends.to = (event.currentTarget as HTMLInputElement).value;
     await refresh();
   }
 
-  function setNormalized(event: Event) {
+  function set普通ized(event: Event) {
     trends.normalized = (event.currentTarget as HTMLInputElement).checked;
     writeUrl();
   }
@@ -91,7 +91,7 @@
     writeUrl();
   }
 
-  async function setGranularity(value: TrendsGranularity) {
+  async function setGranularity(value: 趋势Granularity) {
     trends.granularity = value;
     await refresh();
   }
@@ -106,31 +106,31 @@
 <section class="trends-page">
   <div class="page-head">
     <div>
-      <h1>Trends</h1>
+      <h1>趋势</h1>
       <p>{trends.response?.from ?? trends.from} to {trends.response?.to ?? trends.to}</p>
     </div>
     <div class="head-actions">
       <button class="secondary" onclick={resetTerms}>Reset</button>
       <button class="primary" onclick={refresh} disabled={trends.loading.terms}>
-        {trends.loading.terms ? "Refreshing" : "Refresh"}
+        {trends.loading.terms ? "刷新ing" : "刷新"}
       </button>
     </div>
   </div>
 
   <div class="toolbar">
     <label>
-      <span>From</span>
-      <input type="date" bind:value={trends.from} onchange={setFromDate} />
+      <span>从</span>
+      <input type="date" bind:value={trends.from} onchange={set从Date} />
     </label>
     <label>
-      <span>To</span>
-      <input type="date" bind:value={trends.to} onchange={setToDate} />
+      <span>到</span>
+      <input type="date" bind:value={trends.to} onchange={set到Date} />
     </label>
     <div class="granularity" aria-label="Granularity">
       {#each ["day", "week", "month"] as value}
         <button
           class:active={trends.granularity === value}
-          onclick={() => setGranularity(value as TrendsGranularity)}
+          onclick={() => setGranularity(value as 趋势Granularity)}
         >
           {value}
         </button>
@@ -140,9 +140,9 @@
       <input
         type="checkbox"
         bind:checked={trends.normalized}
-        onchange={setNormalized}
+        onchange={set普通ized}
       />
-      <span>Normalize by number of messages</span>
+      <span>普通ize by number of 条消息</span>
     </label>
   </div>
 
@@ -164,7 +164,7 @@
     </div>
 
     <div class="chart-panel" aria-busy={trends.loading.terms}>
-      <TrendsLineChart
+      <趋势LineChart
         buckets={trends.response?.buckets ?? []}
         series={trends.response?.series ?? []}
         {colorFor}
@@ -213,7 +213,7 @@
     color: var(--text-primary);
   }
 
-  :global(:root.dark) .trends-page {
+  :全局(:root.dark) .trends-page {
     --trend-blue: #60a5fa;
     --trend-gold: #fbbf24;
     --trend-purple: #c084fc;

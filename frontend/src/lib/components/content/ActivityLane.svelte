@@ -1,8 +1,8 @@
-<!-- ABOUTME: Compact message-density lane that fits the SessionVitals
+<!-- ABOUTME: 紧凑 message-density lane that fits the SessionVitals
      timeline grid (`.lane-row` / `.lane-track.activity`). Reads buckets
      from the existing sessionActivity store and renders one absolutely
      positioned `.activity-bar` per populated bucket. Click-to-scroll uses
-     `ui.scrollToOrdinal`, matching ActivityMinimap's behavior. -->
+     `ui.scroll到Ordinal`, matching ActivityMinimap's behavior. -->
 <script lang="ts">
   import { sessionActivity } from "../../stores/sessionActivity.svelte.js";
   import { ui } from "../../stores/ui.svelte.js";
@@ -71,7 +71,7 @@
     if (ui.hasBlockFilters) {
       ui.showAllBlocks();
     }
-    ui.scrollToOrdinal(bucket.first_ordinal);
+    ui.scroll到Ordinal(bucket.first_ordinal);
   }
 </script>
 

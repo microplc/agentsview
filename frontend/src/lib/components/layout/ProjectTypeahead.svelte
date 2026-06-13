@@ -1,15 +1,15 @@
 <script lang="ts">
   import { tick } from "svelte";
-  import type { ProjectInfo } from "../../api/types/core.js";
+  import type { 项目Info } from "../../api/types/core.js";
   import { ChevronDownIcon } from "../../icons.js";
 
   interface Props {
-    projects: ProjectInfo[];
+    个项目: 项目Info[];
     value: string;
     onselect: (value: string) => void;
   }
 
-  let { projects, value, onselect }: Props = $props();
+  let { 个项目, value, onselect }: Props = $props();
 
   let query = $state("");
   let open = $state(false);
@@ -17,10 +17,10 @@
   let inputEl = $state<HTMLInputElement>();
   let containerEl = $state<HTMLDivElement>();
 
-  const allOption = { name: "", label: "All Projects", count: 0 };
+  const allOption = { name: "", label: "All 项目s", count: 0 };
 
   const options = $derived.by(() => {
-    const items = projects.map((p) => ({
+    const items = 个项目.map((p) => ({
       name: p.name,
       label: `${p.name} (${p.session_count})`,
       count: p.session_count,
@@ -35,7 +35,7 @@
   });
 
   const displayValue = $derived(
-    value ? projects.find((p) => p.name === value)?.name ?? value : "All Projects",
+    value ? 个项目.find((p) => p.name === value)?.name ?? value : "All 项目s",
   );
 
   async function openDropdown() {
@@ -61,13 +61,13 @@
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === "ArrowDown") {
-      e.preventDefault();
+      e.prevent默认();
       highlightIndex = Math.min(highlightIndex + 1, filtered.length - 1);
     } else if (e.key === "ArrowUp") {
-      e.preventDefault();
+      e.prevent默认();
       highlightIndex = Math.max(highlightIndex - 1, 0);
     } else if (e.key === "Enter") {
-      e.preventDefault();
+      e.prevent默认();
       const item = filtered[highlightIndex];
       if (item) {
         select(item.name);
@@ -102,7 +102,7 @@
     // Prevent mousedown on the list from stealing focus from the
     // input. This keeps blur firing correctly for outside clicks
     // while allowing scrollbar and option interactions.
-    e.preventDefault();
+    e.prevent默认();
   }
 </script>
 
@@ -116,8 +116,8 @@
       oninput={handleInput}
       onkeydown={handleKeydown}
       onblur={handleBlur}
-      placeholder="Filter projects..."
-      aria-label="Filter projects"
+      placeholder="Filter 个项目..."
+      aria-label="Filter 个项目"
       autocomplete="off"
     />
     <ul class="typeahead-list" role="listbox" onmousedown={preventBlur}>
@@ -134,7 +134,7 @@
           {#each highlightSegments(option.label, query) as seg}{#if seg.match}<mark class="match">{seg.text}</mark>{:else}{seg.text}{/if}{/each}
         </li>
       {:else}
-        <li class="typeahead-empty">No matching projects</li>
+        <li class="typeahead-empty">无匹配ing 个项目</li>
       {/each}
     </ul>
   {:else}
@@ -185,7 +185,7 @@
     white-space: nowrap;
   }
 
-  :global(.typeahead-chevron) {
+  :全局(.typeahead-chevron) {
     flex-shrink: 0;
     opacity: 0.5;
   }

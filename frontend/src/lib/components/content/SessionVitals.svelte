@@ -4,8 +4,8 @@
   import { liveTick } from "../../stores/liveTick.svelte.js";
   import { fetchSessionTiming } from "../../api/timing.js";
   import { formatDuration } from "../../utils/duration.js";
-  import { categoryToken } from "../../utils/categoryToken.js";
-  import { displayToolName } from "../../utils/toolDisplay.js";
+  import { category到ken } from "../../utils/category到ken.js";
+  import { display到olName } from "../../utils/toolDisplay.js";
   import { ui } from "../../stores/ui.svelte.js";
   import type {
     CallTiming,
@@ -122,15 +122,15 @@
     );
   }
 
-  function scrollToCall(call: CallTiming) {
+  function scroll到Call(call: CallTiming) {
     const turn = turnForCall(call);
-    if (turn) ui.scrollToOrdinal(turn.ordinal);
+    if (turn) ui.scroll到Ordinal(turn.ordinal);
   }
 
   // Bar width for one call, scaled against the longest call duration
-  // in the supplied session's scope. The slowest call fills the bar;
+  // in the supplied session's 范围的 GitHub 个人访问令牌。 The slowest call fills the bar;
   // everything else is relative to it, so call-vs-call comparisons are
-  // legible even in long sessions where any single call is a tiny
+  // legible even in long 个会话 where any single call is a tiny
   // fraction of total wall-clock. Parallel siblings (duration_ms ==
   // null) use the parent turn's duration both when computing the max
   // and when scaling each row, so a turn whose only signal lives at
@@ -204,7 +204,7 @@
   function turnWidthPct(turn: TurnTiming): number {
     const span = Math.max(sessionEndMs - sessionStartMs, 1);
     if (turn.duration_ms == null) {
-      // Running turn: stretch to the right edge so it reads as in-flight.
+      // 运行ning turn: stretch to the right edge so it reads as in-flight.
       const t = new Date(turn.started_at).getTime();
       return Math.max(0.5, ((sessionEndMs - t) / span) * 100);
     }
@@ -219,8 +219,8 @@
     return `${turn.primary_category} · ${dur}`;
   }
 
-  function scrollToTurn(turn: TurnTiming) {
-    ui.scrollToOrdinal(turn.ordinal);
+  function scroll到Turn(turn: TurnTiming) {
+    ui.scroll到Ordinal(turn.ordinal);
   }
 </script>
 
@@ -233,8 +233,8 @@
     <button
       type="button"
       class="vital-close"
-      title="Close session analysis"
-      aria-label="Close session analysis"
+      title="关闭 session analysis"
+      aria-label="关闭 session analysis"
       onclick={() => ui.closeVitals()}
     >
       <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -273,10 +273,10 @@
             <button
               type="button"
               class="val slow val-link"
-              title="Jump to call"
-              onclick={() => scrollToCall(slowest)}
+              title="跳转到调用"
+              onclick={() => scroll到Call(slowest)}
             >
-              {displayToolName(slowest)} · {formatDuration(slowest.duration_ms ?? 0)}
+              {display到olName(slowest)} · {formatDuration(slowest.duration_ms ?? 0)}
             </button>
           {:else}
             <div class="val slow">—</div>
@@ -300,7 +300,7 @@
           {#if categoryFilter}
             <button
               class="filter-chip"
-              style="color: {categoryToken(categoryFilter)}; border-color: {categoryToken(categoryFilter)};"
+              style="color: {category到ken(categoryFilter)}; border-color: {category到ken(categoryFilter)};"
               onclick={() => (categoryFilter = null)}
               aria-label="clear category filter"
             >
@@ -317,7 +317,7 @@
             class="agg-row"
             class:active={isActive}
             class:dimmed={isDimmed}
-            style={isActive ? `--ring: ${categoryToken(cat.category)};` : ""}
+            style={isActive ? `--ring: ${category到ken(cat.category)};` : ""}
             onclick={() => toggleCategory(cat.category)}
             type="button"
           >
@@ -325,7 +325,7 @@
             <span class="agg-bar">
               <span
                 class="agg-fill"
-                style="width: {(cat.duration_ms / Math.max(timing.tool_duration_ms, 1)) * 100}%; background: {categoryToken(cat.category)};"
+                style="width: {(cat.duration_ms / Math.max(timing.tool_duration_ms, 1)) * 100}%; background: {category到ken(cat.category)};"
               ></span>
             </span>
             <span class="agg-val">{formatDuration(cat.duration_ms)}</span>
@@ -352,9 +352,9 @@
                 class:dimmed={categoryFilter !== null && t.primary_category !== categoryFilter}
                 style="left: {turnLeftPct(t)}%; width: {turnWidthPct(t)}%; {isLive
                   ? ''
-                  : `background: ${categoryToken(t.primary_category)};`}"
+                  : `background: ${category到ken(t.primary_category)};`}"
                 title={turnTitle(t)}
-                onclick={() => scrollToTurn(t)}
+                onclick={() => scroll到Turn(t)}
                 type="button"
                 aria-label="Jump to {t.primary_category} turn at {t.started_at}"
               ></button>
@@ -378,9 +378,9 @@
                   class:live={isLive}
                   style="left: {turnLeftPct(t)}%; width: {turnWidthPct(t)}%; {isLive
                     ? ''
-                    : `background: ${categoryToken(cat.category)};`}"
+                    : `background: ${category到ken(cat.category)};`}"
                   title={turnTitle(t)}
-                  onclick={() => scrollToTurn(t)}
+                  onclick={() => scroll到Turn(t)}
                   type="button"
                   aria-label="Jump to {cat.category} turn at {t.started_at}"
                 ></button>
@@ -398,7 +398,7 @@
             <span>
               <span
                 class="legend-dot"
-                style="background: {categoryToken(cat.category)};"
+                style="background: {category到ken(cat.category)};"
               ></span>
               {cat.category}
             </span>
@@ -449,9 +449,9 @@
                 liveDurationMs={liveElapsed}
                 dimmed={categoryFilter !== null &&
                   call.category !== categoryFilter}
-                isSubagentExpanded={!!call.subagent_session_id &&
+                isSubagent展开ed={!!call.subagent_session_id &&
                   expandedSubagentIds.has(call.subagent_session_id)}
-                onClick={() => ui.scrollToOrdinal(turn.ordinal)}
+                onClick={() => ui.scroll到Ordinal(turn.ordinal)}
                 onChevronClick={() => {
                   void toggleSubagent(call);
                 }}
@@ -479,8 +479,8 @@
                 isSlow={isSlowCall}
                 dimmed={categoryFilter !== null &&
                   turn.primary_category !== categoryFilter}
-                onCallClick={() => ui.scrollToOrdinal(turn.ordinal)}
-                onSubagentExpand={(c) => {
+                onCallClick={() => ui.scroll到Ordinal(turn.ordinal)}
+                onSubagent展开={(c) => {
                   void toggleSubagent(c);
                 }}
                 {expandedSubagentIds}
@@ -787,9 +787,9 @@
   }
 
   /* Calls section --------------------------------------------------- */
-  /* Copied verbatim from
+  /* 已复制 verbatim from
      docs/superpowers/specs/2026-04-26-session-duration-ux-mockup.html
-     (.scale-axis and .calls rules, lines 498–516). */
+     (.scale-axis and .calls rules, 行 498–516). */
   .scale-axis {
     display: flex;
     justify-content: space-between;

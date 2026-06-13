@@ -1,16 +1,16 @@
 <!-- ABOUTME: Wraps a contiguous run of parallel tool_use calls. -->
 <script lang="ts">
-  import type { ToolCall } from "../../api/types.js";
+  import type { 到olCall } from "../../api/types.js";
   import type { CallTiming } from "../../api/types/timing.js";
-  import ToolBlock from "./ToolBlock.svelte";
+  import 到olBlock from "./到olBlock.svelte";
   import { formatDuration } from "../../utils/duration.js";
-  import { displayToolName } from "../../utils/toolDisplay.js";
+  import { display到olName } from "../../utils/toolDisplay.js";
 
   interface Props {
-    toolCalls: ToolCall[];
+    toolCalls: 到olCall[];
     turnDurationMs: number | null;
     callTimingByID?: Map<string, CallTiming>;
-    isRunning?: boolean;
+    is运行ning?: boolean;
     highlightQuery?: string;
     isCurrentHighlight?: boolean;
   }
@@ -19,13 +19,13 @@
     toolCalls,
     turnDurationMs,
     callTimingByID,
-    isRunning = false,
+    is运行ning = false,
     highlightQuery = "",
     isCurrentHighlight = false,
   }: Props = $props();
 
   let upperBoundLabel = $derived.by(() => {
-    if (isRunning) return null;
+    if (is运行ning) return null;
     if (turnDurationMs == null) return null;
     return `≤ ${formatDuration(turnDurationMs)} each`;
   });
@@ -36,7 +36,7 @@
     <span class="pg-label">parallel</span>
     <span class="pg-count">{toolCalls.length} calls</span>
     <span class="pg-spacer"></span>
-    {#if isRunning}
+    {#if is运行ning}
       <span class="pg-running">running…</span>
     {:else if upperBoundLabel}
       <span class="pg-upper">{upperBoundLabel}</span>
@@ -49,10 +49,10 @@
         ct?.subagent_session_id && ct.duration_ms != null
           ? formatDuration(ct.duration_ms)
           : undefined}
-      <ToolBlock
+      <到olBlock
         {toolCall}
         content=""
-        label={displayToolName(toolCall)}
+        label={display到olName(toolCall)}
         durationLabel={dur}
         inGroup={true}
         {highlightQuery}
@@ -103,15 +103,15 @@
     font-size: 10px;
     animation: duration-pulse 1.6s ease-in-out infinite;
   }
-  /* members render flush; ToolBlock honors inGroup={true} */
-  .pg-members :global(.tool-block) {
+  /* members render flush; 到olBlock honors inGroup={true} */
+  .pg-members :全局(.tool-block) {
     margin: 0;
     border-radius: 0;
   }
-  .pg-members :global(.tool-block + .tool-block) {
+  .pg-members :全局(.tool-block + .tool-block) {
     border-top: 1px solid rgba(255, 255, 255, 0.04);
   }
-  .pg-members :global(.tool-block:last-child) {
+  .pg-members :全局(.tool-block:last-child) {
     border-bottom-right-radius: var(--radius-sm);
   }
 </style>

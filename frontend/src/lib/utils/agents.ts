@@ -1,16 +1,16 @@
-export interface AgentMeta {
+export interface 代理Meta {
   name: string;
   color: string;
   label?: string;
 }
 
-export const KNOWN_AGENTS: readonly AgentMeta[] = [
+export const KNOWN_AGENTS: readonly 代理Meta[] = [
   { name: "claude", color: "var(--accent-blue)" },
   { name: "codex", color: "var(--accent-green)" },
   { name: "copilot", color: "var(--accent-amber)" },
   { name: "gemini", color: "var(--accent-rose)" },
   { name: "opencode", color: "var(--accent-purple)" },
-  { name: "openhands", color: "var(--accent-teal)", label: "OpenHands" },
+  { name: "openhands", color: "var(--accent-teal)", label: "打开Hands" },
   { name: "cursor", color: "var(--accent-black)" },
   { name: "amp", color: "var(--accent-coral)", label: "Amp" },
   { name: "zencoder", color: "var(--accent-red)", label: "Zencoder" },
@@ -25,7 +25,7 @@ export const KNOWN_AGENTS: readonly AgentMeta[] = [
   {
     name: "openclaw",
     color: "var(--accent-orange)",
-    label: "OpenClaw",
+    label: "打开Claw",
   },
   {
     name: "qclaw",

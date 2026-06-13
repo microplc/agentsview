@@ -2,9 +2,9 @@
   import { SearchIcon } from "../../icons.js";
   import { tick, onDestroy } from "svelte";
   import { ui } from "../../stores/ui.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { searchStore } from "../../stores/search.svelte.js";
-  import { messages } from "../../stores/messages.svelte.js";
+  import { 条消息 } from "../../stores/条消息.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import {
     formatRelativeTime,
@@ -12,16 +12,16 @@
     sanitizeSnippet,
   } from "../../utils/format.js";
   import { agentColor } from "../../utils/agents.js";
-  import { copyToClipboard } from "../../utils/clipboard.js";
+  import { copy到Clipboard } from "../../utils/clipboard.js";
   import { stripIdPrefix } from "../../utils/resume.js";
-  import { normalizeMessagePreview } from "../../utils/messages.js";
+  import { normalizeMessagePreview } from "../../utils/条消息.js";
   import type { Session, SearchResult } from "../../api/types.js";
 
   let inputRef: HTMLInputElement | undefined = $state(undefined);
   let selectedIndex: number = $state(0);
   let inputValue: string = $state("");
 
-  // Clear state and reset sort whenever the palette is unmounted, regardless
+  // 清除 state and reset sort whenever the palette is unmounted, regardless
   // of close path (Escape key, overlay click, Cmd+K toggle, or any other
   // mechanism). This ensures stale results and in-flight requests are always
   // cancelled even when the caller bypasses close().
@@ -30,11 +30,11 @@
     searchStore.resetSort();
   });
 
-  // Filtered recent sessions (client-side filter)
-  let recentSessions = $derived.by(() => {
+  // Filtered recent 个会话 (client-side filter)
+  let recent会话 = $derived.by(() => {
     if (inputValue.length > 0 && inputValue.length < 3) {
       const q = inputValue.toLowerCase();
-      return sessions.sessions
+      return 个会话.个会话
         .filter(
           (s) =>
             s.project.toLowerCase().includes(q) ||
@@ -44,7 +44,7 @@
         .slice(0, 10);
     }
     if (!inputValue) {
-      return sessions.sessions.slice(0, 10);
+      return 个会话.个会话.slice(0, 10);
     }
     return [];
   });
@@ -55,7 +55,7 @@
   let totalItems = $derived(
     showSearchResults
       ? searchStore.results.length
-      : recentSessions.length,
+      : recent会话.length,
   );
 
   function handleInput(e: Event) {
@@ -64,7 +64,7 @@
     selectedIndex = 0;
 
     if (inputValue.length >= 3) {
-      searchStore.search(inputValue, sessions.filters.project);
+      searchStore.search(inputValue, 个会话.filters.project);
     } else {
       searchStore.clear();
     }
@@ -72,16 +72,16 @@
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === "ArrowDown") {
-      e.preventDefault();
+      e.prevent默认();
       selectedIndex = Math.min(selectedIndex + 1, totalItems - 1);
     } else if (e.key === "ArrowUp") {
-      e.preventDefault();
+      e.prevent默认();
       selectedIndex = Math.max(selectedIndex - 1, 0);
     } else if (e.key === "Enter") {
-      e.preventDefault();
+      e.prevent默认();
       selectCurrent();
     } else if (e.key === "Escape") {
-      e.preventDefault();
+      e.prevent默认();
       close();
     }
   }
@@ -93,7 +93,7 @@
         selectSearchResult(result);
       }
     } else {
-      const session = recentSessions[selectedIndex];
+      const session = recent会话[selectedIndex];
       if (session) {
         selectSession(session);
       }
@@ -101,21 +101,21 @@
   }
 
   function selectSession(s: Session) {
-    sessions.selectSession(s.id);
-    router.navigateToSession(s.id);
+    个会话.selectSession(s.id);
+    router.navigate到Session(s.id);
     close();
   }
 
   function selectSearchResult(r: SearchResult) {
-    void sessions.navigateToSession(r.session_id);
+    void 个会话.navigate到Session(r.session_id);
     if (r.ordinal !== -1) {
-      ui.scrollToOrdinal(r.ordinal, r.session_id);
+      ui.scroll到Ordinal(r.ordinal, r.session_id);
     } else {
       // Name-only match: clear any stale selection/scroll state so the
       // previously highlighted ordinal is not left active.
       ui.clearScrollState();
     }
-    router.navigateToSession(r.session_id);
+    router.navigate到Session(r.session_id);
     close();
   }
 
@@ -160,7 +160,7 @@
         bind:this={inputRef}
         type="text"
         class="palette-input"
-        placeholder="Search sessions and messages..."
+        placeholder="Search 个会话 and 条消息..."
         value={inputValue}
         oninput={handleInput}
       />
@@ -173,20 +173,20 @@
           <button
             class="sort-btn"
             class:active={searchStore.sort === "relevance"}
-            onmousedown={(e: MouseEvent) => e.preventDefault()}
+            onmousedown={(e: MouseEvent) => e.prevent默认()}
             onclick={() => { searchStore.setSort("relevance"); selectedIndex = 0; }}
-          >Relevance</button>
+          >相关度</button>
           <button
             class="sort-btn"
             class:active={searchStore.sort === "recency"}
-            onmousedown={(e: MouseEvent) => e.preventDefault()}
+            onmousedown={(e: MouseEvent) => e.prevent默认()}
             onclick={() => { searchStore.setSort("recency"); selectedIndex = 0; }}
-          >Recency</button>
+          >时间</button>
         </div>
         {#if searchStore.isSearching}
-          <div class="palette-empty">Searching...</div>
+          <div class="palette-empty">搜索中...</div>
         {:else if searchStore.results.length === 0}
-          <div class="palette-empty">No results</div>
+          <div class="palette-empty">无结果</div>
         {:else}
           {#each searchStore.results as result, i}
             <button
@@ -216,18 +216,18 @@
               <!-- svelte-ignore a11y_no_static_element_interactions -->
               <span
                 class="item-id"
-                title="Copy session ID"
+                title="复制会话 ID"
                 onclick={(e) => {
                   e.stopPropagation();
-                  copyToClipboard(result.session_id);
+                  copy到Clipboard(result.session_id);
                 }}
               >{stripIdPrefix(result.session_id, result.agent).slice(0, 8)}</span>
             </button>
           {/each}
         {/if}
       {:else}
-        <div class="palette-section-label">Recent Sessions</div>
-        {#each recentSessions as session, i}
+        <div class="palette-section-label">Recent 会话</div>
+        {#each recent会话 as session, i}
           {@const preview = session.display_name ?? normalizeMessagePreview(session.first_message)}
           <button
             class="palette-item"
@@ -282,7 +282,7 @@
     border-bottom: 1px solid var(--border-default);
   }
 
-  :global(.search-icon) {
+  :全局(.search-icon) {
     flex-shrink: 0;
     color: var(--text-muted);
   }

@@ -33,9 +33,9 @@
   ];
 
   function levelColor(level: number): string {
-    const isDark =
+    const is深色 =
       document.documentElement.classList.contains("dark");
-    const colors = isDark
+    const colors = is深色
       ? LEVEL_COLORS_DARK
       : LEVEL_COLORS_LIGHT;
     return colors[level] ?? colors[0]!;
@@ -64,8 +64,8 @@
     const lookup = new Map<string, number>();
     let max = 0;
     for (const c of cells) {
-      lookup.set(`${c.day_of_week}:${c.hour}`, c.messages);
-      if (c.messages > max) max = c.messages;
+      lookup.set(`${c.day_of_week}:${c.hour}`, c.条消息);
+      if (c.条消息 > max) max = c.条消息;
     }
 
     const rows: {
@@ -116,7 +116,7 @@
     tooltip = {
       x: rect.left + rect.width / 2,
       y: rect.top - 4,
-      text: `${day} ${h}:00 - ${value.toLocaleString()} messages`,
+      text: `${day} ${h}:00 - ${value.toLocaleString()} 条消息`,
     };
   }
 
@@ -157,7 +157,7 @@
         class="retry-btn"
         onclick={() => analytics.fetchHourOfWeek()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if grid}
@@ -179,7 +179,7 @@
             onclick={() => handleHourClick(h)}
             onkeydown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
+                e.prevent默认();
                 handleHourClick(h);
               }
             }}
@@ -200,7 +200,7 @@
             onclick={() => handleDayClick(row.dayIdx)}
             onkeydown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
+                e.prevent默认();
                 handleDayClick(row.dayIdx);
               }
             }}
@@ -227,7 +227,7 @@
                 handleCellClick(row.dayIdx, cell.hour)}
               onkeydown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
+                  e.prevent默认();
                   handleCellClick(row.dayIdx, cell.hour);
                 }
               }}
@@ -246,7 +246,7 @@
       </div>
     {/if}
   {:else}
-    <div class="empty">No data for this period</div>
+    <div class="empty">此期间无数据</div>
   {/if}
 </div>
 

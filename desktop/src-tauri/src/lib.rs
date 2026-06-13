@@ -1043,11 +1043,11 @@ fn parse_listening_port_from_stdout_buffer(buffer: &mut String, chunk: &str) -> 
 }
 
 fn setup_menu(app: &mut App) -> Result<(), DynError> {
-    let about = MenuItemBuilder::with_id("about", "About AgentsView").build(app)?;
+    let about = MenuItemBuilder::with_id("about", "关于 AgentsView").build(app)?;
     let check_updates =
-        MenuItemBuilder::with_id("check_updates", "Check for Updates...").build(app)?;
+        MenuItemBuilder::with_id("check_updates", "检查更新...").build(app)?;
 
-    let builder = SubmenuBuilder::new(app, "File")
+    let builder = SubmenuBuilder::new(app, "文件")
         .item(&about)
         .separator()
         .item(&check_updates)
@@ -1058,7 +1058,7 @@ fn setup_menu(app: &mut App) -> Result<(), DynError> {
 
     let app_submenu = builder.quit().build()?;
 
-    let edit_submenu = SubmenuBuilder::new(app, "Edit")
+    let edit_submenu = SubmenuBuilder::new(app, "编辑")
         .undo()
         .redo()
         .separator()
@@ -1129,7 +1129,7 @@ async fn check_for_updates(handle: &AppHandle, silent: bool) {
             let h = handle.clone();
             handle
                 .dialog()
-                .message("An update check is already in progress.")
+                .message("更新检查已在进行中。")
                 .title("Update Check")
                 .show(move |_| restore_webview_focus(&h));
         }
@@ -1174,7 +1174,7 @@ async fn check_for_updates(handle: &AppHandle, silent: bool) {
             let h = handle.clone();
             handle
                 .dialog()
-                .message("You're running the latest version.")
+                .message("您已在运行最新版本。")
                 .title("No Updates Available")
                 .show(move |_| restore_webview_focus(&h));
         }
@@ -1184,7 +1184,7 @@ async fn check_for_updates(handle: &AppHandle, silent: bool) {
     let version = update.version.clone();
     let confirmed = dialog_confirm(
         handle,
-        "Update Available",
+        "有可用更新",
         &format!(
             "Version {version} is available. \
              Would you like to download and install it?"
@@ -1207,7 +1207,7 @@ async fn check_for_updates(handle: &AppHandle, silent: bool) {
                     "Failed to download the update. \
                      Please try downloading manually from the releases page.",
                 )
-                .title("Update Failed")
+                .title("更新失败")
                 .show(move |_| restore_webview_focus(&h));
             return;
         }
@@ -1235,15 +1235,15 @@ async fn check_for_updates(handle: &AppHandle, silent: bool) {
                 "Failed to install the update. \
                  Please try downloading manually from the releases page.",
             )
-            .title("Update Failed")
+            .title("更新失败")
             .show(move |_| restore_webview_focus(&h));
         return;
     }
 
     let restart = dialog_confirm(
         handle,
-        "Update Complete",
-        "Update installed. Restart now to apply?",
+        "更新完成",
+        "更新已安装。立即重启以应用？",
     )
     .await;
 

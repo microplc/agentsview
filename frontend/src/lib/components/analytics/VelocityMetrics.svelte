@@ -50,7 +50,7 @@
           {t === "overall"
             ? "Overview"
             : t === "agent"
-              ? "By Agent"
+              ? "By 代理"
               : "By Size"}
         </button>
       {/each}
@@ -64,7 +64,7 @@
         class="retry-btn"
         onclick={() => analytics.fetchVelocity()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if velocity}
@@ -108,7 +108,7 @@
           </div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Tools / Active Min</div>
+          <div class="metric-label">到ols / Active Min</div>
           <div class="metric-value">
             {formatRate(o.tool_calls_per_active_min)}
           </div>
@@ -118,16 +118,16 @@
       <div class="breakdown-table">
         <div class="breakdown-header">
           <span class="col-label">Group</span>
-          <span class="col-num">Sessions</span>
+          <span class="col-num">会话</span>
           <span class="col-num">Cycle p50</span>
           <span class="col-num">Cycle p90</span>
           <span class="col-num">Msgs/min</span>
-          <span class="col-num">Tools/min</span>
+          <span class="col-num">到ols/min</span>
         </div>
         {#each breakdowns as bd}
           <div class="breakdown-row">
             <span class="col-label">{bd.label}</span>
-            <span class="col-num">{bd.sessions}</span>
+            <span class="col-num">{bd.个会话}</span>
             <span class="col-num">
               {formatDuration(bd.overview.turn_cycle_sec.p50)}
             </span>
@@ -144,10 +144,10 @@
         {/each}
       </div>
     {:else}
-      <div class="empty">No breakdown data</div>
+      <div class="empty">无细分数据</div>
     {/if}
   {:else}
-    <div class="empty">No data for this period</div>
+    <div class="empty">此期间无数据</div>
   {/if}
 </div>
 

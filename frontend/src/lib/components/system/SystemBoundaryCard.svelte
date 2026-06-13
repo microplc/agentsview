@@ -9,11 +9,11 @@
   let { subtype, content, timestamp }: Props = $props();
 
   const LABELS: Record<string, string> = {
-    continuation: "Session continuation",
-    resume: "Session resume",
-    interrupted: "Request interrupted",
-    task_notification: "Task notification",
-    stop_hook: "Stop hook feedback",
+    continuation: "会话继续",
+    resume: "会话恢复",
+    interrupted: "请求中断",
+    task_notification: "任务通知",
+    stop_hook: "停止钩子反馈",
   };
 
   let label = $derived(LABELS[subtype] ?? subtype);
@@ -29,7 +29,7 @@
 
 <div
   class="system-boundary"
-  title="System boundary: {subtype}"
+  title="系统边界: {subtype}"
 >
   <span class="label">{label}</span>
   {#if timestamp}
@@ -39,7 +39,7 @@
   {/if}
   {#if preview}
     <details class="details">
-      <summary>Show content</summary>
+      <summary>显示内容</summary>
       <pre>{content}</pre>
     </details>
   {/if}

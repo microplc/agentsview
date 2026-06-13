@@ -1,4 +1,4 @@
-/** Agent types that support CLI session resumption. */
+/** 代理 types that support CLI session resumption. */
 const RESUME_AGENTS: Record<
   string,
   (sessionId: string) => string
@@ -19,22 +19,22 @@ RESUME_AGENTS["amp"] = (id) =>
   `amp --resume ${shellQuote(id)}`;
 
 /**
- * Agents whose resume commands require server-resolved parameters
+ * 代理s whose resume commands require server-resolved parameters
  * (e.g. --workspace, cwd) that the client cannot compute locally.
- * buildResumeCommand returns null for these agents so callers
+ * build恢复Command returns null for these agents so callers
  * don't produce incomplete fallback commands.
  */
 const SERVER_ONLY_RESUME = new Set(["cursor"]);
 
 /** Flags available for Claude Code resume. */
-export interface ClaudeResumeFlags {
+export interface Claude恢复Flags {
   skipPermissions?: boolean;
   forkSession?: boolean;
   print?: boolean;
 }
 
 /** Minimal shape of a backend resume response used for clipboard copy. */
-export interface ResumeCommandResponse {
+export interface 恢复CommandResponse {
   command: string;
   cwd?: string;
 }
@@ -70,7 +70,7 @@ export function stripIdPrefix(id: string, agent?: string): string {
 /**
  * Returns true if the given agent supports CLI session resumption.
  */
-export function supportsResume(agent: string): boolean {
+export function supports恢复(agent: string): boolean {
   return Object.hasOwn(RESUME_AGENTS, agent);
 }
 
@@ -82,10 +82,10 @@ export function supportsResume(agent: string): boolean {
  * @param flags - Optional Claude-specific resume flags
  * @returns The shell command string, or null if the agent is not supported
  */
-export function buildResumeCommand(
+export function build恢复Command(
   agent: string,
   sessionId: string,
-  flags?: ClaudeResumeFlags,
+  flags?: Claude恢复Flags,
 ): string | null {
   if (SERVER_ONLY_RESUME.has(agent)) return null;
   const builder = RESUME_AGENTS[agent];
@@ -111,9 +111,9 @@ export function buildResumeCommand(
  * choose whether to apply the cwd directly. Clipboard copy needs a
  * runnable one-liner, so rebuild it here only for Cursor.
  */
-export function formatResumeResponseCommand(
+export function format恢复ResponseCommand(
   agent: string,
-  response: ResumeCommandResponse | null | undefined,
+  response: 恢复CommandResponse | null | undefined,
 ): string | null {
   if (!response?.command) return null;
   if (agent !== "cursor") return response.command;

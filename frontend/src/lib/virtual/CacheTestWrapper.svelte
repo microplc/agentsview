@@ -9,7 +9,7 @@
         initialOptions: Options;
         updateOptions: (opts: Options) => void;
     };
-    onInstanceChange: (inst: unknown) => void;
+    onInstanceChange: (inst: 未知) => void;
   }
 
   let { type, controller, onInstanceChange }: Props = $props();

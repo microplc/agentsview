@@ -2,7 +2,7 @@
   import { usage } from "../../stores/usage.svelte.js";
   import { savingsState } from "../../utils/usageSavings.js";
 
-  function fmtTokens(v: number): string {
+  function fmt到kens(v: number): string {
     if (v >= 1_000_000_000) {
       const g = Math.floor(v / 100_000_000) / 10;
       return `${g}B`;
@@ -33,34 +33,34 @@
     const cs = usage.summary?.cacheStats;
     if (!cs) return [];
     const total =
-      cs.cacheReadTokens +
-      cs.cacheCreationTokens +
-      cs.uncachedInputTokens +
-      cs.outputTokens;
+      cs.cacheRead到kens +
+      cs.cacheCreation到kens +
+      cs.uncachedInput到kens +
+      cs.output到kens;
     if (total === 0) return [];
     return [
       {
         label: "Cache Reads",
-        value: cs.cacheReadTokens,
-        pct: cs.cacheReadTokens / total,
+        value: cs.cacheRead到kens,
+        pct: cs.cacheRead到kens / total,
         color: "var(--accent-green)",
       },
       {
         label: "Cache Writes",
-        value: cs.cacheCreationTokens,
-        pct: cs.cacheCreationTokens / total,
+        value: cs.cacheCreation到kens,
+        pct: cs.cacheCreation到kens / total,
         color: "var(--accent-teal)",
       },
       {
         label: "Uncached Input",
-        value: cs.uncachedInputTokens,
-        pct: cs.uncachedInputTokens / total,
+        value: cs.uncachedInput到kens,
+        pct: cs.uncachedInput到kens / total,
         color: "var(--accent-amber)",
       },
       {
         label: "Output",
-        value: cs.outputTokens,
-        pct: cs.outputTokens / total,
+        value: cs.output到kens,
+        pct: cs.output到kens / total,
         color: "var(--accent-blue)",
       },
     ];
@@ -76,7 +76,7 @@
   <h3 class="chart-title">Cache Efficiency</h3>
 
   {#if bars.length === 0}
-    <div class="empty">No token data</div>
+    <div class="empty">无令牌数据</div>
   {:else}
     <div class="bar-list">
       {#each bars as bar}
@@ -90,7 +90,7 @@
             ></div>
           </div>
           <span class="bar-value">
-            {fmtTokens(bar.value)}
+            {fmt到kens(bar.value)}
           </span>
         </div>
       {/each}

@@ -1,10 +1,10 @@
 <!-- ABOUTME: Renders a collapsible tool call block with metadata tags and content. -->
 <!-- ABOUTME: Supports Task tool calls with inline subagent conversation expansion. -->
 <script lang="ts">
-  import type { ToolCall } from "../../api/types.js";
+  import type { 到olCall } from "../../api/types.js";
   import SubagentInline from "./SubagentInline.svelte";
   import {
-    extractToolParamMeta,
+    extract到olParamMeta,
     generateFallbackContent,
   } from "../../utils/tool-params.js";
   import { applyHighlight, escapeHTML } from "../../utils/highlight.js";
@@ -12,7 +12,7 @@
   interface Props {
     content: string;
     label?: string;
-    toolCall?: ToolCall;
+    toolCall?: 到olCall;
     highlightQuery?: string;
     isCurrentHighlight?: boolean;
     /** Pre-formatted duration label (e.g. "2.4s", "running 1m 28s+"). Null/undefined renders no badge. */
@@ -20,7 +20,7 @@
     /** Tints the duration badge with the slow color family. */
     isSlow?: boolean;
     /** Tints the duration badge green and pulses it. */
-    isRunning?: boolean;
+    is运行ning?: boolean;
     /** When true, the block sits inside a ParallelGroup — flatten outer margin and corner radii. */
     inGroup?: boolean;
   }
@@ -33,35 +33,35 @@
     isCurrentHighlight = false,
     durationLabel,
     isSlow = false,
-    isRunning = false,
+    is运行ning = false,
     inGroup = false,
   }: Props = $props();
-  let userCollapsed: boolean = $state(true);
-  let userOutputCollapsed: boolean = $state(true);
-  let userHistoryCollapsed: boolean = $state(true);
+  let user折叠d: boolean = $state(true);
+  let userOutput折叠d: boolean = $state(true);
+  let userHistory折叠d: boolean = $state(true);
   let userOverride: boolean = $state(false);
   let userOutputOverride: boolean = $state(false);
   let userHistoryOverride: boolean = $state(false);
-  let searchExpandedInput: boolean = $state(false);
-  let searchExpandedOutput: boolean = $state(false);
-  let searchExpandedHistory: boolean = $state(false);
+  let search展开edInput: boolean = $state(false);
+  let search展开edOutput: boolean = $state(false);
+  let search展开edHistory: boolean = $state(false);
   let prevQuery: string = "";
 
   // Auto-expand when a search match exists in input or output
-  // content. Only reset user overrides when the query itself
+  // content. 开ly reset user overrides when the query itself
   // changes, not when content updates (e.g. during streaming).
   $effect(() => {
     const hq = highlightQuery;
     if (!hq.trim()) {
-      searchExpandedInput = false;
-      searchExpandedOutput = false;
-      contentFullyExpanded = false;
+      search展开edInput = false;
+      search展开edOutput = false;
+      contentFully展开ed = false;
       prevQuery = hq;
       return;
     }
     const q = hq.toLowerCase();
     const inputText = (
-      taskPrompt ?? fallbackContent ?? content ?? ""
+      task提示 ?? fallbackContent ?? content ?? ""
     ).toLowerCase();
     const historyText = (
       toolCall?.result_events?.map((event) => event.content).join("\n\n") ?? ""
@@ -69,10 +69,10 @@
     const outputText = (
       [toolCall?.result_content ?? "", historyText].filter(Boolean).join("\n\n")
     ).toLowerCase();
-    searchExpandedInput = inputText.includes(q);
-    searchExpandedOutput = outputText.includes(q);
-    searchExpandedHistory = historyText.includes(q);
-    if (searchExpandedInput) contentFullyExpanded = true;
+    search展开edInput = inputText.includes(q);
+    search展开edOutput = outputText.includes(q);
+    search展开edHistory = historyText.includes(q);
+    if (search展开edInput) contentFully展开ed = true;
     if (hq !== prevQuery) {
       userOverride = false;
       userOutputOverride = false;
@@ -82,19 +82,19 @@
   });
 
   let collapsed = $derived(
-    userOverride ? userCollapsed
-      : (searchExpandedInput || searchExpandedOutput) ? false
-      : userCollapsed,
+    userOverride ? user折叠d
+      : (search展开edInput || search展开edOutput) ? false
+      : user折叠d,
   );
-  let outputCollapsed = $derived(
-    userOutputOverride ? userOutputCollapsed
-      : searchExpandedOutput ? false
-      : userOutputCollapsed,
+  let output折叠d = $derived(
+    userOutputOverride ? userOutput折叠d
+      : search展开edOutput ? false
+      : userOutput折叠d,
   );
-  let historyCollapsed = $derived(
-    userHistoryOverride ? userHistoryCollapsed
-      : searchExpandedHistory ? false
-      : userHistoryCollapsed,
+  let history折叠d = $derived(
+    userHistoryOverride ? userHistory折叠d
+      : search展开edHistory ? false
+      : userHistory折叠d,
   );
 
   let outputPreviewLine = $derived.by(() => {
@@ -123,11 +123,11 @@
   });
 
   let previewLine = $derived.by(() => {
-    // Tool-specific summaries take precedence over the first line of
+    // 到ol-specific summaries take precedence over the first line of
     // content, which for these tools is a generic header (e.g.
-    // "[Todo List]") that hides the meaningful info.
+    // "[到do List]") that hides the meaningful info.
     const toolName = toolCall?.tool_name;
-    if (toolName === "TodoWrite") {
+    if (toolName === "到doWrite") {
       const todos = inputParams?.todos;
       if (Array.isArray(todos) && todos.length) {
         const target =
@@ -147,7 +147,7 @@
     } else if (toolName === "Skill" || toolName === "skill") {
       const skill = inputParams?.skill ?? inputParams?.name;
       if (skill) return String(skill).slice(0, 100);
-    } else if (toolName === "ToolSearch") {
+    } else if (toolName === "到olSearch") {
       const query = inputParams?.query;
       if (query) {
         const firstLine = String(query).split("\n")[0] ?? "";
@@ -155,7 +155,7 @@
       }
     } else if (
       toolName === "Task" ||
-      toolName === "Agent" ||
+      toolName === "代理" ||
       toolCall?.category === "Task" ||
       (toolName?.includes("subagent") ?? false)
     ) {
@@ -176,7 +176,7 @@
       const firstLine = String(cmd).split("\n")[0] ?? "";
       return `$ ${firstLine}`.slice(0, 100);
     }
-    // For Edit/Write/Read with no content, show file path as preview
+    // For 编辑/Write/Read with no content, show file path as preview
     const filePath =
       inputParams?.file_path ?? inputParams?.path ?? inputParams?.filePath;
     if (filePath) return String(filePath).slice(0, 100);
@@ -239,7 +239,7 @@
   /** Extract metadata tags for common tool types */
   let toolParamMeta = $derived.by(() => {
     if (!inputParams || !toolCall) return null;
-    return extractToolParamMeta(toolCall.tool_name, inputParams, toolCall.category);
+    return extract到olParamMeta(toolCall.tool_name, inputParams, toolCall.category);
   });
 
   /** Combined metadata for any tool type */
@@ -251,8 +251,8 @@
       null,
   );
 
-  /** Generate content from input_json when regex content is empty.
-   *  Try category first (e.g. "Edit"), then fall back to raw tool_name
+  /** 生成 content from input_json when regex content is empty.
+   *  Try category first (e.g. "编辑"), then fall back to raw tool_name
    *  (e.g. "apply_patch") so tools that don't match their category's
    *  specific field patterns still get the generic key-value output. */
   let fallbackContent = $derived.by(() => {
@@ -264,12 +264,12 @@
 
   let isTask = $derived(
     toolCall?.tool_name === "Task" ||
-      toolCall?.tool_name === "Agent" ||
+      toolCall?.tool_name === "代理" ||
       toolCall?.category === "Task" ||
       (toolCall?.tool_name?.includes("subagent") ?? false),
   );
 
-  let taskPrompt = $derived(
+  let task提示 = $derived(
     isTask ? inputParams?.prompt ?? null : null,
   );
 
@@ -277,21 +277,21 @@
     isTask ? toolCall?.subagent_session_id ?? null : null,
   );
   const CONTENT_PREVIEW_LINES = 20;
-  let contentFullyExpanded: boolean = $state(false);
+  let contentFully展开ed: boolean = $state(false);
 
   let displayContent = $derived.by(() => {
     const raw = fallbackContent ?? content ?? "";
     if (!raw) return { text: "", isLong: false };
-    const lines = raw.split("\n");
-    const isLong = lines.length > CONTENT_PREVIEW_LINES;
-    if (isLong && !contentFullyExpanded) {
+    const 行 = raw.split("\n");
+    const isLong = 行.length > CONTENT_PREVIEW_LINES;
+    if (isLong && !contentFully展开ed) {
       return {
-        text: lines.slice(0, CONTENT_PREVIEW_LINES).join("\n"),
+        text: 行.slice(0, CONTENT_PREVIEW_LINES).join("\n"),
         isLong: true,
-        totalLines: lines.length,
+        totalLines: 行.length,
       };
     }
-    return { text: raw, isLong, totalLines: lines.length };
+    return { text: raw, isLong, totalLines: 行.length };
   });
 
   let isDiff = $derived.by(() => {
@@ -312,9 +312,9 @@
     onclick={() => {
       const sel = window.getSelection();
       if (sel && sel.toString().length > 0) return;
-      userCollapsed = !userCollapsed;
+      user折叠d = !user折叠d;
       userOverride = true;
-      if (userCollapsed) contentFullyExpanded = false;
+      if (user折叠d) contentFully展开ed = false;
     }}
   >
     <span class="tool-chevron" class:open={!collapsed}>
@@ -330,7 +330,7 @@
       <span
         class="tool-duration"
         class:slow={isSlow}
-        class:running={isRunning}
+        class:running={is运行ning}
       >
         {durationLabel}
       </span>
@@ -347,8 +347,8 @@
         {/each}
       </div>
     {/if}
-    {#if taskPrompt}
-      <pre class="tool-content" use:applyHighlight={{ q: highlightQuery, current: isCurrentHighlight, content: taskPrompt }}>{@html escapeHTML(taskPrompt)}</pre>
+    {#if task提示}
+      <pre class="tool-content" use:applyHighlight={{ q: highlightQuery, current: isCurrentHighlight, content: task提示 }}>{@html escapeHTML(task提示)}</pre>
     {:else if fallbackContent && isDiff}
       <div class="diff-view">
         {#each diffLines as line}
@@ -362,10 +362,10 @@
           class="show-more-btn"
           onclick={(e) => {
             e.stopPropagation();
-            contentFullyExpanded = !contentFullyExpanded;
+            contentFully展开ed = !contentFully展开ed;
           }}
         >
-          {contentFullyExpanded ? "show less" : `show all ${displayContent.totalLines} lines`}
+          {contentFully展开ed ? "show less" : `show all ${displayContent.totalLines} 行`}
         </button>
       {/if}
     {/if}
@@ -376,19 +376,19 @@
           e.stopPropagation();
           const sel = window.getSelection();
           if (sel && sel.toString().length > 0) return;
-          userOutputCollapsed = !userOutputCollapsed;
+          userOutput折叠d = !userOutput折叠d;
           userOutputOverride = true;
         }}
       >
-        <span class="tool-chevron" class:open={!outputCollapsed}>
+        <span class="tool-chevron" class:open={!output折叠d}>
           &#9656;
         </span>
         <span class="output-label">output</span>
-        {#if outputCollapsed && outputPreviewLine}
+        {#if output折叠d && outputPreviewLine}
           <span class="tool-preview">{outputPreviewLine}</span>
         {/if}
       </button>
-      {#if !outputCollapsed}
+      {#if !output折叠d}
         <pre class="tool-content output-content" use:applyHighlight={{ q: highlightQuery, current: isCurrentHighlight, content: toolCall.result_content }}>{@html escapeHTML(toolCall.result_content)}</pre>
       {/if}
     {/if}
@@ -399,19 +399,19 @@
           e.stopPropagation();
           const sel = window.getSelection();
           if (sel && sel.toString().length > 0) return;
-          userHistoryCollapsed = !userHistoryCollapsed;
+          userHistory折叠d = !userHistory折叠d;
           userHistoryOverride = true;
         }}
       >
-        <span class="tool-chevron" class:open={!historyCollapsed}>
+        <span class="tool-chevron" class:open={!history折叠d}>
           &#9656;
         </span>
         <span class="output-label">history</span>
-        {#if historyCollapsed && historyPreviewLine}
+        {#if history折叠d && historyPreviewLine}
           <span class="tool-preview">{historyPreviewLine}</span>
         {/if}
       </button>
-      {#if !historyCollapsed}
+      {#if !history折叠d}
         <div class="result-history">
           {#each resultEvents as event (event.event_index)}
             <div class="result-event">

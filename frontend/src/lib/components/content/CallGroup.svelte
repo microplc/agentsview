@@ -10,7 +10,7 @@
     barScalePct: (call: CallTiming) => number;
     headerBarPct: number;
     onCallClick: (call: CallTiming) => void;
-    onSubagentExpand: (call: CallTiming) => void;
+    onSubagent展开: (call: CallTiming) => void;
     expandedSubagentIds: Set<string>;
     isLive?: boolean;
     /** Elapsed ms for the running tail call when `isLive` is
@@ -32,7 +32,7 @@
     barScalePct,
     headerBarPct,
     onCallClick,
-    onSubagentExpand,
+    onSubagent展开,
     expandedSubagentIds,
     isLive = false,
     liveDurationMs,
@@ -72,20 +72,20 @@
         liveDurationMs={isLastLive ? liveDurationMs : undefined}
         isSlow={isSlow ? isSlow(call) : false}
         {expandable}
-        isSubagentExpanded={call.subagent_session_id != null &&
+        isSubagent展开ed={call.subagent_session_id != null &&
           expandedSubagentIds.has(call.subagent_session_id)}
         sharedDurationLabel={sharedLabel}
         onClick={() => onCallClick(call)}
-        onChevronClick={() => onSubagentExpand(call)}
+        onChevronClick={() => onSubagent展开(call)}
       />
     {/each}
   </div>
 </div>
 
 <style>
-  /* Copied verbatim from
+  /* 已复制 verbatim from
      docs/superpowers/specs/2026-04-26-session-duration-ux-mockup.html
-     (.cgroup rules, lines 608–668). */
+     (.cgroup rules, 行 608–668). */
   .cgroup {
     display: grid;
     grid-template-columns: 14px 1fr;

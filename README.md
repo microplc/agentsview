@@ -7,7 +7,7 @@ accounts, everything local.
   <img src="https://agentsview.io/screenshots/dashboard.png" alt="Analytics dashboard" width="720">
 </p>
 
-## Install
+## 安装
 
 ```bash
 # macOS / Linux
@@ -33,7 +33,7 @@ docker run --rm -p 127.0.0.1:8080:8080 \
   ghcr.io/kenn-io/agentsview:latest
 ```
 
-## Quick Start
+## 快速开始
 
 ```bash
 agentsview serve           # start server, open web UI
@@ -44,7 +44,7 @@ On first run, agentsview discovers sessions from every supported agent on your
 machine, syncs them into a local SQLite database, and opens a web UI at
 `http://127.0.0.1:8080`.
 
-## Remote / forwarded access
+## 远程/转发访问
 
 agentsview binds to loopback and validates the request `Host` header to guard
 against DNS-rebinding attacks. When you reach it through SSH port-forwarding, a
@@ -142,7 +142,7 @@ Keep Quack on loopback or behind TLS. Plain HTTP Quack on a non-loopback bind
 requires `--allow-insecure` and should only be used behind a trusted tunnel or
 reverse proxy.
 
-## Token Usage and Cost Tracking
+## Token 用量与费用跟踪
 
 `agentsview usage` is a fast, local replacement for ccusage and similar tools.
 It tracks token consumption and compute costs across **all** your coding agents
@@ -175,7 +175,7 @@ Features:
 - Timezone-aware date bucketing (`--timezone`)
 - Works standalone -- no server required, just run the command
 
-## Per-Session Details
+## 按会话详情
 
 `agentsview session usage <id>` prints per-session token statistics plus a cost
 estimate for a single session. The output reports the session's total output
@@ -207,7 +207,7 @@ HTTP responses also include `server_running: true`. Existing sessions return
 The deprecated alias `agentsview token-use <id>` remains available for
 compatibility and now also reports cost estimates.
 
-## Session Stats
+## 会话统计
 
 `agentsview stats` emits window-scoped analytics over recorded sessions: totals,
 archetypes (automation vs. quick/standard/deep/marathon), distributions for
@@ -236,7 +236,7 @@ agentsview stats --format json --agent claude | jq '.schema_version'
 agentsview stats --include-git-outcomes
 ```
 
-## Session Browser
+## 会话浏览器
 
 | Dashboard                                                     | Session viewer                                                          |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------- |
@@ -246,17 +246,17 @@ agentsview stats --include-git-outcomes
 | --------------------------------------------------------------- | --------------------------------------------------------- |
 | ![Search](https://agentsview.io/screenshots/search-results.png) | ![Heatmap](https://agentsview.io/screenshots/heatmap.png) |
 
-- **Full-text search** across all message content (FTS5)
-- **Token usage and cost dashboard** -- per-session and per-model cost
-  breakdowns, daily spend charts, all in the web UI
-- **Analytics dashboard** -- activity heatmaps, tool usage, velocity metrics,
-  project breakdowns
-- **Live updates** via SSE as active sessions receive new messages
-- **Keyboard-first** navigation (`j`/`k`/`[`/`]`, `Cmd+K` search, `?` for all
-  shortcuts)
-- **Export** sessions as HTML or publish to GitHub Gist
+- **全文搜索**所有消息内容（FTS5）
+- **Token 用量和费用面板** -- 按会话和按模型的费用
+  细分、每日支出图表，全部在 Web 界面中
+- **分析面板** -- 活动热力图、工具使用、速度指标、
+  项目细分
+- 通过 SSE **实时更新**活跃会话的新消息
+- **键盘优先**导航（`j`/`k`/`[`/`]`、`Cmd+K`搜索、`?`查看所有
+  快捷键）
+- **导出**会话为 HTML 或发布到 GitHub Gist
 
-## Supported Agents
+## 支持的代理
 
 agentsview auto-discovers sessions from all of these:
 
@@ -329,7 +329,7 @@ Sidecars stay on your machine. agentsview makes no outbound request to produce
 or read them, and treats sidecars as untrusted structured input -- see
 [SECURITY.md](SECURITY.md) for the trust model.
 
-## PostgreSQL Sync
+## PostgreSQL 同步
 
 Push session data to a shared PostgreSQL instance for team dashboards:
 
@@ -379,7 +379,7 @@ loginctl enable-linger "$USER"
 See [PostgreSQL docs](https://agentsview.io/postgresql/) for setup and
 configuration.
 
-## DuckDB Mirror and Quack
+## DuckDB 镜像与 Quack
 
 DuckDB support is a mirror backend, not a replacement for the local SQLite
 archive. `agentsview serve` still performs primary ingestion into SQLite. Use
@@ -421,7 +421,7 @@ Troubleshooting:
 - DuckDB search currently uses substring/regex fallback behavior. SQLite FTS5
   remains the indexed search path for primary local serving.
 
-## Privacy
+## 隐私
 
 agentsview sends a limited anonymous `daemon_active` telemetry ping to PostHog
 when the server starts and every 24 hours while it runs, using a stable random
@@ -436,9 +436,9 @@ All session data stays on your machine. The server binds to `127.0.0.1` by
 default. The update check is optional and can be disabled with
 `--no-update-check`.
 
-## Documentation
+## 文档
 
-Full docs at **[agentsview.io](https://agentsview.io)**:
+完整文档请访问 **[agentsview.io](https://agentsview.io)**:
 [Quick Start](https://agentsview.io/quickstart/) --
 [Usage Guide](https://agentsview.io/usage/) --
 [CLI Reference](https://agentsview.io/commands/) --
@@ -447,7 +447,7 @@ Full docs at **[agentsview.io](https://agentsview.io)**:
 
 ______________________________________________________________________
 
-## Development
+## 开发
 
 Requires Go 1.26+ (CGO), Node.js 22+.
 
@@ -477,7 +477,7 @@ socket before running the benchmark.
 Pre-commit hooks via [prek](https://github.com/j178/prek): run `make lint-tools`
 and `make install-hooks` after cloning (requires `prek` and `uv`).
 
-### Project Layout
+### 项目结构
 
 ```
 cmd/agentsview/     CLI entrypoint
@@ -486,7 +486,7 @@ frontend/           Svelte 5 SPA (Vite, TypeScript)
 desktop/            Tauri desktop wrapper
 ```
 
-## Acknowledgements
+## 致谢
 
 Inspired by
 [claude-history-tool](https://github.com/andyfischer/ai-coding-tools/tree/main/claude-history-tool)
@@ -494,6 +494,6 @@ by Andy Fischer and
 [claude-code-transcripts](https://github.com/simonw/claude-code-transcripts) by
 Simon Willison.
 
-## License
+## 许可证
 
 MIT

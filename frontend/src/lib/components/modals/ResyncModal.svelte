@@ -8,9 +8,9 @@
   let errorMessage: string = $state("");
 
   function startResync() {
-    if (sync.readOnly) {
+    if (sync.read开ly) {
       errorMessage =
-        "Full resync is unavailable for read-only backends.";
+        "只读后端不支持完全重新同步。";
       view = "error";
       return;
     }
@@ -26,7 +26,7 @@
     if (started) {
       view = "progress";
     } else if (!errorMessage) {
-      errorMessage = "A sync is already in progress.";
+      errorMessage = "同步已在进行中。";
       view = "error";
     }
   }
@@ -54,9 +54,9 @@
 
   const progressPct = $derived(
     sync.progress
-      ? sync.progress.sessions_total > 0
-        ? (sync.progress.sessions_done /
-            sync.progress.sessions_total) *
+      ? sync.progress.个会话_total > 0
+        ? (sync.progress.个会话_done /
+            sync.progress.个会话_total) *
           100
         : 0
       : 0,
@@ -71,13 +71,13 @@
 >
   <div class="modal-panel resync-panel">
     <div class="modal-header">
-      <h3 class="modal-title">Full Resync</h3>
+      <h3 class="modal-title">完全重新同步</h3>
       {#if view !== "progress"}
         <button
           class="modal-close"
           onclick={close}
-          title="Close resync dialog"
-          aria-label="Close resync dialog"
+          title="关闭重新同步对话框"
+          aria-label="关闭重新同步对话框"
         >
           &times;
         </button>
@@ -88,19 +88,19 @@
       {#if view === "confirm"}
         <p class="confirm-text">
           Re-parse all session files from scratch. Existing
-          sessions will be updated in place &mdash; no data is
-          deleted. Use this after upgrading or when sessions
+          个会话 will be updated in place &mdash; no data is
+          已删除. Use this after upgrading or when 个会话
           appear incorrect.
         </p>
         <div class="confirm-actions">
           <button class="modal-btn" onclick={close}>
-            Cancel
+            取消
           </button>
           <button
             class="modal-btn modal-btn-primary"
             onclick={startResync}
           >
-            Start Full Resync
+            Start 完全重新同步
           </button>
         </div>
 
@@ -109,10 +109,10 @@
           <div class="modal-spinner"></div>
           <p class="progress-label">
             {#if sync.progress}
-              Syncing {sync.progress.sessions_done}
-              / {sync.progress.sessions_total} sessions...
+              同步中 {sync.progress.个会话_done}
+              / {sync.progress.个会话_total} 个会话...
             {:else}
-              Preparing...
+              准备中...
             {/if}
           </p>
           <div class="progress-bar-track">
@@ -127,11 +127,11 @@
         <div class="done-view">
           {#if sync.lastSyncStats}
             <p class="done-summary">
-              Sessions synced: {sync.lastSyncStats.synced}
+              会话 已同步: {sync.lastSyncStats.已同步}
             </p>
             {#if sync.lastSyncStats.failed > 0}
               <p class="done-warning">
-                Failed: {sync.lastSyncStats.failed}
+                失败: {sync.lastSyncStats.failed}
               </p>
             {/if}
           {/if}
@@ -140,7 +140,7 @@
               class="modal-btn modal-btn-primary"
               onclick={close}
             >
-              Close
+              关闭
             </button>
           </div>
         </div>
@@ -153,10 +153,10 @@
               class="modal-btn modal-btn-primary"
               onclick={startResync}
             >
-              Retry
+              重试
             </button>
             <button class="modal-btn" onclick={close}>
-              Close
+              关闭
             </button>
           </div>
         </div>

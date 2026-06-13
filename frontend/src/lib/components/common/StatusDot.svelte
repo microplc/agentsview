@@ -1,14 +1,14 @@
 <script lang="ts">
   import {
-    getSessionStatus,
-    type SessionStatusInput,
-  } from "../../stores/sessions.svelte.js";
+    getSession状态,
+    type Session状态Input,
+  } from "../../stores/个会话.svelte.js";
 
   interface Props {
     /** Anything with the recency + termination_status fields the
      * status calculation reads. Both the full Session and the
-     * lighter TopSession (analytics top list) qualify. */
-    session: SessionStatusInput;
+     * lighter 到pSession (analytics top list) qualify. */
+    session: Session状态Input;
     /** Optional full member list of this row's continuation/subagent
      * group. When provided, the status uses the freshest activity
      * across the group: a parent in tool_call_pending with a
@@ -16,13 +16,13 @@
      * parent's parser flag still wins for awaiting_user — a fork
      * running in parallel doesn't change that the agent has said
      * "your turn". */
-    groupSessions?: SessionStatusInput[];
+    group会话?: Session状态Input[];
     size?: number;
   }
 
-  let { session, groupSessions, size = 6 }: Props = $props();
+  let { session, group会话, size = 6 }: Props = $props();
 
-  let status = $derived(getSessionStatus(session, groupSessions));
+  let status = $derived(getSession状态(session, group会话));
 
   let label = $derived.by(() => {
     switch (status) {

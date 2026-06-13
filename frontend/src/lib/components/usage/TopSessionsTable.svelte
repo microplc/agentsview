@@ -1,34 +1,34 @@
 <script lang="ts">
   import { usage } from "../../stores/usage.svelte.js";
   import { router } from "../../stores/router.svelte.js";
-  import { formatTokenCount } from "../../utils/format.js";
-  import { formatAgentName, truncate } from "../../utils/format.js";
+  import { format到kenCount } from "../../utils/format.js";
+  import { format代理Name, truncate } from "../../utils/format.js";
 
   function fmtCost(v: number): string {
     return `$${v.toFixed(2)}`;
   }
 
   function handleRowClick(sessionId: string) {
-    router.navigateToSession(sessionId);
+    router.navigate到Session(sessionId);
   }
 </script>
 
-<div class="top-sessions-container">
-  <h3 class="chart-title">Top Sessions by Cost</h3>
+<div class="top-个会话-container">
+  <h3 class="chart-title">到p 会话 by Cost</h3>
 
-  {#if usage.errors.topSessions}
+  {#if usage.errors.top会话}
     <div class="error">
-      {usage.errors.topSessions}
+      {usage.errors.top会话}
       <button
         class="retry-btn"
-        onclick={() => usage.fetchTopSessions()}
+        onclick={() => usage.fetch到p会话()}
       >
-        Retry
+        重试
       </button>
     </div>
-  {:else if usage.topSessions && usage.topSessions.length > 0}
+  {:else if usage.top会话 && usage.top会话.length > 0}
     <div class="session-list">
-      {#each usage.topSessions as row, i (row.sessionId)}
+      {#each usage.top会话 as row, i (row.sessionId)}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div
@@ -39,7 +39,7 @@
           <div class="session-info">
             <span class="session-label">
               <span class="agent-pill">
-                {formatAgentName(row.agent)}
+                {format代理Name(row.agent)}
               </span>
               {truncate(row.displayName || row.sessionId.slice(0, 12), 100)}
             </span>
@@ -48,7 +48,7 @@
             </span>
           </div>
           <span class="session-tokens">
-            {formatTokenCount(row.totalTokens)}
+            {format到kenCount(row.total到kens)}
           </span>
           <span class="session-cost">
             {fmtCost(row.cost)}
@@ -57,12 +57,12 @@
       {/each}
     </div>
   {:else}
-    <div class="empty">No sessions in range</div>
+    <div class="empty">No 个会话 in range</div>
   {/if}
 </div>
 
 <style>
-  .top-sessions-container {
+  .top-个会话-container {
     flex: 1;
     display: flex;
     flex-direction: column;

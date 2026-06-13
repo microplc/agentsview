@@ -33,19 +33,19 @@
   }
 
   function levelColor(level: number): string {
-    const isDark = document.documentElement.classList.contains(
+    const is深色 = document.documentElement.classList.contains(
       "dark",
     );
-    const colors = isDark ? LEVEL_COLORS_DARK : LEVEL_COLORS_LIGHT;
+    const colors = is深色 ? LEVEL_COLORS_DARK : LEVEL_COLORS_LIGHT;
     return colors[level] ?? colors[0]!;
   }
 
   function metricLabel(metric: HeatmapMetric): string {
     switch (metric) {
-      case "sessions":
-        return "Sessions";
+      case "个会话":
+        return "会话";
       case "output_tokens":
-        return "Output Tokens";
+        return "Output 到kens";
       default:
         return "Messages";
     }
@@ -133,9 +133,9 @@
     grid.cols.length * CELL_STEP + LABEL_WIDTH + 4,
   );
   const svgHeight = 7 * CELL_STEP + HEADER_HEIGHT + 4;
-  const supportsOutputTokens = $derived(
+  const supportsOutput到kens = $derived(
     analytics.summary?.total_output_tokens !== undefined &&
-      analytics.summary?.token_reporting_sessions !== undefined,
+      analytics.summary?.token_reporting_个会话 !== undefined,
   );
 </script>
 
@@ -145,25 +145,25 @@
     <div class="metric-toggle">
       <button
         class="toggle-btn"
-        class:active={analytics.metric === "messages"}
-        onclick={() => analytics.setMetric("messages")}
+        class:active={analytics.metric === "条消息"}
+        onclick={() => analytics.setMetric("条消息")}
       >
         Messages
       </button>
       <button
         class="toggle-btn"
-        class:active={analytics.metric === "sessions"}
-        onclick={() => analytics.setMetric("sessions")}
+        class:active={analytics.metric === "个会话"}
+        onclick={() => analytics.setMetric("个会话")}
       >
-        Sessions
+        会话
       </button>
-      {#if supportsOutputTokens}
+      {#if supportsOutput到kens}
         <button
           class="toggle-btn"
           class:active={analytics.metric === "output_tokens"}
           onclick={() => analytics.setMetric("output_tokens")}
         >
-          Output Tokens
+          Output 到kens
         </button>
       {/if}
     </div>
@@ -176,7 +176,7 @@
         class="retry-btn"
         onclick={() => analytics.fetchHeatmap()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if grid.cols.length > 0}
@@ -251,7 +251,7 @@
       </div>
     {/if}
   {:else}
-    <div class="empty">No data for this period</div>
+    <div class="empty">此期间无数据</div>
   {/if}
 </div>
 

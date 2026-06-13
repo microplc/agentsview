@@ -124,16 +124,16 @@ func newSessionListCommand() *cobra.Command {
 
 // printSessionListHuman writes a compact columnar summary of the
 // session list, with a trailing hint when another page is
-// available. Prints "(no sessions)" for empty lists.
+// available. Prints （无会话） for empty lists.
 func printSessionListHuman(
 	w io.Writer, list *service.SessionList,
 ) error {
 	if len(list.Sessions) == 0 {
-		fmt.Fprintln(w, "(no sessions)")
+		fmt.Fprintln(w, （无会话）)
 		return nil
 	}
 	fmt.Fprintf(w, "%-40s  %-20s  %-15s  %s\n",
-		"ID", "PROJECT", "AGENT", "STARTED")
+		"ID", "项目", "AGENT", "STARTED")
 	for _, s := range list.Sessions {
 		started := "-"
 		if s.StartedAt != nil && len(*s.StartedAt) >= 16 {

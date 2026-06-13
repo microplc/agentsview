@@ -43,11 +43,11 @@ func runProjects(jsonOutput bool) {
 	}
 
 	if len(projects) == 0 {
-		fmt.Println("No projects found.")
+		fmt.Println("未找到项目。")
 		return
 	}
 
-	fmt.Printf("%-40s %s\n", "PROJECT", "SESSIONS")
+	fmt.Printf("%-40s %s\n", "项目", "会话数")
 	for _, p := range projects {
 		name := p.Name
 		if name == "" {

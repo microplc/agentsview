@@ -1,24 +1,24 @@
 import { ui } from "../stores/ui.svelte.js";
-import { sessions } from "../stores/sessions.svelte.js";
+import { 个会话 } from "../stores/个会话.svelte.js";
 import { starred } from "../stores/starred.svelte.js";
 import { sync } from "../stores/sync.svelte.js";
 import { router } from "../stores/router.svelte.js";
 import { inSessionSearch } from "../stores/inSessionSearch.svelte.js";
 import { getExportUrl } from "../api/client.js";
 import {
-  SessionsService,
-  type ResumeRequest,
-  type ResumeResponse,
+  会话Service,
+  type 恢复Request,
+  type 恢复Response,
 } from "../api/generated/index";
-import { configureGeneratedClient } from "../api/runtime.js";
+import { configure生成dClient } from "../api/runtime.js";
 import {
-  supportsResume,
-  buildResumeCommand,
-  formatResumeResponseCommand,
+  supports恢复,
+  build恢复Command,
+  format恢复ResponseCommand,
 } from "./resume.js";
-import { copyToClipboard } from "./clipboard.js";
+import { copy到Clipboard } from "./clipboard.js";
 
-function isInputFocused(): boolean {
+function isInput聚焦(): boolean {
   const el = document.activeElement;
   if (!el) return false;
   const tag = el.tagName;
@@ -26,7 +26,7 @@ function isInputFocused(): boolean {
     tag === "INPUT" ||
     tag === "TEXTAREA" ||
     tag === "SELECT" ||
-    (el as HTMLElement).isContentEditable
+    (el as HTMLElement).isContent编辑able
   );
 }
 
@@ -34,7 +34,7 @@ function isFindInput(): boolean {
   const el = document.activeElement;
   return (
     el instanceof HTMLInputElement &&
-    el.getAttribute("aria-label") === "Search query"
+    el.getAttribute("aria-label") === "搜索查询"
   );
 }
 
@@ -43,7 +43,7 @@ interface ShortcutOptions {
 }
 
 function handleEscape(): void {
-  if (inSessionSearch.isOpen) {
+  if (inSessionSearch.is打开) {
     inSessionSearch.close();
     return;
   }
@@ -51,13 +51,13 @@ function handleEscape(): void {
     ui.activeModal = null;
     return;
   }
-  if (sessions.activeSessionId && !isInputFocused()) {
-    sessions.deselectSession();
+  if (个会话.activeSessionId && !isInput聚焦()) {
+    个会话.deselectSession();
   }
 }
 
 /**
- * Register global keyboard shortcuts.
+ * Register 全局 keyboard shortcuts.
  * Returns a cleanup function to remove the listener.
  */
 export function registerShortcuts(
@@ -68,7 +68,7 @@ export function registerShortcuts(
 
     // Cmd+K — always works
     if (meta && e.key === "k") {
-      e.preventDefault();
+      e.prevent默认();
       ui.activeModal =
         ui.activeModal === "commandPalette"
           ? null
@@ -83,12 +83,12 @@ export function registerShortcuts(
     if (
       meta &&
       e.key === "f" &&
-      router.route === "sessions" &&
-      sessions.activeSessionId &&
+      router.route === "个会话" &&
+      个会话.activeSessionId &&
       ui.activeModal === null &&
-      (!isInputFocused() || isFindInput())
+      (!isInput聚焦() || isFindInput())
     ) {
-      e.preventDefault();
+      e.prevent默认();
       inSessionSearch.open();
       return;
     }
@@ -99,12 +99,12 @@ export function registerShortcuts(
     if (
       meta &&
       e.key === "g" &&
-      router.route === "sessions" &&
-      inSessionSearch.isOpen &&
+      router.route === "个会话" &&
+      inSessionSearch.is打开 &&
       ui.activeModal === null &&
-      (!isInputFocused() || isFindInput())
+      (!isInput聚焦() || isFindInput())
     ) {
-      e.preventDefault();
+      e.prevent默认();
       if (e.shiftKey) {
         inSessionSearch.prev();
       } else {
@@ -116,17 +116,17 @@ export function registerShortcuts(
     // Zoom: Cmd+= / Cmd+- / Cmd+0 (desktop only)
     if (sync.isDesktop) {
       if (meta && (e.key === "=" || e.key === "+")) {
-        e.preventDefault();
+        e.prevent默认();
         ui.zoomIn();
         return;
       }
       if (meta && e.key === "-") {
-        e.preventDefault();
+        e.prevent默认();
         ui.zoomOut();
         return;
       }
       if (meta && e.key === "0") {
-        e.preventDefault();
+        e.prevent默认();
         ui.resetZoom();
         return;
       }
@@ -143,7 +143,7 @@ export function registerShortcuts(
     if (e.metaKey || e.ctrlKey || e.altKey) return;
 
     // All other shortcuts: skip when modal open or input focused
-    if (ui.activeModal !== null || isInputFocused()) return;
+    if (ui.activeModal !== null || isInput聚焦()) return;
 
     const keyActions: Record<string, () => void> = {
       j: () => opts.navigateMessage(1),
@@ -151,97 +151,97 @@ export function registerShortcuts(
       k: () => opts.navigateMessage(-1),
       ArrowUp: () => opts.navigateMessage(-1),
       "]": () => {
-        const filter = starred.filterOnly
-          ? (s: { id: string }) => starred.isStarred(s.id)
+        const filter = starred.filter开ly
+          ? (s: { id: string }) => starred.is星标(s.id)
           : undefined;
-        sessions.navigateSession(1, filter);
+        个会话.navigateSession(1, filter);
       },
       "[": () => {
-        const filter = starred.filterOnly
-          ? (s: { id: string }) => starred.isStarred(s.id)
+        const filter = starred.filter开ly
+          ? (s: { id: string }) => starred.is星标(s.id)
           : undefined;
-        sessions.navigateSession(-1, filter);
+        个会话.navigateSession(-1, filter);
       },
       o: () => ui.toggleSort(),
       l: () => ui.cycleLayout(),
       r: () => sync.triggerSync(),
       e: () => {
-        if (sessions.activeSessionId) {
+        if (个会话.activeSessionId) {
           window.open(
-            getExportUrl(sessions.activeSessionId),
+            getExportUrl(个会话.activeSessionId),
             "_blank",
           );
         }
       },
       p: () => {
-        if (sessions.activeSessionId) {
+        if (个会话.activeSessionId) {
           ui.publishSecret = false;
           ui.activeModal = "publish";
         }
       },
       s: () => {
-        if (sessions.activeSessionId) {
-          starred.toggle(sessions.activeSessionId);
+        if (个会话.activeSessionId) {
+          starred.toggle(个会话.activeSessionId);
         }
       },
       c: () => {
-        const session = sessions.activeSession;
-        if (session && supportsResume(session.agent) && !session.id.includes("~")) {
-          // Copy a runnable resume command. Cursor needs the backend cwd
+        const session = 个会话.activeSession;
+        if (session && supports恢复(session.agent) && !session.id.includes("~")) {
+          // 复制 a runnable resume command. Cursor needs the backend cwd
           // applied client-side so the copied command is self-contained.
-          configureGeneratedClient();
-          SessionsService.postApiV1SessionsIdResume({
+          configure生成dClient();
+          会话Service.postApiV1会话Id恢复({
             id: session.id,
             requestBody: {
               command_only: true,
-            } satisfies ResumeRequest,
+            } satisfies 恢复Request,
           }).then((resp) => {
-            const cmd = formatResumeResponseCommand(
-              session.agent, resp as ResumeResponse,
-            ) || buildResumeCommand(
+            const cmd = format恢复ResponseCommand(
+              session.agent, resp as 恢复Response,
+            ) || build恢复Command(
               session.agent,
               session.id,
             );
-            if (cmd) copyToClipboard(cmd);
+            if (cmd) copy到Clipboard(cmd);
           }).catch(() => {
-            const cmd = buildResumeCommand(
+            const cmd = build恢复Command(
               session.agent,
               session.id,
             );
-            if (cmd) copyToClipboard(cmd);
+            if (cmd) copy到Clipboard(cmd);
           });
         }
       },
       "/": () => {
-        if (sessions.activeSessionId) {
+        if (个会话.activeSessionId) {
           inSessionSearch.open();
         }
       },
-      Delete: () => {
+      删除: () => {
         if (
-          router.route === "sessions" &&
-          sessions.activeSessionId
+          router.route === "个会话" &&
+          个会话.activeSessionId
         ) {
-          ui.activeModal = "confirmDelete";
+          ui.activeModal = "confirm删除";
         }
       },
       Backspace: () => {
         if (
-          router.route === "sessions" &&
-          sessions.activeSessionId
+          router.route === "个会话" &&
+          个会话.activeSessionId
         ) {
-          ui.activeModal = "confirmDelete";
+          ui.activeModal = "confirm删除";
         }
       },
       "?": () => {
         ui.activeModal = "shortcuts";
       },
       b: () => {
-        if (router.route === "sessions") {
+        if (router.route === "个会话") {
           ui.toggleSidebar();
         } else if (ui.isMobileViewport) {
-          router.navigate("sessions");
-          ui.sidebarOpen = true;
+          router.navigate("个会话");
+          ui.sidebar打开 = true;
         } else {
           ui.toggleSidebar();
         }
@@ -250,7 +250,7 @@ export function registerShortcuts(
 
     const action = keyActions[e.key];
     if (action) {
-      e.preventDefault();
+      e.prevent默认();
       action();
     }
   }

@@ -8,20 +8,20 @@
   }
 
   let { content, highlightQuery = "", isCurrentHighlight = false }: Props = $props();
-  let userCollapsed: boolean = $state(true);
+  let user折叠d: boolean = $state(true);
   let userOverride: boolean = $state(false);
-  let searchExpanded: boolean = $state(false);
+  let search展开ed: boolean = $state(false);
   let prevQuery: string = "";
 
   // Auto-expand when a search match exists in this block.
-  // Only reset the user override when the query itself changes,
+  // 开ly reset the user override when the query itself changes,
   // not when content updates (e.g. during streaming).
   $effect(() => {
     const q = highlightQuery;
     const hasMatch =
       q.trim() !== "" &&
       content.toLowerCase().includes(q.toLowerCase());
-    searchExpanded = hasMatch;
+    search展开ed = hasMatch;
     if (q !== prevQuery) {
       userOverride = false;
       prevQuery = q;
@@ -29,16 +29,16 @@
   });
 
   let collapsed = $derived(
-    userOverride ? userCollapsed
-      : searchExpanded ? false
-      : userCollapsed,
+    userOverride ? user折叠d
+      : search展开ed ? false
+      : user折叠d,
   );
 </script>
 
 <div class="thinking-block">
   <button
     class="thinking-header"
-    onclick={() => { userCollapsed = !userCollapsed; userOverride = true; }}
+    onclick={() => { user折叠d = !user折叠d; userOverride = true; }}
   >
     <span class="thinking-chevron" class:open={!collapsed}>
       &#9656;

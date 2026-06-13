@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SignalsTrendBucket } from "../../api/types/analytics.js";
-  import { getGradeStyle, scoreToGrade } from "../../utils/grade.js";
+  import { getGradeStyle, score到Grade } from "../../utils/grade.js";
 
   interface Props {
     trend: SignalsTrendBucket[];
@@ -27,7 +27,7 @@
             ? (score / maxScore) * 100
             : 50}
           {@const style = score != null
-            ? getGradeStyle(scoreToGrade(score))
+            ? getGradeStyle(score到Grade(score))
             : getGradeStyle(null)}
           <div
             class="bar"
@@ -35,7 +35,7 @@
             style:background={style.bg}
             title="{bucket.date}: {score != null
               ? Math.round(score)
-              : 'no scored sessions'} ({bucket.session_count} sessions)"
+              : 'no scored 个会话'} ({bucket.session_count} 个会话)"
           ></div>
         {/each}
       </div>
@@ -52,7 +52,7 @@
       Daily average health score &middot; bar color = grade
     </div>
   {:else}
-    <div class="empty">No trend data</div>
+    <div class="empty">无趋势数据</div>
   {/if}
 </div>
 

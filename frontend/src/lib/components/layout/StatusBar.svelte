@@ -18,15 +18,15 @@
     if (!sync.syncing || !sync.progress) return null;
     const p = sync.progress;
     if (p.phase === "scan") {
-      return `Scanning ${p.current_project || ""}...`;
+      return `正在扫描 ${p.current_project || ""}...`;
     }
     if (p.phase === "parse") {
-      const pct = p.sessions_total > 0
-        ? Math.round((p.sessions_done / p.sessions_total) * 100)
+      const pct = p.个会话_total > 0
+        ? Math.round((p.个会话_done / p.个会话_total) * 100)
         : 0;
-      return `Syncing ${pct}% (${p.sessions_done}/${p.sessions_total})`;
+      return `同步中 ${pct}% (${p.个会话_done}/${p.个会话_total})`;
     }
-    return "Syncing...";
+    return "同步中...";
   });
 
   let lastSyncText = $derived.by(() => {
@@ -51,11 +51,11 @@
 <footer class="status-bar">
   <div class="status-left">
     {#if sync.stats}
-      <span>{formatNumber(sync.stats.session_count)} sessions</span>
+      <span>{formatNumber(sync.stats.session_count)} 个会话</span>
       <span class="sep">&middot;</span>
-      <span>{formatNumber(sync.stats.message_count)} messages</span>
+      <span>{formatNumber(sync.stats.message_count)} 条消息</span>
       <span class="sep">&middot;</span>
-      <span>{formatNumber(sync.stats.project_count)} projects</span>
+      <span>{formatNumber(sync.stats.project_count)} 个项目</span>
     {/if}
   </div>
 
@@ -64,9 +64,9 @@
       <button
         class="remote-warn"
         onclick={() => router.navigate("settings")}
-        title="Can't reach the remote server. Open settings to check the URL, token, or disconnect."
+        title="无法连接远程服务器。打开设置检查 URL、令牌或断开连接。"
       >
-        remote server unreachable
+        远程服务器无法连接
       </button>
       <span class="sep">&middot;</span>
     {/if}
@@ -74,9 +74,9 @@
       <button
         class="backend-warn"
         onclick={() => sync.loadStats()}
-        title={sync.backendDegradedMessage ?? "sync not ready"}
+        title={sync.backendDegradedMessage ?? "同步未就绪"}
       >
-        sync not ready
+        同步未就绪
       </button>
       <span class="sep">&middot;</span>
     {/if}
@@ -86,14 +86,14 @@
           class="zoom-btn"
           onclick={() => ui.zoomOut()}
           disabled={ui.zoomLevel <= 67}
-          title="Zoom out ({mod}+-)"
+          title="缩小 ({mod}+-)"
         >
           &minus;
         </button>
         <button
           class="zoom-level"
           onclick={() => ui.resetZoom()}
-          title="Reset zoom ({mod}+0)"
+          title="重置缩放 ({mod}+0)"
         >
           {ui.zoomLevel}%
         </button>
@@ -101,7 +101,7 @@
           class="zoom-btn"
           onclick={() => ui.zoomIn()}
           disabled={ui.zoomLevel >= 200}
-          title="Zoom in ({mod}++)"
+          title="放大 ({mod}++)"
         >
           +
         </button>
@@ -112,9 +112,9 @@
       <button
         class="update-available"
         onclick={() => (ui.activeModal = "update")}
-        title="A new version is available: {sync.latestVersion}"
+        title="有新版本可用： {sync.latest版本}"
       >
-        update available
+        有可用更新
       </button>
       <span class="sep">&middot;</span>
     {/if}
@@ -122,9 +122,9 @@
       <button
         class="version-warn"
         onclick={() => window.location.reload()}
-        title="Frontend and backend versions differ. Click to reload."
+        title="前端和后端版本不一致。点击重新加载。"
       >
-        version mismatch - reload
+        版本不匹配 - 重新加载
       </button>
     {/if}
     {#if progressText}
@@ -133,22 +133,22 @@
     {:else if lastSyncText}
       {#if sync.versionMismatch}<span class="sep">&middot;</span>{/if}
       <span title={lastSyncTimestamp ?? undefined}>
-        synced {lastSyncText}
+        已同步 {lastSyncText}
       </span>
     {/if}
-    {#if sync.serverVersion}
+    {#if sync.server版本}
       {#if sync.versionMismatch || progressText || sync.lastSync}
         <span class="sep">&middot;</span>
       {/if}
       <button
         class="version"
-        title="Build: {sync.serverVersion.commit}"
+        title="Build: {sync.server版本.commit}"
         onclick={() => {
           if (ui.activeModal === "resync" && sync.syncing) return;
           ui.activeModal = "about";
         }}
       >
-        {sync.serverVersion.version}
+        {sync.server版本.version}
       </button>
     {/if}
   </div>

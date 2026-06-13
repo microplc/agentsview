@@ -8,8 +8,8 @@
   const MIN_BAR_WIDTH = 6;
   const BAR_GAP = 2;
 
-  type Metric = "messages" | "sessions";
-  let metric = $state<Metric>("messages");
+  type Metric = "条消息" | "个会话";
+  let metric = $state<Metric>("条消息");
 
   let containerEl = $state<HTMLDivElement | null>(null);
   let containerWidth = $state(600);
@@ -32,7 +32,7 @@
     }
 
     const values = series.map((e) =>
-      metric === "messages" ? e.messages : e.sessions,
+      metric === "条消息" ? e.条消息 : e.个会话,
     );
     const maxVal = Math.max(...values, 1);
 
@@ -54,12 +54,12 @@
         height,
         value: val,
         date: entry.date,
-        userMessages: entry.user_messages,
-        assistantMessages: entry.assistant_messages,
+        userMessages: entry.user_条消息,
+        assistantMessages: entry.assistant_条消息,
       };
     });
 
-    // Generate sparse x-axis labels
+    // 生成 sparse x-axis labels
     const labelStep = Math.max(
       1,
       Math.floor(series.length / 8),
@@ -112,16 +112,16 @@
       day: "numeric",
       year: "numeric",
     });
-    const lines = [`${label}: ${bar.value.toLocaleString()} ${metric}`];
-    if (metric === "messages") {
-      lines.push(
+    const 行 = [`${label}: ${bar.value.toLocaleString()} ${metric}`];
+    if (metric === "条消息") {
+      行.push(
         `user: ${bar.userMessages} / assistant: ${bar.assistantMessages}`,
       );
     }
     tooltip = {
       x: rect.left + rect.width / 2,
       y: rect.top - 4,
-      text: lines.join(" | "),
+      text: 行.join(" | "),
     };
   }
 
@@ -168,17 +168,17 @@
       <div class="metric-toggle">
         <button
           class="toggle-btn"
-          class:active={metric === "messages"}
-          onclick={() => (metric = "messages")}
+          class:active={metric === "条消息"}
+          onclick={() => (metric = "条消息")}
         >
           Messages
         </button>
         <button
           class="toggle-btn"
-          class:active={metric === "sessions"}
-          onclick={() => (metric = "sessions")}
+          class:active={metric === "个会话"}
+          onclick={() => (metric = "个会话")}
         >
-          Sessions
+          会话
         </button>
       </div>
       <div class="granularity-toggle">
@@ -214,7 +214,7 @@
         class="retry-btn"
         onclick={() => analytics.fetchActivity()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if chart.bars.length > 0}
@@ -224,7 +224,7 @@
         height={SVG_HEIGHT}
         class="timeline-svg"
       >
-        <!-- Y-axis guide lines -->
+        <!-- Y-axis guide 行 -->
         {#each [0.25, 0.5, 0.75, 1] as frac}
           <line
             x1="0"
@@ -252,7 +252,7 @@
             onclick={() => handleBarClick(bar)}
             onkeydown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
+                e.prevent默认();
                 handleBarClick(bar);
               }
             }}
@@ -284,7 +284,7 @@
       </div>
     {/if}
   {:else}
-    <div class="empty">No activity data</div>
+    <div class="empty">无活动数据</div>
   {/if}
 </div>
 

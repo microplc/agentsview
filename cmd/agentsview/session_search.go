@@ -121,7 +121,7 @@ func newSessionSearchCommand() *cobra.Command {
 // printContentMatchesHuman writes one line per match, terminal-sanitized.
 func printContentMatchesHuman(w io.Writer, res *service.ContentSearchResult) error {
 	if len(res.Matches) == 0 {
-		fmt.Fprintln(w, "(no matches)")
+		fmt.Fprintln(w, （无匹配）)
 		return nil
 	}
 	for _, m := range res.Matches {

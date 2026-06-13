@@ -176,7 +176,7 @@ func printStatsHuman(w io.Writer, stats *service.SessionStats) error {
 	ew := &errWriter{w: w}
 	printHeader(ew, stats)
 	if stats.Totals.SessionsAll == 0 {
-		fmt.Fprintln(ew, "Totals")
+		fmt.Fprintln(ew, "总计")
 		fmt.Fprintln(ew, "  (no sessions in window)")
 		return ew.err
 	}
@@ -244,7 +244,7 @@ func printHeader(w io.Writer, s *service.SessionStats) {
 }
 
 func printTotals(w io.Writer, s *service.SessionStats) {
-	fmt.Fprintln(w, "Totals")
+	fmt.Fprintln(w, "总计")
 	fmt.Fprintf(w, "  Sessions:              %s (human %s, automation %s)\n",
 		fmtInt(s.Totals.SessionsAll),
 		fmtInt(s.Totals.SessionsHuman),
@@ -257,7 +257,7 @@ func printTotals(w io.Writer, s *service.SessionStats) {
 
 func printArchetypes(w io.Writer, s *service.SessionStats) {
 	a := s.Archetypes
-	fmt.Fprintln(w, "Archetypes")
+	fmt.Fprintln(w, "类型")
 	tw := tabwriter.NewWriter(w, 0, 4, 2, ' ', 0)
 	rows := []struct {
 		name  string
@@ -282,7 +282,7 @@ func printArchetypes(w io.Writer, s *service.SessionStats) {
 
 func printSessionShape(w io.Writer, s *service.SessionStats) {
 	d := s.Distributions
-	fmt.Fprintln(w, "Session shape (means)")
+	fmt.Fprintln(w, "会话形状（均值）")
 	fmt.Fprintf(w, "  Duration (min):        mean=%s (scope_all); mean=%s (scope_human)\n",
 		fmtFloat(d.DurationMinutes.ScopeAll.Mean),
 		fmtFloat(d.DurationMinutes.ScopeHuman.Mean))
@@ -300,7 +300,7 @@ func printSessionShape(w io.Writer, s *service.SessionStats) {
 
 func printVelocity(w io.Writer, s *service.SessionStats) {
 	v := s.Velocity
-	fmt.Fprintln(w, "Velocity")
+	fmt.Fprintln(w, "速度")
 	fmt.Fprintf(w, "  Turn cycle (s):        p50=%s p90=%s mean=%s\n",
 		fmtFloat(v.TurnCycleSeconds.P50),
 		fmtFloat(v.TurnCycleSeconds.P90),

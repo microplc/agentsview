@@ -1,16 +1,16 @@
-<!-- ABOUTME: Expandable inline view of a subagent's conversation.
-     ABOUTME: Lazily loads and renders subagent messages within a parent ToolBlock. -->
+<!-- ABOUTME: 展开able inline view of a subagent's conversation.
+     ABOUTME: Lazily loads and renders subagent 条消息 within a parent 到olBlock. -->
 <script lang="ts">
   import type {
     Message,
     MessagesResponse,
     Session,
   } from "../../api/types.js";
-  import { SessionsService } from "../../api/generated/index";
-  import { configureGeneratedClient } from "../../api/runtime.js";
-  import { formatTokenUsage } from "../../utils/format.js";
+  import { 会话Service } from "../../api/generated/index";
+  import { configure生成dClient } from "../../api/runtime.js";
+  import { format到ken用量 } from "../../utils/format.js";
   import { computeMainModel } from "../../utils/model.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import MessageContent from "./MessageContent.svelte";
 
@@ -20,34 +20,34 @@
 
   let { sessionId }: Props = $props();
   let expanded = $state(false);
-  let messages = $state<Message[] | null>(null);
+  let 条消息 = $state<Message[] | null>(null);
   let sessionMeta = $state<Session | null>(null);
   let loading = $state(false);
   let error = $state<string | null>(null);
 
-  let subagentSession = $derived(sessions.childSessions.get(sessionId) ?? null);
+  let subagentSession = $derived(个会话.child会话.get(sessionId) ?? null);
   let tokenSourceSession = $derived(sessionMeta ?? subagentSession);
 
-  async function toggleExpand() {
+  async function toggle展开() {
     expanded = !expanded;
-    if (expanded && !messages) {
+    if (expanded && !条消息) {
       loading = true;
       error = null;
       try {
-        configureGeneratedClient();
+        configure生成dClient();
         const [resp, meta] = await Promise.all([
-          SessionsService.getApiV1SessionsIdMessages({
+          会话Service.getApiV1会话IdMessages({
             id: sessionId,
             limit: 1000,
-          }) as unknown as Promise<MessagesResponse>,
-          (SessionsService.getApiV1SessionsId({
+          }) as 未知 as Promise<MessagesResponse>,
+          (会话Service.getApiV1会话Id({
             id: sessionId,
-          }) as unknown as Promise<Session>).catch(() => null),
+          }) as 未知 as Promise<Session>).catch(() => null),
         ]);
-        messages = resp.messages;
+        条消息 = resp.条消息;
         sessionMeta = meta;
       } catch (e) {
-        error = e instanceof Error ? e.message : "Failed to load";
+        error = e instanceof 错误 ? e.message : "失败 to load";
       } finally {
         loading = false;
       }
@@ -55,40 +55,40 @@
   }
 
   async function openAsSession(e: MouseEvent) {
-    e.preventDefault();
+    e.prevent默认();
     e.stopPropagation();
-    router.navigateToSession(sessionId);
+    router.navigate到Session(sessionId);
   }
 
   let agentLabel = $derived(sessionMeta?.agent ?? null);
   let messageCountLabel = $derived(
-    sessionMeta ? `${sessionMeta.message_count} messages` : null,
+    sessionMeta ? `${sessionMeta.message_count} 条消息` : null,
   );
   let subagentModel = $derived(
-    messages && sessionMeta &&
-    messages.length >= sessionMeta.message_count
-      ? computeMainModel(messages)
+    条消息 && sessionMeta &&
+    条消息.length >= sessionMeta.message_count
+      ? computeMainModel(条消息)
       : "",
   );
-  let subagentHasContextTokens = $derived(
+  let subagentHasContext到kens = $derived(
     tokenSourceSession
       ? (tokenSourceSession.has_peak_context_tokens ??
         tokenSourceSession.peak_context_tokens > 0)
       : false,
   );
-  let subagentHasOutputTokens = $derived(
+  let subagentHasOutput到kens = $derived(
     tokenSourceSession
       ? (tokenSourceSession.has_total_output_tokens ??
         tokenSourceSession.total_output_tokens > 0)
       : false,
   );
-  let subagentTokenSummary = $derived(
+  let subagent到kenSummary = $derived(
     tokenSourceSession
-      ? formatTokenUsage(
+      ? format到ken用量(
           tokenSourceSession.peak_context_tokens,
-          subagentHasContextTokens,
+          subagentHasContext到kens,
           tokenSourceSession.total_output_tokens,
-          subagentHasOutputTokens,
+          subagentHasOutput到kens,
         )
       : null,
   );
@@ -96,7 +96,7 @@
 
 <div class="subagent-inline">
   <div class="subagent-header">
-    <button class="subagent-toggle" onclick={toggleExpand}>
+    <button class="subagent-toggle" onclick={toggle展开}>
       <span class="toggle-chevron" class:open={expanded}>&#9656;</span>
       <span class="toggle-label">Subagent session</span>
       {#if agentLabel}
@@ -106,8 +106,8 @@
         <span class="toggle-meta">{messageCountLabel}</span>
       {/if}
       <span class="toggle-session-id">{sessionId.slice(0, 12)}</span>
-      {#if subagentTokenSummary}
-        <span class="toggle-tokens">({subagentTokenSummary})</span>
+      {#if subagent到kenSummary}
+        <span class="toggle-tokens">({subagent到kenSummary})</span>
       {/if}
       {#if subagentSession}
         {#if subagentModel}
@@ -119,24 +119,24 @@
       href={router.buildSessionHref(sessionId)}
       class="open-session-link"
       onclick={openAsSession}
-      title="Open as full session"
+      title="打开 as full session"
     >
-      Open session &#8599;
+      打开 session &#8599;
     </a>
   </div>
 
   {#if expanded}
-    <div class="subagent-messages">
+    <div class="subagent-条消息">
       {#if loading}
-        <div class="subagent-status">Loading...</div>
+        <div class="subagent-status">加载中...</div>
       {:else if error}
         <div class="subagent-status subagent-error">{error}</div>
-      {:else if messages && messages.length > 0}
-        {#each messages as message}
+      {:else if 条消息 && 条消息.length > 0}
+        {#each 条消息 as message}
           <MessageContent {message} isSubagentContext={true} />
         {/each}
-      {:else if messages}
-        <div class="subagent-status">No messages</div>
+      {:else if 条消息}
+        <div class="subagent-status">No 条消息</div>
       {/if}
     </div>
   {/if}
@@ -237,7 +237,7 @@
     flex-shrink: 0;
   }
 
-  .subagent-messages {
+  .subagent-条消息 {
     border-left: 3px solid var(--accent-green);
     margin: 0 0 4px 10px;
     display: flex;
@@ -246,11 +246,11 @@
     padding: 4px 0;
   }
 
-  /* Inner messages already get their role identity from the avatar
-     and name; the green rail of .subagent-messages already groups
+  /* Inner 条消息 already get their role identity from the avatar
+     and name; the green rail of .subagent-条消息 already groups
      them. The per-message left rail is redundant and reads as
      toothy in this context. */
-  .subagent-messages :global(.message) {
+  .subagent-条消息 :全局(.message) {
     border-left: none;
     border-radius: var(--radius-md);
   }

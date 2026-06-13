@@ -16,7 +16,7 @@
       ? firstLine.slice(0, 140) + "…"
       : firstLine;
   });
-  let hasMore = $derived(content.length > 0 && content !== preview);
+  let has更多 = $derived(content.length > 0 && content !== preview);
 </script>
 
 <div class="boundary" title="Context window compacted at this point">
@@ -33,7 +33,7 @@
   <span class="boundary-line"></span>
 </div>
 {#if preview}
-  {#if hasMore}
+  {#if has更多}
     <details class="boundary-details">
       <summary class="boundary-preview">
         <span>{preview}</span>

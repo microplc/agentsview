@@ -1,26 +1,26 @@
 <script lang="ts">
-  import SettingsSection from "./SettingsSection.svelte";
+  import 设置Section from "./设置Section.svelte";
   import {
-    SettingsService,
+    设置Service,
     type ApplyWorktreeMappingsResponse,
-    type DbWorktreeProjectMapping,
+    type DbWorktree项目Mapping,
     type WorktreeMappingRequest,
   } from "../../api/generated/index";
-  import { callGenerated } from "../../api/runtime.js";
+  import { call生成d } from "../../api/runtime.js";
 
   interface WorktreeMappingsResponse {
     machine: string;
-    mappings: DbWorktreeProjectMapping[];
+    mappings: DbWorktree项目Mapping[];
   }
 
   interface Props {
-    readOnly?: boolean;
+    read开ly?: boolean;
   }
 
-  let { readOnly = false }: Props = $props();
+  let { read开ly = false }: Props = $props();
 
   let machine = $state("");
-  let mappings: DbWorktreeProjectMapping[] = $state([]);
+  let mappings: DbWorktree项目Mapping[] = $state([]);
   let loading = $state(true);
   let saving = $state(false);
   let applying = $state(false);
@@ -32,7 +32,7 @@
   let enabled = $state(true);
 
   $effect(() => {
-    if (readOnly) {
+    if (read开ly) {
       loading = false;
       return;
     }
@@ -44,13 +44,13 @@
     error = "";
     try {
       const res =
-        await callGenerated(() =>
-          SettingsService.getApiV1SettingsWorktreeMappings(),
-        ) as unknown as WorktreeMappingsResponse;
+        await call生成d(() =>
+          设置Service.getApiV1设置WorktreeMappings(),
+        ) as 未知 as WorktreeMappingsResponse;
       machine = res.machine;
       mappings = res.mappings;
     } catch (err) {
-      error = err instanceof Error ? err.message : "Failed to load mappings";
+      error = err instanceof 错误 ? err.message : "失败 to load mappings";
     } finally {
       loading = false;
     }
@@ -63,7 +63,7 @@
     enabled = true;
   }
 
-  function editMapping(mapping: DbWorktreeProjectMapping) {
+  function editMapping(mapping: DbWorktree项目Mapping) {
     editingId = mapping.id;
     pathPrefix = mapping.path_prefix;
     project = mapping.project;
@@ -85,14 +85,14 @@
     applyMessage = "";
     try {
       if (editingId == null) {
-        await callGenerated(() =>
-          SettingsService.postApiV1SettingsWorktreeMappings({
+        await call生成d(() =>
+          设置Service.postApiV1设置WorktreeMappings({
             requestBody: input,
           }),
         );
       } else {
-        await callGenerated(() =>
-          SettingsService.putApiV1SettingsWorktreeMappingsId({
+        await call生成d(() =>
+          设置Service.putApiV1设置WorktreeMappingsId({
             id: String(editingId),
             requestBody: input,
           }),
@@ -101,7 +101,7 @@
       resetForm();
       await loadMappings();
     } catch (err) {
-      error = err instanceof Error ? err.message : "Failed to save mapping";
+      error = err instanceof 错误 ? err.message : "失败 to save mapping";
     } finally {
       saving = false;
     }
@@ -112,15 +112,15 @@
     error = "";
     applyMessage = "";
     try {
-      await callGenerated(() =>
-        SettingsService.deleteApiV1SettingsWorktreeMappingsId({
+      await call生成d(() =>
+        设置Service.deleteApiV1设置WorktreeMappingsId({
           id: String(id),
         }),
       );
       if (editingId === id) resetForm();
       await loadMappings();
     } catch (err) {
-      error = err instanceof Error ? err.message : "Failed to delete mapping";
+      error = err instanceof 错误 ? err.message : "失败 to delete mapping";
     } finally {
       saving = false;
     }
@@ -132,39 +132,39 @@
     applyMessage = "";
     try {
       const res =
-        await callGenerated(() =>
-          SettingsService.postApiV1SettingsWorktreeMappingsApply(),
+        await call生成d(() =>
+          设置Service.postApiV1设置WorktreeMappingsApply(),
         ) as ApplyWorktreeMappingsResponse;
-      applyMessage = `${res.updated_sessions} updated, ${res.matched_sessions} matched`;
+      applyMessage = `${res.updated_个会话} updated, ${res.matched_个会话} matched`;
     } catch (err) {
-      error = err instanceof Error ? err.message : "Failed to apply mappings";
+      error = err instanceof 错误 ? err.message : "失败 to apply mappings";
     } finally {
       applying = false;
     }
   }
 
-  let canSave = $derived(pathPrefix.trim() !== "" && project.trim() !== "");
+  let can保存 = $derived(pathPrefix.trim() !== "" && project.trim() !== "");
 </script>
 
-<SettingsSection
-  title="Worktree mappings"
-  description="Map worktree path prefixes to canonical projects on this machine."
+<设置Section
+  title="工作树映射"
+  description="Map worktree path prefixes to canonical 个项目 on this machine."
 >
-  {#if readOnly}
-    <div class="muted">Worktree mappings are available in local mode only.</div>
+  {#if read开ly}
+    <div class="muted">工作树映射 are available in local mode only.</div>
   {:else if loading}
-    <div class="muted">Loading mappings...</div>
+    <div class="muted">正在加载映射...</div>
   {:else if error && mappings.length === 0}
     <div class="error-text">{error}</div>
   {:else}
     <div class="machine-row">
-      <span class="label">Machine</span>
+      <span class="label">机器</span>
       <code>{machine || "local"}</code>
     </div>
 
     <div class="mapping-list">
       {#if mappings.length === 0}
-        <div class="empty">No worktree mappings configured.</div>
+        <div class="empty">未配置工作树映射。</div>
       {:else}
         {#each mappings as mapping (mapping.id)}
           <div class="mapping-row" class:disabled={!mapping.enabled}>
@@ -173,12 +173,12 @@
               <div class="mapping-path">{mapping.path_prefix}</div>
             </div>
             <div class="mapping-actions">
-              <span class="status">{mapping.enabled ? "On" : "Off"}</span>
+              <span class="status">{mapping.enabled ? "开" : "关"}</span>
               <button class="small-btn" onclick={() => editMapping(mapping)}>
-                Edit
+                编辑
               </button>
               <button class="small-btn danger" onclick={() => removeMapping(mapping.id)}>
-                Delete
+                删除
               </button>
             </div>
           </div>
@@ -188,7 +188,7 @@
 
     <div class="form-grid">
       <label class="field">
-        <span>Path prefix</span>
+        <span>路径前缀</span>
         <input
           type="text"
           bind:value={pathPrefix}
@@ -196,12 +196,12 @@
         />
       </label>
       <label class="field">
-        <span>Project</span>
+        <span>项目</span>
         <input type="text" bind:value={project} placeholder="project-name" />
       </label>
       <label class="enabled-toggle">
         <input type="checkbox" bind:checked={enabled} />
-        Enabled
+        已启用
       </label>
     </div>
 
@@ -215,24 +215,24 @@
     <div class="button-row">
       <button
         class="primary-btn"
-        disabled={!canSave || saving}
+        disabled={!can保存 || saving}
         onclick={saveMapping}
       >
-        {saving ? "Saving..." : editingId == null ? "Add mapping" : "Save mapping"}
+        {saving ? "保存中..." : editingId == null ? "添加映射" : "保存 mapping"}
       </button>
       {#if editingId != null}
-        <button class="secondary-btn" onclick={resetForm}>Cancel</button>
+        <button class="secondary-btn" onclick={resetForm}>取消</button>
       {/if}
       <button
         class="secondary-btn"
         disabled={applying || mappings.length === 0}
         onclick={applyMappings}
       >
-        {applying ? "Applying..." : "Apply mappings"}
+        {applying ? "正在应用..." : "应用映射"}
       </button>
     </div>
   {/if}
-</SettingsSection>
+</设置Section>
 
 <style>
   .machine-row,

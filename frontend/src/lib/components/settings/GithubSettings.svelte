@@ -1,43 +1,43 @@
 <script lang="ts">
-  import SettingsSection from "./SettingsSection.svelte";
+  import 设置Section from "./设置Section.svelte";
   import { settings } from "../../stores/settings.svelte.js";
   import { ConfigService } from "../../api/generated/index";
-  import { configureGeneratedClient } from "../../api/runtime.js";
+  import { configure生成dClient } from "../../api/runtime.js";
 
   let tokenInput: string = $state("");
   let saving: boolean = $state(false);
   let error: string | null = $state(null);
   let success: string | null = $state(null);
 
-  async function handleSave() {
+  async function handle保存() {
     if (!tokenInput.trim()) return;
     saving = true;
     error = null;
     success = null;
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       await ConfigService.postApiV1ConfigGithub({
         requestBody: { token: tokenInput.trim() },
       });
       tokenInput = "";
-      success = "GitHub token saved.";
+      success = "GitHub 令牌已保存。";
       await settings.load();
     } catch (e) {
-      error = e instanceof Error ? e.message : "Failed to save token";
+      error = e instanceof 错误 ? e.message : "失败 to save token";
     } finally {
       saving = false;
     }
   }
 </script>
 
-<SettingsSection
-  title="GitHub Integration"
-  description="Token used for publishing sessions as GitHub Gists."
+<设置Section
+  title="GitHub 集成"
+  description="到ken used for publishing 个会话 as GitHub Gists."
 >
   <div class="status-row">
-    <span class="status-label">Status</span>
-    <span class="status-value" class:configured={settings.githubConfigured}>
-      {settings.githubConfigured ? "Configured" : "Not configured"}
+    <span class="status-label">状态</span>
+    <span class="status-value" class:configured={settings.github已配置}>
+      {settings.github已配置 ? "已配置" : "未配置"}
     </span>
   </div>
 
@@ -51,9 +51,9 @@
     <button
       class="save-btn"
       disabled={saving || !tokenInput.trim()}
-      onclick={handleSave}
+      onclick={handle保存}
     >
-      {saving ? "Saving..." : "Save token"}
+      {saving ? "保存中..." : "保存 token"}
     </button>
   </div>
 
@@ -63,7 +63,7 @@
   {#if success}
     <p class="msg success">{success}</p>
   {/if}
-</SettingsSection>
+</设置Section>
 
 <style>
   .status-row {

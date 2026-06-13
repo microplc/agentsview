@@ -1,31 +1,31 @@
 <script lang="ts">
-  import { TrashIcon } from "../../icons.js";
+  import { 回收站Icon } from "../../icons.js";
   import { onMount } from "svelte";
   import type { Session } from "../../api/types.js";
-  import { SessionsService } from "../../api/generated/index";
-  import { configureGeneratedClient } from "../../api/runtime.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 会话Service } from "../../api/generated/index";
+  import { configure生成dClient } from "../../api/runtime.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { formatRelativeTime, truncate } from "../../utils/format.js";
-  import { normalizeMessagePreview } from "../../utils/messages.js";
-  let trashedSessions: Session[] = $state([]);
+  import { normalizeMessagePreview } from "../../utils/条消息.js";
+  let trashed会话: Session[] = $state([]);
   let loading = $state(true);
   let emptying = $state(false);
 
-  interface TrashResponse {
-    sessions: Session[];
+  interface 回收站Response {
+    个会话: Session[];
   }
 
   onMount(() => {
-    loadTrash();
+    load回收站();
   });
 
-  async function loadTrash() {
+  async function load回收站() {
     loading = true;
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       const res =
-        await SessionsService.getApiV1Trash() as unknown as TrashResponse;
-      trashedSessions = res.sessions ?? [];
+        await 会话Service.getApiV1回收站() as 未知 as 回收站Response;
+      trashed会话 = res.个会话 ?? [];
     } catch {
       // Silently ignore — page will show empty state.
     } finally {
@@ -35,24 +35,24 @@
 
   async function restoreSession(id: string) {
     try {
-      configureGeneratedClient();
-      await SessionsService.postApiV1SessionsIdRestore({ id });
-      trashedSessions = trashedSessions.filter((s) => s.id !== id);
-      sessions.clearRecentlyDeleted(id);
-      sessions.invalidateFilterCaches();
-      sessions.load();
+      configure生成dClient();
+      await 会话Service.postApiV1会话Id恢复({ id });
+      trashed会话 = trashed会话.filter((s) => s.id !== id);
+      个会话.clearRecently删除d(id);
+      个会话.invalidateFilterCaches();
+      个会话.load();
     } catch {
       // silently fail
     }
   }
 
-  async function permanentDelete(id: string) {
+  async function permanent删除(id: string) {
     try {
-      configureGeneratedClient();
-      await SessionsService.deleteApiV1SessionsIdPermanent({ id });
-      trashedSessions = trashedSessions.filter((s) => s.id !== id);
-      sessions.clearRecentlyDeleted(id);
-      sessions.invalidateFilterCaches();
+      configure生成dClient();
+      await 会话Service.deleteApiV1会话IdPermanent({ id });
+      trashed会话 = trashed会话.filter((s) => s.id !== id);
+      个会话.clearRecently删除d(id);
+      个会话.invalidateFilterCaches();
     } catch {
       // silently fail
     }
@@ -61,11 +61,11 @@
   async function emptyAll() {
     emptying = true;
     try {
-      configureGeneratedClient();
-      await SessionsService.deleteApiV1Trash();
-      trashedSessions = [];
-      sessions.clearRecentlyDeleted();
-      sessions.invalidateFilterCaches();
+      configure生成dClient();
+      await 会话Service.deleteApiV1回收站();
+      trashed会话 = [];
+      个会话.clearRecently删除d();
+      个会话.invalidateFilterCaches();
     } catch {
       // Silently ignore — button resets to allow retry.
     } finally {
@@ -81,35 +81,35 @@
 
 <div class="trash-page">
   <div class="trash-header">
-    <TrashIcon size="18" strokeWidth="2" class="trash-icon" aria-hidden="true" />
-    <h2>Trash</h2>
-    {#if trashedSessions.length > 0}
-      <span class="trash-count">{trashedSessions.length}</span>
+    <回收站Icon size="18" strokeWidth="2" class="trash-icon" aria-hidden="true" />
+    <h2>回收站</h2>
+    {#if trashed会话.length > 0}
+      <span class="trash-count">{trashed会话.length}</span>
       <button
         class="empty-all-btn"
         onclick={emptyAll}
         disabled={emptying}
       >
-        {emptying ? "Emptying..." : "Empty Trash"}
+        {emptying ? "清空中..." : "Empty 回收站"}
       </button>
     {/if}
   </div>
 
   <p class="trash-desc">
-    Deleted sessions are kept until you permanently delete them or empty the trash.
+    删除d 个会话 are kept until you permanently delete them or empty the trash.
   </p>
 
   {#if loading}
-    <div class="loading-state">Loading trash...</div>
-  {:else if trashedSessions.length === 0}
+    <div class="loading-state">正在加载回收站...</div>
+  {:else if trashed会话.length === 0}
     <div class="empty-state">
-      <TrashIcon size="40" strokeWidth="1.6" class="empty-icon" aria-hidden="true" />
-      <p class="empty-title">Trash is empty</p>
-      <p class="empty-desc-text">Deleted sessions will appear here.</p>
+      <回收站Icon size="40" strokeWidth="1.6" class="empty-icon" aria-hidden="true" />
+      <p class="empty-title">回收站 is empty</p>
+      <p class="empty-desc-text">删除d 个会话 will appear here.</p>
     </div>
   {:else}
     <div class="trash-list">
-      {#each trashedSessions as session (session.id)}
+      {#each trashed会话 as session (session.id)}
         <div class="trash-card">
           <div class="trash-card-info">
             <div class="trash-card-name">{displayName(session)}</div>
@@ -117,8 +117,8 @@
               <span class="trash-agent">{session.agent}</span>
               <span class="trash-project">{session.project}</span>
               <span class="trash-msgs">{session.user_message_count} msgs</span>
-              {#if session.deleted_at}
-                <span class="trash-deleted">deleted {formatRelativeTime(session.deleted_at)}</span>
+              {#if session.已删除_at}
+                <span class="trash-已删除">已删除 {formatRelativeTime(session.已删除_at)}</span>
               {/if}
             </div>
           </div>
@@ -126,16 +126,16 @@
             <button
               class="restore-btn"
               onclick={() => restoreSession(session.id)}
-              title="Restore session"
+              title="恢复 session"
             >
-              Restore
+              恢复
             </button>
             <button
               class="perm-delete-btn"
-              onclick={() => permanentDelete(session.id)}
-              title="Permanently delete"
+              onclick={() => permanent删除(session.id)}
+              title="永久删除"
             >
-              Delete Forever
+              删除 Forever
             </button>
           </div>
         </div>
@@ -158,7 +158,7 @@
     margin-bottom: 8px;
   }
 
-  :global(.trash-icon) {
+  :全局(.trash-icon) {
     color: var(--text-muted);
   }
 
@@ -214,7 +214,7 @@
     color: var(--text-muted);
   }
 
-  :global(.empty-icon) {
+  :全局(.empty-icon) {
     opacity: 0.15;
     margin-bottom: 16px;
   }
@@ -291,7 +291,7 @@
     white-space: nowrap;
   }
 
-  .trash-deleted {
+  .trash-已删除 {
     white-space: nowrap;
     color: var(--accent-red, #e55);
     font-style: italic;

@@ -47,7 +47,7 @@ func newSessionToolCallsCommand() *cobra.Command {
 // fields are sanitized for terminal safety.
 func printToolCallsHuman(w io.Writer, list *service.ToolCallList) error {
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "ORDINAL\tTIMESTAMP\tTOOL\tCATEGORY")
+	fmt.Fprintln(tw, "序号\t时间戳\t工具\t类别")
 	for _, tc := range list.ToolCalls {
 		ts := tc.Timestamp
 		if len(ts) >= 19 {

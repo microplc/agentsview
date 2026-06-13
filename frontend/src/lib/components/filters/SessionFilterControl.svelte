@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { starred } from "../../stores/starred.svelte.js";
   import {
     agentColor,
@@ -12,26 +12,26 @@
   interface Props {
     groupMode?: GroupMode;
     showDisplay?: boolean;
-    showStarred?: boolean;
+    show星标?: boolean;
     align?: "left" | "right";
-    onToggleGroupByAgent?: () => void;
-    onToggleGroupByProject?: () => void;
-    onClearGroupMode?: () => void;
+    on到ggleGroupBy代理?: () => void;
+    on到ggleGroupBy项目?: () => void;
+    on清除GroupMode?: () => void;
     extraActive?: boolean;
-    onClearExtra?: () => void;
+    on清除Extra?: () => void;
     extraSections?: Snippet;
   }
 
   let {
     groupMode = "none",
     showDisplay = true,
-    showStarred = true,
+    show星标 = true,
     align = "right",
-    onToggleGroupByAgent,
-    onToggleGroupByProject,
-    onClearGroupMode,
+    on到ggleGroupBy代理,
+    on到ggleGroupBy项目,
+    on清除GroupMode,
     extraActive = false,
-    onClearExtra,
+    on清除Extra,
     extraSections,
   }: Props = $props();
 
@@ -43,8 +43,8 @@
   let agentSearch = $state("");
   let machineSearch = $state("");
 
-  const sortedAgents = $derived.by(() => {
-    const agents = [...sessions.agents].sort(
+  const sorted代理s = $derived.by(() => {
+    const agents = [...个会话.agents].sort(
       (a, b) => b.session_count - a.session_count,
     );
     if (!agentSearch) return agents;
@@ -54,8 +54,8 @@
     );
   });
 
-  const sortedMachines = $derived.by(() => {
-    const machines = [...sessions.machines].sort();
+  const sorted机器s = $derived.by(() => {
+    const machines = [...个会话.machines].sort();
     if (!machineSearch) return machines;
     const q = machineSearch.toLowerCase();
     return machines.filter((m) => m.toLowerCase().includes(q));
@@ -63,29 +63,29 @@
 
   $effect(() => {
     if (open) {
-      sessions.loadAgents();
-      sessions.loadMachines();
+      个会话.load代理s();
+      个会话.load机器s();
       agentSearch = "";
       machineSearch = "";
     }
   });
 
   let hasFilters = $derived(
-    sessions.hasActiveFilters ||
-      (showStarred && starred.filterOnly) ||
+    个会话.hasActiveFilters ||
+      (show星标 && starred.filter开ly) ||
       extraActive,
   );
-  let isRecentlyActiveOn = $derived(
-    sessions.filters.recentlyActive,
+  let isRecentlyActive开 = $derived(
+    个会话.filters.recentlyActive,
   );
-  let isHideUnknownOn = $derived(
-    sessions.filters.hideUnknownProject,
+  let is隐藏Unknown开 = $derived(
+    个会话.filters.hideUnknown项目,
   );
-  let isHideSingleTurnOn = $derived(
-    !sessions.filters.includeOneShot,
+  let is隐藏SingleTurn开 = $derived(
+    !个会话.filters.include开eShot,
   );
-  let isIncludeAutomatedOn = $derived(
-    sessions.filters.includeAutomated,
+  let isIncludeAutomated开 = $derived(
+    个会话.filters.includeAutomated,
   );
 
   $effect(() => {
@@ -109,15 +109,15 @@
   });
 
   function clearFilters() {
-    onClearGroupMode?.();
-    onClearExtra?.();
-    if (sessions.hasActiveFilters && starred.filterOnly) {
-      if (showStarred) starred.filterOnly = false;
-      sessions.clearSessionFilters();
-    } else if (sessions.hasActiveFilters) {
-      sessions.clearSessionFilters();
-    } else if (showStarred && starred.filterOnly) {
-      starred.filterOnly = false;
+    on清除GroupMode?.();
+    on清除Extra?.();
+    if (个会话.hasActiveFilters && starred.filter开ly) {
+      if (show星标) starred.filter开ly = false;
+      个会话.clearSessionFilters();
+    } else if (个会话.hasActiveFilters) {
+      个会话.clearSessionFilters();
+    } else if (show星标 && starred.filter开ly) {
+      starred.filter开ly = false;
     }
   }
 </script>
@@ -126,7 +126,7 @@
   class="filter-btn"
   bind:this={filterBtnRef}
   onclick={() => (open = !open)}
-  title="Filter sessions"
+  title="Filter 个会话"
   aria-label="Filters"
   aria-expanded={open}
 >
@@ -148,7 +148,7 @@
         <button
           class="filter-toggle"
           class:active={groupMode === "agent"}
-          onclick={onToggleGroupByAgent}
+          onclick={on到ggleGroupBy代理}
         >
           <span
             class="toggle-check"
@@ -159,7 +159,7 @@
         <button
           class="filter-toggle"
           class:active={groupMode === "project"}
-          onclick={onToggleGroupByProject}
+          onclick={on到ggleGroupBy项目}
         >
           <span
             class="toggle-check"
@@ -169,19 +169,19 @@
         </button>
       </div>
     {/if}
-    {#if showStarred}
+    {#if show星标}
       <div class="filter-section">
-        <div class="filter-section-label">Starred</div>
+        <div class="filter-section-label">星标</div>
         <button
           class="filter-toggle"
-          class:active={starred.filterOnly}
-          onclick={() => (starred.filterOnly = !starred.filterOnly)}
+          class:active={starred.filter开ly}
+          onclick={() => (starred.filter开ly = !starred.filter开ly)}
         >
           <span
             class="toggle-check"
-            class:on={starred.filterOnly}
+            class:on={starred.filter开ly}
           ></span>
-          Starred only
+          仅星标
           {#if starred.count > 0}
             <span class="starred-count">{starred.count}</span>
           {/if}
@@ -192,15 +192,15 @@
       <div class="filter-section-label">Activity</div>
       <button
         class="filter-toggle"
-        class:active={isRecentlyActiveOn}
+        class:active={isRecentlyActive开}
         onclick={() =>
-          sessions.setRecentlyActiveFilter(
-            !isRecentlyActiveOn,
+          个会话.setRecentlyActiveFilter(
+            !isRecentlyActive开,
           )}
       >
         <span
           class="toggle-check"
-          class:on={isRecentlyActiveOn}
+          class:on={isRecentlyActive开}
         ></span>
         Recently Active
       </button>
@@ -211,86 +211,86 @@
       </div>
       <button
         class="filter-toggle"
-        class:active={isHideSingleTurnOn}
+        class:active={is隐藏SingleTurn开}
         onclick={() =>
-          sessions.setIncludeOneShotFilter(
-            isHideSingleTurnOn,
+          个会话.setInclude开eShotFilter(
+            is隐藏SingleTurn开,
           )}
       >
         <span
           class="toggle-check"
-          class:on={isHideSingleTurnOn}
+          class:on={is隐藏SingleTurn开}
         ></span>
-        Hide single-turn
+        隐藏 single-turn
       </button>
       <button
         class="filter-toggle"
-        class:active={isIncludeAutomatedOn}
+        class:active={isIncludeAutomated开}
         onclick={() =>
-          sessions.setIncludeAutomatedFilter(
-            !isIncludeAutomatedOn,
+          个会话.setIncludeAutomatedFilter(
+            !isIncludeAutomated开,
           )}
       >
         <span
           class="toggle-check"
-          class:on={isIncludeAutomatedOn}
+          class:on={isIncludeAutomated开}
         ></span>
-        Include automated sessions
+        Include automated 个会话
       </button>
     </div>
     <div class="filter-section">
-      <div class="filter-section-label">Project</div>
+      <div class="filter-section-label">项目</div>
       <button
         class="filter-toggle"
-        class:active={isHideUnknownOn}
+        class:active={is隐藏Unknown开}
         onclick={() =>
-          sessions.setHideUnknownProjectFilter(
-            !isHideUnknownOn,
+          个会话.set隐藏Unknown项目Filter(
+            !is隐藏Unknown开,
           )}
       >
         <span
           class="toggle-check"
-          class:on={isHideUnknownOn}
+          class:on={is隐藏Unknown开}
         ></span>
-        Hide unknown
+        隐藏 未知
       </button>
     </div>
     <div class="filter-section">
-      <div class="filter-section-label">Agent</div>
-      {#if sessions.agents.length > 5}
+      <div class="filter-section-label">代理</div>
+      {#if 个会话.agents.length > 5}
         <input
           class="agent-search"
           type="text"
-          placeholder="Search agents..."
+          placeholder="搜索代理..."
           bind:value={agentSearch}
         />
       {/if}
       <div class="agent-select-list">
         <button
           class="agent-select-row"
-          class:selected={!sessions.filters.agent}
+          class:selected={!个会话.filters.agent}
           style:--agent-color={"var(--accent-blue)"}
-          onclick={() => sessions.setAgentFilter("")}
+          onclick={() => 个会话.set代理Filter("")}
         >
           <span
             class="agent-check"
-            class:on={!sessions.filters.agent}
+            class:on={!个会话.filters.agent}
           >
-            {#if !sessions.filters.agent}
+            {#if !个会话.filters.agent}
               <CheckIcon size="8" strokeWidth="2.4" aria-hidden="true" />
             {/if}
           </span>
-          <span class="agent-select-name">All agents</span>
+          <span class="agent-select-name">所有代理</span>
         </button>
-        {#each sortedAgents as agent (agent.name)}
+        {#each sorted代理s as agent (agent.name)}
           {@const selected =
-            sessions.isAgentSelected(agent.name)}
+            个会话.is代理Selected(agent.name)}
           <button
             class="agent-select-row"
             class:selected
             style:--agent-color={agentColor(agent.name)}
             onclick={() =>
-              sessions.toggleAgentFilter(agent.name)}
+              个会话.toggle代理Filter(agent.name)}
           >
             <span
               class="agent-check"
@@ -313,32 +313,32 @@
           </button>
         {:else}
           <span class="agent-select-empty">
-            {agentSearch ? "No match" : "No agents"}
+            {agentSearch ? "无匹配" : "无代理"}
           </span>
         {/each}
       </div>
     </div>
-    {#if sessions.machines.length > 0}
+    {#if 个会话.machines.length > 0}
       <div class="filter-section">
-        <div class="filter-section-label">Machine</div>
-        {#if sessions.machines.length > 5}
+        <div class="filter-section-label">机器</div>
+        {#if 个会话.machines.length > 5}
           <input
             class="agent-search"
             type="text"
-            placeholder="Search machines..."
+            placeholder="搜索机器..."
             bind:value={machineSearch}
           />
         {/if}
         <div class="agent-select-list">
-          {#each sortedMachines as machine (machine)}
+          {#each sorted机器s as machine (machine)}
             {@const selected =
-              sessions.isMachineSelected(machine)}
+              个会话.is机器Selected(machine)}
             <button
               class="agent-select-row"
               class:selected
               style:--agent-color={"var(--accent-blue)"}
               onclick={() =>
-                sessions.toggleMachineFilter(machine)}
+                个会话.toggle机器Filter(machine)}
             >
               <span
                 class="agent-check"
@@ -354,21 +354,21 @@
             </button>
           {:else}
             <span class="agent-select-empty">
-              {machineSearch ? "No match" : "No machines"}
+              {machineSearch ? "无匹配" : "无机器"}
             </span>
           {/each}
         </div>
       </div>
     {/if}
     <div class="filter-section">
-      <div class="filter-section-label">Min Prompts</div>
+      <div class="filter-section-label">最少提示数</div>
       <div class="pill-buttons">
         {#each [2, 3, 5, 10] as n}
           <button
             class="pill-btn"
-            class:active={sessions.filters.minUserMessages === n}
+            class:active={个会话.filters.minUserMessages === n}
             onclick={() =>
-              sessions.setMinUserMessagesFilter(n)}
+              个会话.setMinUserMessagesFilter(n)}
           >
             {n}
           </button>
@@ -383,7 +383,7 @@
         class="clear-filters-btn"
         onclick={clearFilters}
       >
-        Clear filters
+        清除过滤
       </button>
     {/if}
   </div>

@@ -1,12 +1,12 @@
 <script lang="ts">
   import type {
-    TrendsBucket,
-    TrendsSeries,
+    趋势Bucket,
+    趋势Series,
   } from "../../api/types.js";
 
   interface Props {
-    buckets: TrendsBucket[];
-    series: TrendsSeries[];
+    buckets: 趋势Bucket[];
+    series: 趋势Series[];
     colorFor: (term: string, index: number) => string;
     activeTerm: string | null;
     normalized: boolean;
@@ -59,7 +59,7 @@
   });
   const hasData = $derived(series.some((item) => item.total > 0));
   const metricLabel = $derived(
-    normalized ? "Occurrences / 1k messages" : "Occurrences",
+    normalized ? "Occurrences / 1k 条消息" : "Occurrences",
   );
 
   function niceScale(maxY: number): { step: number; max: number } {
@@ -112,7 +112,7 @@
     });
   }
 
-  function pathFor(item: TrendsSeries): string {
+  function pathFor(item: 趋势Series): string {
     return item.points
       .map((point, index) => {
         const cmd = index === 0 ? "M" : "L";
@@ -135,14 +135,14 @@
 
 <div class="chart-wrap" bind:this={containerEl}>
   {#if buckets.length === 0 || series.length === 0}
-    <div class="empty">No trend data</div>
+    <div class="empty">无趋势数据</div>
   {:else}
     <svg
       class="chart"
       viewBox={`0 0 ${width} ${HEIGHT}`}
       role="img"
       aria-label={normalized
-        ? "Term occurrence trends per 1,000 messages"
+        ? "Term occurrence trends per 1,000 条消息"
         : "Term occurrence trends"}
     >
       <text class="y-title" x={LEFT} y="12">

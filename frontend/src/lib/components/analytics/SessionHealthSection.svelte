@@ -1,6 +1,6 @@
 <script lang="ts">
   import { analytics } from "../../stores/analytics.svelte.js";
-  import { scoreToGrade } from "../../utils/grade.js";
+  import { score到Grade } from "../../utils/grade.js";
   import GradeDistribution
     from "./GradeDistribution.svelte";
   import OutcomeDistribution
@@ -10,8 +10,8 @@
   const signals = $derived(analytics.signals);
   const visible = $derived(
     signals != null &&
-    (signals.scored_sessions > 0 ||
-     signals.unscored_sessions > 0),
+    (signals.scored_个会话 > 0 ||
+     signals.unscored_个会话 > 0),
   );
 </script>
 
@@ -20,9 +20,9 @@
     <div class="section-header">
       <h3 class="section-title">Session Health</h3>
       <span class="section-subtitle">
-        {signals.scored_sessions} scored
+        {signals.scored_个会话} scored
         &middot;
-        {signals.unscored_sessions} unscored
+        {signals.unscored_个会话} unscored
       </span>
     </div>
 
@@ -36,18 +36,18 @@
         </span>
         {#if signals.avg_health_score != null}
           <span class="card-sub">
-            Grade {scoreToGrade(signals.avg_health_score)}
+            Grade {score到Grade(signals.avg_health_score)}
           </span>
         {/if}
       </div>
       <div class="card">
-        <span class="card-label">Completed</span>
+        <span class="card-label">已完成</span>
         <span class="card-value" style:color="var(--accent-green)">
-          {#if signals.scored_sessions > 0}
+          {#if signals.scored_个会话 > 0}
             {Math.round(
               ((signals.outcome_distribution?.completed ?? 0) /
-                (signals.scored_sessions +
-                  signals.unscored_sessions)) *
+                (signals.scored_个会话 +
+                  signals.unscored_个会话)) *
                 100,
             )}%
           {:else}
@@ -55,17 +55,17 @@
           {/if}
         </span>
         <span class="card-sub">
-          {signals.outcome_distribution?.completed ?? 0} sessions
+          {signals.outcome_distribution?.completed ?? 0} 个会话
         </span>
       </div>
       <div class="card">
-        <span class="card-label">Errored</span>
+        <span class="card-label">错误ed</span>
         <span class="card-value" style:color="var(--accent-red)">
-          {#if signals.scored_sessions > 0}
+          {#if signals.scored_个会话 > 0}
             {Math.round(
               ((signals.outcome_distribution?.errored ?? 0) /
-                (signals.scored_sessions +
-                  signals.unscored_sessions)) *
+                (signals.scored_个会话 +
+                  signals.unscored_个会话)) *
                 100,
             )}%
           {:else}
@@ -73,36 +73,36 @@
           {/if}
         </span>
         <span class="card-sub">
-          {signals.outcome_distribution?.errored ?? 0} sessions
+          {signals.outcome_distribution?.errored ?? 0} 个会话
         </span>
       </div>
       <div class="card">
-        <span class="card-label">Tool Failures</span>
+        <span class="card-label">到ol Failures</span>
         <span class="card-value" style:color="var(--accent-amber)">
-          {#if signals.scored_sessions > 0}
+          {#if signals.scored_个会话 > 0}
             {Math.round(signals.tool_health.failure_rate)}%
           {:else}
             --
           {/if}
         </span>
         <span class="card-sub">
-          {signals.tool_health.sessions_with_failures} sessions
+          {signals.tool_health.个会话_with_failures} 个会话
         </span>
       </div>
       <div class="card">
-        <span class="card-label">Compactions</span>
+        <span class="card-label">紧凑ions</span>
         <span
           class="card-value"
           style:color={signals.context_health
-            .sessions_with_mid_task_compaction > 0
+            .个会话_with_mid_task_compaction > 0
             ? "var(--accent-red)"
             : "var(--accent-amber)"}
         >
-          {signals.context_health.sessions_with_compaction}
+          {signals.context_health.个会话_with_compaction}
         </span>
         <span class="card-sub">
-          {#if signals.context_health.sessions_with_mid_task_compaction > 0}
-            {signals.context_health.sessions_with_mid_task_compaction}
+          {#if signals.context_health.个会话_with_mid_task_compaction > 0}
+            {signals.context_health.个会话_with_mid_task_compaction}
             mid-task &middot;
           {/if}
           avg {signals.context_health.avg_compaction_count.toFixed(1)}/session
@@ -126,14 +126,14 @@
       </div>
       <div class="chart-panel">
         <div class="mini-table">
-          <div class="table-title">By Agent</div>
+          <div class="table-title">By 代理</div>
           <table>
             <thead>
               <tr>
-                <th>Agent</th>
-                <th class="num">Sessions</th>
+                <th>代理</th>
+                <th class="num">会话</th>
                 <th class="num">Avg Score</th>
-                <th class="num">Completed</th>
+                <th class="num">已完成</th>
               </tr>
             </thead>
             <tbody>
@@ -159,14 +159,14 @@
       </div>
       <div class="chart-panel">
         <div class="mini-table">
-          <div class="table-title">By Project</div>
+          <div class="table-title">By 项目</div>
           <table>
             <thead>
               <tr>
-                <th>Project</th>
-                <th class="num">Sessions</th>
+                <th>项目</th>
+                <th class="num">会话</th>
                 <th class="num">Avg Score</th>
-                <th class="num">Completed</th>
+                <th class="num">已完成</th>
               </tr>
             </thead>
             <tbody>

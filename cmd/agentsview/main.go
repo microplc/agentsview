@@ -407,7 +407,7 @@ func cleanResyncTemp(dbPath string) {
 func runInitialSync(
 	ctx context.Context, engine *sync.Engine,
 ) {
-	fmt.Println("Running initial sync...")
+	fmt.Println("正在运行初始同步...")
 	t := time.Now()
 	stats := engine.SyncAll(ctx, printSyncProgress)
 	printSyncSummary(stats, t)
@@ -420,7 +420,7 @@ func runInitialSync(
 func runInitialResync(
 	ctx context.Context, engine *sync.Engine,
 ) bool {
-	fmt.Println("Data version changed, running full resync...")
+	fmt.Println("数据版本已更改，正在运行完全重新同步...")
 	t := time.Now()
 	stats := engine.ResyncAll(ctx, printSyncProgress)
 	printSyncSummary(stats, t)

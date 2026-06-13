@@ -31,35 +31,35 @@
 >
   <div class="modal-panel update-panel">
     <div class="modal-header">
-      <h3 class="modal-title">Software Update</h3>
+      <h3 class="modal-title">软件更新</h3>
       <button
         class="modal-close"
         onclick={close}
-        title="Close update dialog"
-        aria-label="Close update dialog"
+        title="关闭 update dialog"
+        aria-label="关闭 update dialog"
       >
         &times;
       </button>
     </div>
 
     <div class="modal-body">
-      {#if sync.updateAvailable && sync.latestVersion}
+      {#if sync.updateAvailable && sync.latest版本}
         <p class="update-text">
-          A new version is available:
-          <strong>{sync.latestVersion}</strong>
+          有新版本可用：
+          <strong>{sync.latest版本}</strong>
         </p>
         <p class="update-current">
-          You are running
-          {sync.serverVersion?.version ?? "unknown"}.
+          您正在运行
+          {sync.server版本?.version ?? "未知"}.
         </p>
         <p class="update-instructions">
-          Run <code>agentsview update</code> on the command
+          运行 <code>agentsview update</code> on the command
           line to install.
         </p>
       {:else}
         <p class="update-text">
-          You're running the latest version
-          ({sync.serverVersion?.version ?? "unknown"}).
+          您正在运行最新版本
+          ({sync.server版本?.version ?? "未知"}).
         </p>
       {/if}
       <div class="update-actions">
@@ -67,7 +67,7 @@
           class="modal-btn modal-btn-primary"
           onclick={close}
         >
-          Close
+          关闭
         </button>
       </div>
     </div>

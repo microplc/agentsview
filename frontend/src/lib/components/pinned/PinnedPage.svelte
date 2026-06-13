@@ -1,46 +1,46 @@
 <script lang="ts">
   import {
     CheckIcon,
-    CopyIcon,
+    复制Icon,
     ExternalLinkIcon,
     PinIcon,
     XIcon,
   } from "../../icons.js";
   import { pins } from "../../stores/pins.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import { ui } from "../../stores/ui.svelte.js";
   import { formatRelativeTime, truncate } from "../../utils/format.js";
   import { renderMarkdown } from "../../utils/markdown.js";
   import { highlightCodeFences } from "../../utils/highlight-fences.js";
-  import { copyToClipboard } from "../../utils/clipboard.js";
-  import { normalizeMessagePreview } from "../../utils/messages.js";
+  import { copy到Clipboard } from "../../utils/clipboard.js";
+  import { normalizeMessagePreview } from "../../utils/条消息.js";
   $effect(() => {
-    pins.loadAll(sessions.filters.project || undefined);
+    pins.loadAll(个会话.filters.project || undefined);
   });
 
   /** Set of expanded pin IDs. */
   let expanded: Set<number> = $state(new Set());
 
-  function toggleExpand(pinId: number) {
+  function toggle展开(pinId: number) {
     const next = new Set(expanded);
     if (next.has(pinId)) next.delete(pinId);
     else next.add(pinId);
     expanded = next;
   }
 
-  function navigateToPin(sessionId: string, ordinal: number) {
-    ui.scrollToOrdinal(ordinal, sessionId);
-    router.navigateToSession(sessionId);
+  function navigate到Pin(sessionId: string, ordinal: number) {
+    ui.scroll到Ordinal(ordinal, sessionId);
+    router.navigate到Session(sessionId);
   }
 
-  function getSessionInfo(pin: import("../../api/types.js").PinnedMessage) {
+  function getSessionInfo(pin: import("../../api/types.js").已固定Message) {
     // Use backend-provided session metadata (available for all-pins
-    // query). Fall back to the sessions store for older data.
+    // query). Fall back to the 个会话 store for older data.
     if (pin.session_project || pin.session_agent) {
       return {
-        project: pin.session_project ?? "unknown",
-        agent: pin.session_agent ?? "unknown",
+        project: pin.session_project ?? "未知",
+        agent: pin.session_agent ?? "未知",
         name:
           pin.session_display_name
           ?? (
@@ -50,7 +50,7 @@
           ),
       };
     }
-    const s = sessions.sessions.find((s) => s.id === pin.session_id);
+    const s = 个会话.个会话.find((s) => s.id === pin.session_id);
     return s
       ? {
           project: s.project,
@@ -61,17 +61,17 @@
             ?? (normalizeMessagePreview(s.first_message) || s.project),
         }
       : {
-          project: "unknown",
-          agent: "unknown",
+          project: "未知",
+          agent: "未知",
           name: pin.session_id.slice(0, 12) + "...",
         };
   }
 
   let copiedId: number | null = $state(null);
 
-  async function handleCopy(pinId: number, content: string | null | undefined) {
+  async function handle复制(pinId: number, content: string | null | undefined) {
     if (!content) return;
-    const ok = await copyToClipboard(content);
+    const ok = await copy到Clipboard(content);
     if (ok) {
       copiedId = pinId;
       setTimeout(() => { if (copiedId === pinId) copiedId = null; }, 1500);
@@ -92,17 +92,17 @@
 <div class="pinned-page">
   <div class="pinned-header">
     <PinIcon size="18" strokeWidth="2" class="pin-icon" aria-hidden="true" />
-    <h2>Pinned Messages</h2>
+    <h2>已固定 Messages</h2>
     {#if pins.pins.length > 0}
       <span class="pin-count">{pins.pins.length}</span>
     {/if}
   </div>
 
   {#if pins.loading}
-    <div class="loading-state">Loading pins...</div>
-  {:else if pins.pins.length === 0 && sessions.filters.project}
+    <div class="loading-state">正在加载固定消息...</div>
+  {:else if pins.pins.length === 0 && 个会话.filters.project}
     <div class="empty-state">
-      <p class="empty-title">No pinned messages for this project</p>
+      <p class="empty-title">No pinned 条消息 for this project</p>
       <p class="empty-desc">
         Try selecting a different project or clear the project filter.
       </p>
@@ -110,19 +110,19 @@
   {:else if pins.pins.length === 0}
     <div class="empty-state">
       <PinIcon size="40" strokeWidth="1.6" class="empty-icon" aria-hidden="true" />
-      <p class="empty-title">No pinned messages</p>
+      <p class="empty-title">No pinned 条消息</p>
       <p class="empty-desc">
-        Pin messages from any session by clicking the pin icon in the message header.
+        Pin 条消息 from any session by clicking the pin icon in the message header.
       </p>
     </div>
   {:else}
     <div class="pin-list">
       {#each pins.pins as pin (pin.id)}
         {@const info = getSessionInfo(pin)}
-        {@const isExpanded = expanded.has(pin.id)}
+        {@const is展开ed = expanded.has(pin.id)}
         {@const preview = previewContent(pin.content)}
-        {@const hasMore = (pin.content?.length ?? 0) > 300}
-        <div class="pin-card" class:expanded={isExpanded}>
+        {@const has更多 = (pin.content?.length ?? 0) > 300}
+        <div class="pin-card" class:expanded={is展开ed}>
           <div class="pin-card-header">
             <span
               class="role-badge"
@@ -139,7 +139,7 @@
 
           {#if preview}
             <div class="pin-content-wrap">
-              {#if isExpanded && pin.content}
+              {#if is展开ed && pin.content}
                 <div
                   class="pin-content-full markdown"
                   use:highlightCodeFences={{ content: pin.content }}
@@ -155,35 +155,35 @@
           <div class="pin-card-footer">
             <button
               class="pin-card-meta"
-              onclick={() => navigateToPin(pin.session_id, pin.ordinal)}
-              title="Go to message"
+              onclick={() => navigate到Pin(pin.session_id, pin.ordinal)}
+              title="跳转到消息"
             >
               <ExternalLinkIcon size="10" strokeWidth="2.2" aria-hidden="true" />
               <span>{info.project}</span>
             </button>
             <div class="pin-card-actions">
-              {#if hasMore}
+              {#if has更多}
                 <button
                   class="expand-btn"
-                  onclick={() => toggleExpand(pin.id)}
+                  onclick={() => toggle展开(pin.id)}
                 >
-                  {isExpanded ? "Collapse" : "Expand"}
+                  {is展开ed ? "折叠" : "展开"}
                 </button>
               {/if}
               <button
                 class="copy-btn"
-                title="Copy message"
-                onclick={() => handleCopy(pin.id, pin.content)}
+                title="复制 message"
+                onclick={() => handle复制(pin.id, pin.content)}
               >
                 {#if copiedId === pin.id}
                   <CheckIcon size="12" strokeWidth="2.4" aria-hidden="true" />
                 {:else}
-                  <CopyIcon size="12" strokeWidth="2" aria-hidden="true" />
+                  <复制Icon size="12" strokeWidth="2" aria-hidden="true" />
                 {/if}
               </button>
               <button
                 class="unpin-btn"
-                title="Unpin"
+                title="取消固定"
                 onclick={() => pins.unpin(pin.session_id, pin.message_id)}
               >
                 <XIcon size="12" strokeWidth="2.4" aria-hidden="true" />
@@ -210,7 +210,7 @@
     margin-bottom: 28px;
   }
 
-  :global(.pin-icon) {
+  :全局(.pin-icon) {
     color: var(--accent-blue);
   }
 
@@ -243,7 +243,7 @@
     color: var(--text-muted);
   }
 
-  :global(.empty-icon) {
+  :全局(.empty-icon) {
     opacity: 0.15;
     margin-bottom: 16px;
   }
@@ -357,16 +357,16 @@
   }
 
   /* Markdown prose inside expanded pins */
-  .pin-content-full :global(p) {
+  .pin-content-full :全局(p) {
     margin: 0.4em 0;
   }
-  .pin-content-full :global(p:first-child) {
+  .pin-content-full :全局(p:first-child) {
     margin-top: 0;
   }
-  .pin-content-full :global(p:last-child) {
+  .pin-content-full :全局(p:last-child) {
     margin-bottom: 0;
   }
-  .pin-content-full :global(code) {
+  .pin-content-full :全局(code) {
     font-family: var(--font-mono);
     font-size: 0.85em;
     background: var(--bg-inset);
@@ -374,7 +374,7 @@
     border-radius: 4px;
     padding: 0.15em 0.4em;
   }
-  .pin-content-full :global(pre) {
+  .pin-content-full :全局(pre) {
     background: var(--code-bg);
     color: var(--code-text);
     border-radius: var(--radius-md);
@@ -382,29 +382,29 @@
     overflow-x: auto;
     margin: 0.4em 0;
   }
-  .pin-content-full :global(pre code) {
+  .pin-content-full :全局(pre code) {
     background: none;
     border: none;
     padding: 0;
     font-size: 12px;
     color: inherit;
   }
-  .pin-content-full :global(ul),
-  .pin-content-full :global(ol) {
+  .pin-content-full :全局(ul),
+  .pin-content-full :全局(ol) {
     padding-left: 1.4em;
     margin: 0.4em 0;
   }
-  .pin-content-full :global(blockquote) {
+  .pin-content-full :全局(blockquote) {
     border-left: 3px solid var(--border-default);
     margin: 0.4em 0;
     padding: 0.2em 0.8em;
     color: var(--text-secondary);
   }
-  .pin-content-full :global(a) {
+  .pin-content-full :全局(a) {
     color: var(--accent-blue);
     text-decoration: none;
   }
-  .pin-content-full :global(a:hover) {
+  .pin-content-full :全局(a:hover) {
     text-decoration: underline;
   }
 

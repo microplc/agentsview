@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { starred } from "../../stores/starred.svelte.js";
   import SessionItem from "./SessionItem.svelte";
   import SessionFilterControl from "../filters/SessionFilterControl.svelte";
@@ -22,23 +22,23 @@
     getInitialGroupMode,
     buildGroupSections,
     buildDisplayItems,
-    computeTotalSize,
+    compute到talSize,
     findStart,
     isSubagentDescendant,
     selectPrimaryId,
   } from "./session-list-utils.js";
 
   let containerRef: HTMLDivElement | undefined = $state(undefined);
-  let scrollTop = $state(0);
+  let scroll到p = $state(0);
   let viewportHeight = $state(0);
   let scrollRaf: number | null = $state(null);
-  let initialHydratedVersion: number | null = $state(null);
-  let initialHydratingVersion: number | null = $state(null);
+  let initialHydrated版本: number | null = $state(null);
+  let initialHydrating版本: number | null = $state(null);
   let paintedDisplayItems: DisplayItem[] = $state([]);
-  let paintedTotalSize = $state(0);
+  let painted到talSize = $state(0);
 
   let groupMode: GroupMode = $state(getInitialGroupMode());
-  let manualExpanded: Set<string> = $state(new Set());
+  let manual展开ed: Set<string> = $state(new Set());
   // Start all collapsed when grouping is first enabled.
   let collapseAll = $state(getInitialGroupMode() !== "none");
   // Track which continuation chains are expanded.
@@ -51,12 +51,12 @@
   });
 
   let groups = $derived.by(() => {
-    const all = sessions.groupedSessions;
-    if (!starred.filterOnly) return all;
+    const all = 个会话.grouped会话;
+    if (!starred.filter开ly) return all;
     return all
       .map((g) => {
-        const filtered = g.sessions.filter((s) =>
-          starred.isStarred(s.id),
+        const filtered = g.个会话.filter((s) =>
+          starred.is星标(s.id),
         );
         // Recompute primarySessionId so it points to a
         // session that survived the filter, using the same
@@ -66,16 +66,16 @@
         );
         return {
           ...g,
-          sessions: filtered,
+          个会话: filtered,
           // Preserve full session list so ancestry helpers
           // can still walk the parent chain correctly.
-          allSessions: g.sessions,
+          all会话: g.个会话,
           primarySessionId: primaryStillPresent
             ? g.primarySessionId
             : selectPrimaryId(filtered, g.key),
         };
       })
-      .filter((g) => g.sessions.length > 0);
+      .filter((g) => g.个会话.length > 0);
   });
 
   // Build grouped structure when groupMode is not "none".
@@ -92,7 +92,7 @@
     }
     // Invert: all labels minus the manually expanded ones.
     const all = new Set(groupSections.map((s) => s.label));
-    for (const a of manualExpanded) all.delete(a);
+    for (const a of manual展开ed) all.delete(a);
     return all;
   });
 
@@ -102,29 +102,29 @@
   );
 
   // When include_children is enabled the API total includes
-  // child/subagent sessions.  The header should show the count of
+  // child/subagent 个会话.  The header should show the count of
   // root-level groups the user actually sees in the sidebar.
   let totalCount = $derived(
-    starred.filterOnly
-      ? groups.reduce((n, g) => n + g.sessions.length, 0)
+    starred.filter开ly
+      ? groups.reduce((n, g) => n + g.个会话.length, 0)
       : groups.length,
   );
-  let totalSize = $derived(computeTotalSize(displayItems));
+  let totalSize = $derived(compute到talSize(displayItems));
   let renderDisplayItems = $derived(
-    initialHydratedVersion === sessions.sidebarIndexVersion
+    initialHydrated版本 === 个会话.sidebarIndex版本
       ? displayItems
       : paintedDisplayItems,
   );
-  let renderTotalSize = $derived(
-    initialHydratedVersion === sessions.sidebarIndexVersion
+  let render到talSize = $derived(
+    initialHydrated版本 === 个会话.sidebarIndex版本
       ? totalSize
-      : paintedTotalSize,
+      : painted到talSize,
   );
 
   let visibleItems = $derived.by(() => {
     if (renderDisplayItems.length === 0) return [];
-    const start = findStart(renderDisplayItems, scrollTop);
-    const end = scrollTop + viewportHeight + OVERSCAN * ITEM_HEIGHT;
+    const start = findStart(renderDisplayItems, scroll到p);
+    const end = scroll到p + viewportHeight + OVERSCAN * ITEM_HEIGHT;
     const result: typeof renderDisplayItems = [];
     for (let i = start; i < renderDisplayItems.length; i++) {
       const item = renderDisplayItems[i]!;
@@ -137,33 +137,33 @@
   function setGroupMode(mode: GroupMode) {
     groupMode = mode;
     collapseAll = mode !== "none";
-    manualExpanded = new Set();
+    manual展开ed = new Set();
   }
 
-  function toggleGroupByAgent() {
+  function toggleGroupBy代理() {
     setGroupMode(groupMode === "agent" ? "none" : "agent");
   }
 
-  function toggleGroupByProject() {
+  function toggleGroupBy项目() {
     setGroupMode(groupMode === "project" ? "none" : "project");
   }
 
   function toggleGroup(label: string) {
     if (collapseAll) {
       collapseAll = false;
-      manualExpanded = new Set([label]);
+      manual展开ed = new Set([label]);
     } else {
-      const next = new Set(manualExpanded);
+      const next = new Set(manual展开ed);
       if (next.has(label)) {
         next.delete(label);
       } else {
         next.add(label);
       }
-      manualExpanded = next;
+      manual展开ed = next;
     }
   }
 
-  function toggleChainExpand(groupKey: string) {
+  function toggleChain展开(groupKey: string) {
     const next = new Set(expandedGroups);
     if (next.has(groupKey)) {
       next.delete(groupKey);
@@ -193,9 +193,9 @@
   function sessionForItem(item: DisplayItem) {
     if (item.type !== "session") return undefined;
     if (item.isChild) return item.session;
-    return item.group?.sessions.find(
+    return item.group?.个会话.find(
       (s) => s.id === item.group!.primarySessionId,
-    ) ?? item.group?.sessions[0];
+    ) ?? item.group?.个会话[0];
   }
 
   function needsVisibleHydration(item: DisplayItem): boolean {
@@ -228,7 +228,7 @@
 
   function requestHydration(ids: string[], version: number) {
     if (ids.length === 0) return;
-    void sessions.hydrateVisibleSessions(ids, version);
+    void 个会话.hydrateVisible会话(ids, version);
   }
 
   $effect(() => {
@@ -243,50 +243,50 @@
   });
 
   $effect(() => {
-    const version = sessions.sidebarIndexVersion;
+    const version = 个会话.sidebarIndex版本;
     const ids = initialHydrationIds(displayItems);
 
-    if (initialHydratedVersion === version) {
+    if (initialHydrated版本 === version) {
       paintedDisplayItems = displayItems;
-      paintedTotalSize = totalSize;
+      painted到talSize = totalSize;
       return;
     }
-    if (initialHydratingVersion === version) return;
+    if (initialHydrating版本 === version) return;
 
     if (ids.length === 0) {
-      initialHydratedVersion = version;
+      initialHydrated版本 = version;
       paintedDisplayItems = displayItems;
-      paintedTotalSize = totalSize;
+      painted到talSize = totalSize;
       return;
     }
 
-    initialHydratingVersion = version;
+    initialHydrating版本 = version;
     void (async () => {
-      await sessions.hydrateVisibleSessions(ids, version);
-      if (sessions.sidebarIndexVersion !== version) return;
-      initialHydratedVersion = version;
-      initialHydratingVersion = null;
+      await 个会话.hydrateVisible会话(ids, version);
+      if (个会话.sidebarIndex版本 !== version) return;
+      initialHydrated版本 = version;
+      initialHydrating版本 = null;
       paintedDisplayItems = displayItems;
-      paintedTotalSize = totalSize;
+      painted到talSize = totalSize;
     })();
   });
 
   $effect(() => {
-    const version = sessions.sidebarIndexVersion;
-    if (initialHydratedVersion !== version) return;
+    const version = 个会话.sidebarIndex版本;
+    if (initialHydrated版本 !== version) return;
     requestHydration(hydrationIdsForItems(visibleItems), version);
   });
 
-  // Clamp stale scrollTop when count shrinks.
+  // Clamp stale scroll到p when count shrinks.
   $effect(() => {
     if (!containerRef) return;
-    const maxTop = Math.max(
+    const max到p = Math.max(
       0,
-      renderTotalSize - containerRef.clientHeight,
+      render到talSize - containerRef.clientHeight,
     );
-    if (scrollTop > maxTop) {
-      scrollTop = maxTop;
-      containerRef.scrollTop = maxTop;
+    if (scroll到p > max到p) {
+      scroll到p = max到p;
+      containerRef.scroll到p = max到p;
     }
   });
 
@@ -296,18 +296,18 @@
     scrollRaf = requestAnimationFrame(() => {
       scrollRaf = null;
       if (!containerRef) return;
-      scrollTop = containerRef.scrollTop;
+      scroll到p = containerRef.scroll到p;
     });
   }
 
   // Scroll to the active session when it changes (e.g. from
-  // the command palette). Expands collapsed agent groups and
-  // scrolls the item into view. Only fires on selection
+  // the command palette). 展开s collapsed agent groups and
+  // scrolls the item into view. 开ly fires on selection
   // changes, not on displayItems rebuilds, so collapsing a
   // group containing the active session stays collapsed.
   let prevRevealedId: string | null = null;
   $effect(() => {
-    const activeId = sessions.activeSessionId;
+    const activeId = 个会话.activeSessionId;
     if (!activeId) {
       prevRevealedId = null;
       return;
@@ -338,13 +338,13 @@
     }
     if (!item) {
       // Session may be hidden in a collapsed group section.
-      // Expand it — the effect will re-run when displayItems
+      // 展开 it — the effect will re-run when displayItems
       // updates, and prevRevealedId is still unset so the
       // second pass will proceed to scroll.
       if (groupMode !== "none") {
         for (const section of groupSections) {
           const owns = section.groups.some((g) =>
-            g.sessions.some((s) => s.id === activeId),
+            g.个会话.some((s) => s.id === activeId),
           );
           if (owns && collapsed.has(section.label)) {
             toggleGroup(section.label);
@@ -355,7 +355,7 @@
       // Session may be inside a collapsed continuation chain.
       // Auto-expand the parent group and relevant sub-groups.
       for (const g of groups) {
-        const match = g.sessions.find((s) => s.id === activeId);
+        const match = g.个会话.find((s) => s.id === activeId);
         if (!match) continue;
         if (match.id === g.primarySessionId) break; // already primary
         const next = new Set(expandedGroups);
@@ -372,10 +372,10 @@
     // displayItems rebuilds don't re-trigger.
     prevRevealedId = activeId;
     const itemBottom = item.top + item.height;
-    const viewTop = containerRef.scrollTop;
-    const viewBottom = viewTop + containerRef.clientHeight;
-    if (item.top >= viewTop && itemBottom <= viewBottom) return;
-    containerRef.scrollTop = Math.max(
+    const view到p = containerRef.scroll到p;
+    const viewBottom = view到p + containerRef.clientHeight;
+    if (item.top >= view到p && itemBottom <= viewBottom) return;
+    containerRef.scroll到p = Math.max(
       0,
       item.top - containerRef.clientHeight / 2 + item.height / 2,
     );
@@ -391,45 +391,45 @@
 
 <div class="session-list-header">
   <span class="session-count">
-    {formatNumber(totalCount)} sessions
+    {formatNumber(totalCount)} 个会话
   </span>
   <div class="header-actions">
-    {#if sessions.loading}
+    {#if 个会话.loading}
       <span class="loading-indicator">loading</span>
     {/if}
     <SessionFilterControl
       {groupMode}
-      onToggleGroupByAgent={toggleGroupByAgent}
-      onToggleGroupByProject={toggleGroupByProject}
-      onClearGroupMode={() => setGroupMode("none")}
-      extraActive={sessions.filters.termination !== ""}
-      onClearExtra={() => sessions.setTerminationFilter("")}
+      on到ggleGroupBy代理={toggleGroupBy代理}
+      on到ggleGroupBy项目={toggleGroupBy项目}
+      on清除GroupMode={() => setGroupMode("none")}
+      extraActive={个会话.filters.termination !== ""}
+      on清除Extra={() => 个会话.setTerminationFilter("")}
       extraSections={statusFilterSection}
     />
     {#snippet statusFilterSection()}
       <div class="filter-section">
-        <div class="filter-section-label">Status</div>
+        <div class="filter-section-label">状态</div>
         <div class="pill-buttons">
           <button
             class="pill-btn pill-btn--status-active"
-            class:active={sessions.hasTerminationStatus("active")}
-            onclick={() => sessions.toggleTerminationStatus("active")}
+            class:active={个会话.hasTermination状态("active")}
+            onclick={() => 个会话.toggleTermination状态("active")}
             title="Last activity within 10 minutes"
           >
             Active
           </button>
           <button
             class="pill-btn pill-btn--status-stale"
-            class:active={sessions.hasTerminationStatus("stale")}
-            onclick={() => sessions.toggleTerminationStatus("stale")}
+            class:active={个会话.hasTermination状态("stale")}
+            onclick={() => 个会话.toggleTermination状态("stale")}
             title="Flagged session, idle 10 minutes to 1 hour"
           >
             Stale
           </button>
           <button
             class="pill-btn pill-btn--status-unclean"
-            class:active={sessions.hasTerminationStatus("unclean")}
-            onclick={() => sessions.toggleTerminationStatus("unclean")}
+            class:active={个会话.hasTermination状态("unclean")}
+            onclick={() => 个会话.toggleTermination状态("unclean")}
             title="Terminated mid tool call (over 1 hour idle)"
           >
             Unclean
@@ -446,7 +446,7 @@
   onscroll={handleScroll}
 >
   <div
-    style="height: {renderTotalSize}px; width: 100%; position: relative;"
+    style="height: {render到talSize}px; width: 100%; position: relative;"
   >
     {#each visibleItems as item (item.id)}
       <div
@@ -456,8 +456,8 @@
           <button
             class="group-header"
             onclick={() => toggleGroup(item.label)}
-            title="{collapsed.has(item.label) ? 'Expand' : 'Collapse'} {item.label} group"
-            aria-label="{collapsed.has(item.label) ? 'Expand' : 'Collapse'} {item.label} group"
+            title="{collapsed.has(item.label) ? '展开' : '折叠'} {item.label} group"
+            aria-label="{collapsed.has(item.label) ? '展开' : '折叠'} {item.label} group"
           >
             {#if collapsed.has(item.label)}
               <ChevronRightIcon class="chevron" size="10" strokeWidth="2.5" aria-hidden="true" />
@@ -477,15 +477,15 @@
           </button>
         {:else if item.type === "subagent-group" && item.group}
           {@const subKey = `subagent:${item.group.key}`}
-          {@const subExpanded = expandedGroups.has(subKey)}
+          {@const sub展开ed = expandedGroups.has(subKey)}
           <button
             class="sub-group-header"
             style:padding-left="{8 + (item.depth ?? 1) * 16}px"
-            onclick={() => toggleChainExpand(subKey)}
-            title="{subExpanded ? 'Collapse' : 'Expand'} Subagents group"
-            aria-label="{subExpanded ? 'Collapse' : 'Expand'} Subagents group"
+            onclick={() => toggleChain展开(subKey)}
+            title="{sub展开ed ? '折叠' : '展开'} Subagents group"
+            aria-label="{sub展开ed ? '折叠' : '展开'} Subagents group"
           >
-            {#if subExpanded}
+            {#if sub展开ed}
               <ChevronDownIcon class="sub-group-arrow" size="10" strokeWidth="2.5" aria-hidden="true" />
             {:else}
               <ChevronRightIcon class="sub-group-arrow" size="10" strokeWidth="2.5" aria-hidden="true" />
@@ -496,15 +496,15 @@
           </button>
         {:else if item.type === "team-group" && item.group}
           {@const teamKey = `team:${item.group.key}`}
-          {@const teamExpanded = expandedGroups.has(teamKey)}
+          {@const team展开ed = expandedGroups.has(teamKey)}
           <button
             class="sub-group-header"
             style:padding-left="{8 + (item.depth ?? 1) * 16}px"
-            onclick={() => toggleChainExpand(teamKey)}
-            title="{teamExpanded ? 'Collapse' : 'Expand'} Team group"
-            aria-label="{teamExpanded ? 'Collapse' : 'Expand'} Team group"
+            onclick={() => toggleChain展开(teamKey)}
+            title="{team展开ed ? '折叠' : '展开'} Team group"
+            aria-label="{team展开ed ? '折叠' : '展开'} Team group"
           >
-            {#if teamExpanded}
+            {#if team展开ed}
               <ChevronDownIcon class="sub-group-arrow" size="10" strokeWidth="2.5" aria-hidden="true" />
             {:else}
               <ChevronRightIcon class="sub-group-arrow" size="10" strokeWidth="2.5" aria-hidden="true" />
@@ -517,34 +517,34 @@
           <SessionItem
             session={item.session}
             continuationCount={1}
-            hideAgent={groupMode === "agent"}
-            hideProject={groupMode === "project"}
+            hide代理={groupMode === "agent"}
+            hide项目={groupMode === "project"}
             compact
             depth={item.depth ?? 1}
             isLastChild={item.isLastChild ?? false}
           />
         {:else if item.group}
-          {@const primary = item.group.sessions.find(
+          {@const primary = item.group.个会话.find(
             (s) => s.id === item.group!.primarySessionId,
-          ) ?? item.group.sessions[0]}
-          {@const children = item.group.sessions.filter((s) => s.id !== item.group!.primarySessionId)}
-          {@const groupHasSubagents = children.some((s) => isSubagentDescendant(s, item.group!.sessions))}
+          ) ?? item.group.个会话[0]}
+          {@const children = item.group.个会话.filter((s) => s.id !== item.group!.primarySessionId)}
+          {@const groupHasSubagents = children.some((s) => isSubagentDescendant(s, item.group!.个会话))}
           {@const groupHasTeammates = children.some((s) => s.is_teammate ?? s.first_message?.includes("<teammate-message") ?? false)}
           {#if primary}
             <SessionItem
               session={primary}
-              continuationCount={item.group.sessions.length}
-              groupSessionIds={item.group.sessions.length > 1
-                ? item.group.sessions.map((s) => s.id)
+              continuationCount={item.group.个会话.length}
+              groupSessionIds={item.group.个会话.length > 1
+                ? item.group.个会话.map((s) => s.id)
                 : undefined}
-              groupSessions={item.group.sessions.length > 1
-                ? item.group.sessions
+              group会话={item.group.个会话.length > 1
+                ? item.group.个会话
                 : undefined}
-              hideAgent={groupMode === "agent"}
-              hideProject={groupMode === "project"}
+              hide代理={groupMode === "agent"}
+              hide项目={groupMode === "project"}
               expanded={expandedGroups.has(item.group.key)}
-              onToggleExpand={item.group.sessions.length > 1
-                ? () => toggleChainExpand(item.group!.key)
+              on到ggle展开={item.group.个会话.length > 1
+                ? () => toggleChain展开(item.group!.key)
                 : undefined}
               depth={0}
               hasSubagents={groupHasSubagents}
@@ -589,7 +589,7 @@
   /* Snippet rendered inside SessionFilterControl carries this
      component's CSS scope, so it doesn't see SessionFilterControl's
      own .filter-section / .pill-* base styles. Re-declare them
-     here so the Status section's buttons render as pills with
+     here so the 状态 section's buttons render as pills with
      proper section spacing. */
   .filter-section {
     padding: 4px 0;
@@ -633,7 +633,7 @@
     border-color: var(--border-default);
   }
 
-  /* Status filter pills mirror the dot indicators: green = active,
+  /* 状态 filter pills mirror the dot indicators: green = active,
      amber = stale, red = unclean. Inactive state shows a faint
      colored border so the colors are recognizable without selection. */
   .pill-btn--status-active {
@@ -706,7 +706,7 @@
     background: var(--bg-surface-hover);
   }
 
-  :global(.chevron) {
+  :全局(.chevron) {
     flex-shrink: 0;
   }
 
@@ -717,7 +717,7 @@
     flex-shrink: 0;
   }
 
-  :global(.project-icon) {
+  :全局(.project-icon) {
     flex-shrink: 0;
     color: var(--text-muted);
   }
@@ -761,13 +761,13 @@
     background: var(--bg-surface-hover);
   }
 
-  :global(.sub-group-arrow) {
+  :全局(.sub-group-arrow) {
     flex-shrink: 0;
     color: var(--text-muted);
     opacity: 0.5;
   }
 
-  :global(.sub-group-icon) {
+  :全局(.sub-group-icon) {
     flex-shrink: 0;
     color: var(--text-muted);
     opacity: 0.6;

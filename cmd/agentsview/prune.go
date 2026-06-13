@@ -123,7 +123,7 @@ func (p *Pruner) Prune(cfg PruneConfig) error {
 			"\nDelete %d sessions?", len(candidates),
 		)
 		if !confirm(p.In, p.Out, msg) {
-			fmt.Fprintln(p.Out, "Aborted.")
+			fmt.Fprintln(p.Out, "已中止。")
 			return nil
 		}
 	}

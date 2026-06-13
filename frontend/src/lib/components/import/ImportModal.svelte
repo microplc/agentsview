@@ -3,7 +3,7 @@
   import {
     importClaudeAI,
     importChatGPT,
-    type ImportStats,
+    type 导入Stats,
   } from "../../api/client.js";
   import {
     FileCheckIcon,
@@ -25,7 +25,7 @@
     onimported,
   }: Props = $props();
 
-  type ImportResult = {
+  type 导入Result = {
     imported: number;
     updated: number;
     skipped: number;
@@ -39,12 +39,12 @@
   let importing = $state(false);
   let dragOver = $state(false);
   let dragCount = $state(0);
-  let result = $state<ImportResult | null>(null);
+  let result = $state<导入Result | null>(null);
   let error = $state<string | null>(null);
   let phase = $state<"importing" | "indexing">(
     "importing",
   );
-  let progressStats = $state<ImportStats | null>(null);
+  let progressStats = $state<导入Stats | null>(null);
 
   const fileSize = $derived(
     selectedFile
@@ -94,13 +94,13 @@
   }
 
   function handleDragEnter(e: DragEvent) {
-    e.preventDefault();
+    e.prevent默认();
     dragCount++;
     if (!importing) dragOver = true;
   }
 
   function handleDragOver(e: DragEvent) {
-    e.preventDefault();
+    e.prevent默认();
     if (e.dataTransfer) e.dataTransfer.dropEffect = "copy";
   }
 
@@ -113,7 +113,7 @@
   }
 
   function handleDrop(e: DragEvent) {
-    e.preventDefault();
+    e.prevent默认();
     dragCount = 0;
     dragOver = false;
     if (importing) return;
@@ -143,7 +143,7 @@
     if (fileInput) fileInput.value = "";
   }
 
-  async function handleImport() {
+  async function handle导入() {
     if (importing || !selectedFile) return;
     importing = true;
     error = null;
@@ -152,7 +152,7 @@
     progressStats = null;
 
     const cb = {
-      onProgress: (stats: ImportStats) => {
+      onProgress: (stats: 导入Stats) => {
         progressStats = stats;
       },
       onIndexing: () => {
@@ -169,15 +169,15 @@
       onimported();
     } catch (e) {
       error =
-        e instanceof Error
+        e instanceof 错误
           ? e.message
-          : "Import failed";
+          : "导入 failed";
     } finally {
       importing = false;
     }
   }
 
-  function handleClose() {
+  function handle关闭() {
     if (importing) return;
     selectedFile = null;
     result = null;
@@ -206,26 +206,26 @@
           "modal-overlay",
         )
       )
-        handleClose();
+        handle关闭();
     }}
     onkeydown={(e) => {
-      if (e.key === "Escape") handleClose();
+      if (e.key === "Escape") handle关闭();
     }}
   >
     <div
       class="modal-panel import-panel"
       role="dialog"
       aria-modal="true"
-      aria-label="Import conversations"
+      aria-label="导入对话"
     >
       <div class="modal-header">
-        <h3 class="modal-title">Import Conversations</h3>
+        <h3 class="modal-title">导入 Conversations</h3>
         <button
           class="modal-close"
-          onclick={handleClose}
+          onclick={handle关闭}
           disabled={importing}
-          title="Close import dialog"
-          aria-label="Close"
+          title="关闭 import dialog"
+          aria-label="关闭"
         >&times;</button>
       </div>
 
@@ -281,11 +281,11 @@
                 class="modal-btn"
                 onclick={handleReset}
               >
-                Import more
+                导入 more
               </button>
               <button
                 class="modal-btn modal-btn-primary"
-                onclick={handleClose}
+                onclick={handle关闭}
               >
                 Done
               </button>
@@ -345,7 +345,7 @@
                 </span>
               {:else}
                 <span class="importing-label">
-                  Importing conversations...
+                  导入ing conversations...
                 </span>
               {/if}
             </div>
@@ -378,7 +378,7 @@
               role="button"
               tabindex="0"
               ondragenter={handleDragEnter}
-              ondragover={handleDragOver}
+              ondr前ver={handleDragOver}
               ondragleave={handleDragLeave}
               ondrop={handleDrop}
               onclick={() => fileInput?.click()}
@@ -387,7 +387,7 @@
                   e.key === "Enter" ||
                   e.key === " "
                 ) {
-                  e.preventDefault();
+                  e.prevent默认();
                   fileInput?.click();
                 }
               }}
@@ -420,17 +420,17 @@
           <div class="import-actions">
             <button
               class="modal-btn"
-              onclick={handleClose}
+              onclick={handle关闭}
               disabled={importing}
             >
-              Cancel
+              取消
             </button>
             <button
               class="modal-btn modal-btn-primary"
-              onclick={handleImport}
+              onclick={handle导入}
               disabled={!selectedFile || importing}
             >
-              Import
+              导入
             </button>
           </div>
         {/if}
@@ -575,7 +575,7 @@
       );
   }
 
-  .zone-empty.drag-over :global(.upload-icon) {
+  .zone-empty.drag-over :全局(.upload-icon) {
     color: var(--accent-blue);
     animation: icon-lift 0.35s ease-out;
   }
@@ -592,7 +592,7 @@
     }
   }
 
-  :global(.upload-icon) {
+  :全局(.upload-icon) {
     color: var(--text-muted);
     margin-bottom: 2px;
     transition: color 0.15s;
@@ -623,7 +623,7 @@
     width: 100%;
   }
 
-  :global(.file-icon) {
+  :全局(.file-icon) {
     color: var(--text-muted);
     flex-shrink: 0;
   }
@@ -667,7 +667,7 @@
     color: var(--text-primary);
   }
 
-  /* Importing state */
+  /* 导入ing state */
   .zone-importing {
     min-height: 140px;
     padding: 24px;
@@ -681,7 +681,7 @@
     margin-top: 4px;
   }
 
-  /* ── Error ── */
+  /* ── 错误 ── */
   .import-error {
     display: flex;
     align-items: flex-start;
@@ -695,7 +695,7 @@
     word-break: break-word;
   }
 
-  .import-error :global(svg) {
+  .import-error :全局(svg) {
     flex-shrink: 0;
     margin-top: 1px;
   }

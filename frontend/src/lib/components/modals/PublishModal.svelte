@@ -1,11 +1,11 @@
 <script lang="ts">
   import { ui } from "../../stores/ui.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import {
     ConfigService,
-    SessionsService,
+    会话Service,
   } from "../../api/generated/index";
-  import { configureGeneratedClient } from "../../api/runtime.js";
+  import { configure生成dClient } from "../../api/runtime.js";
   import type { PublishResponse } from "../../api/types.js";
 
   type View = "setup" | "progress" | "success" | "error";
@@ -17,7 +17,7 @@
 
   async function init() {
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       const config = await ConfigService.getApiV1ConfigGithub();
       if (config.configured) {
         await doPublish();
@@ -29,49 +29,49 @@
     }
   }
 
-  async function handleSaveToken() {
+  async function handle保存到ken() {
     const token = tokenInput.trim();
     if (!token) return;
 
     view = "progress";
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       await ConfigService.postApiV1ConfigGithub({
         requestBody: { token },
       });
       await doPublish();
     } catch (err) {
       errorMessage =
-        err instanceof Error ? err.message : "Failed to save token";
+        err instanceof 错误 ? err.message : "失败 to save token";
       view = "error";
     }
   }
 
   async function doPublish() {
-    const id = sessions.activeSessionId;
+    const id = 个会话.activeSessionId;
     if (!id) {
-      errorMessage = "No session selected";
+      errorMessage = "未选择会话";
       view = "error";
       return;
     }
 
     view = "progress";
     try {
-      configureGeneratedClient();
+      configure生成dClient();
       result =
-        await SessionsService.postApiV1SessionsIdPublish({
+        await 会话Service.postApiV1会话IdPublish({
           id,
           secret: ui.publishSecret,
-        }) as unknown as PublishResponse;
+        }) as 未知 as PublishResponse;
       view = "success";
     } catch (err) {
       errorMessage =
-        err instanceof Error ? err.message : "Publish failed";
+        err instanceof 错误 ? err.message : "发布失败";
       view = "error";
     }
   }
 
-  function copyToClipboard(text: string) {
+  function copy到Clipboard(text: string) {
     navigator.clipboard.writeText(text);
   }
 
@@ -104,8 +104,8 @@
       <button
         class="modal-close"
         onclick={() => ui.activeModal = null}
-        title="Close publish dialog"
-        aria-label="Close publish dialog"
+        title="关闭 publish dialog"
+        aria-label="关闭 publish dialog"
       >
         &times;
       </button>
@@ -114,8 +114,8 @@
     <div class="modal-body">
       {#if view === "setup"}
         <p class="setup-text">
-          Enter a GitHub personal access token with the
-          <code>gist</code> scope.
+          输入具有
+          <code>gist</code> 范围的 GitHub 个人访问令牌。
         </p>
         <input
           class="token-input"
@@ -123,7 +123,7 @@
           placeholder="ghp_..."
           bind:value={tokenInput}
           onkeydown={(e) => {
-            if (e.key === "Enter") handleSaveToken();
+            if (e.key === "Enter") handle保存到ken();
           }}
         />
         <div class="setup-actions">
@@ -133,14 +133,14 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            Create token on GitHub
+            在 GitHub 上创建令牌
           </a>
           <button
             class="modal-btn modal-btn-primary"
-            onclick={handleSaveToken}
+            onclick={handle保存到ken}
             disabled={!tokenInput.trim()}
           >
-            Save & Publish
+            保存并发布
           </button>
         </div>
 
@@ -156,7 +156,7 @@
         <div class="success-view">
           <div class="url-field">
             <label class="url-label" for="publish-view-url">
-              View URL
+              查看 URL
             </label>
             <div class="url-row">
               <input
@@ -168,9 +168,9 @@
               />
               <button
                 class="modal-btn btn-copy"
-                onclick={() => copyToClipboard(result!.view_url)}
+                onclick={() => copy到Clipboard(result!.view_url)}
               >
-                Copy
+                复制
               </button>
             </div>
           </div>
@@ -188,9 +188,9 @@
               />
               <button
                 class="modal-btn btn-copy"
-                onclick={() => copyToClipboard(result!.gist_url)}
+                onclick={() => copy到Clipboard(result!.gist_url)}
               >
-                Copy
+                复制
               </button>
             </div>
           </div>
@@ -199,13 +199,13 @@
               class="modal-btn modal-btn-primary"
               onclick={() => window.open(result!.view_url, "_blank")}
             >
-              Open in Browser
+              打开 in Browser
             </button>
             <button
               class="modal-btn"
               onclick={() => ui.activeModal = null}
             >
-              Close
+              关闭
             </button>
           </div>
         </div>
@@ -218,13 +218,13 @@
               class="modal-btn modal-btn-primary"
               onclick={doPublish}
             >
-              Retry
+              重试
             </button>
             <button
               class="modal-btn"
               onclick={() => ui.activeModal = null}
             >
-              Close
+              关闭
             </button>
           </div>
         </div>

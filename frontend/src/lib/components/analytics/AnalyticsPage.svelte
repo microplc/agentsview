@@ -4,22 +4,22 @@
   import SummaryCards from "./SummaryCards.svelte";
   import Heatmap from "./Heatmap.svelte";
   import ActivityTimeline from "./ActivityTimeline.svelte";
-  import ProjectBreakdown from "./ProjectBreakdown.svelte";
+  import 项目Breakdown from "./项目Breakdown.svelte";
   import HourOfWeekHeatmap from "./HourOfWeekHeatmap.svelte";
   import SessionShape from "./SessionShape.svelte";
   import VelocityMetrics from "./VelocityMetrics.svelte";
-  import ToolUsage from "./ToolUsage.svelte";
-  import AgentComparison from "./AgentComparison.svelte";
+  import 到ol用量 from "./到ol用量.svelte";
+  import 代理Comparison from "./代理Comparison.svelte";
   import SessionHealthSection from "./SessionHealthSection.svelte";
-  import TopSessions from "./TopSessions.svelte";
+  import 到p会话 from "./到p会话.svelte";
   import ActiveFilters from "./ActiveFilters.svelte";
   import SessionFilterControl from "../filters/SessionFilterControl.svelte";
   import { analytics } from "../../stores/analytics.svelte.js";
-  import { sessions } from "../../stores/sessions.svelte.js";
+  import { 个会话 } from "../../stores/个会话.svelte.js";
   import { events } from "../../stores/events.svelte.js";
   import { ui } from "../../stores/ui.svelte.js";
   import { exportAnalyticsCSV } from "../../utils/csv-export.js";
-  import { RefreshCwIcon } from "../../icons.js";
+  import { 刷新CwIcon } from "../../icons.js";
 
   function shortTz(tz: string): string {
     const slash = tz.lastIndexOf("/");
@@ -36,7 +36,7 @@
       to: analytics.to,
       summary: analytics.summary,
       activity: analytics.activity,
-      projects: analytics.projects,
+      个项目: analytics.个项目,
       tools: analytics.tools,
       velocity: analytics.velocity,
     });
@@ -56,25 +56,25 @@
     );
   });
 
-  // Sync sidebar filters to analytics dashboard. Runs whenever
+  // Sync sidebar filters to analytics dashboard. 运行s whenever
   // the sidebar filters change. Uses untrack on analytics state
   // so that local drill-downs don't re-trigger.
   $effect(() => {
-    const headerProject = sessions.filters.project;
-    const headerMachine = sessions.filters.machine;
-    const headerAgent = sessions.filters.agent;
-    const headerTermination = sessions.filters.termination;
-    const headerRecentlyActive = sessions.filters.recentlyActive;
+    const header项目 = 个会话.filters.project;
+    const header机器 = 个会话.filters.machine;
+    const header代理 = 个会话.filters.agent;
+    const headerTermination = 个会话.filters.termination;
+    const headerRecentlyActive = 个会话.filters.recentlyActive;
     const headerMinUserMessages =
-      sessions.filters.minUserMessages;
-    const headerIncludeOneShot =
-      sessions.filters.includeOneShot;
+      个会话.filters.minUserMessages;
+    const headerInclude开eShot =
+      个会话.filters.include开eShot;
     const headerIncludeAutomated =
-      sessions.filters.includeAutomated;
+      个会话.filters.includeAutomated;
 
-    const curProject = untrack(() => analytics.project);
-    const curMachine = untrack(() => analytics.machine);
-    const curAgent = untrack(() => analytics.agent);
+    const cur项目 = untrack(() => analytics.project);
+    const cur机器 = untrack(() => analytics.machine);
+    const cur代理 = untrack(() => analytics.agent);
     const curTermination = untrack(() => analytics.termination);
     const curRecentlyActive = untrack(
       () => analytics.recentlyActive,
@@ -82,24 +82,24 @@
     const curMinUser = untrack(
       () => analytics.minUserMessages,
     );
-    const curIncludeOneShot = untrack(
-      () => analytics.includeOneShot,
+    const curInclude开eShot = untrack(
+      () => analytics.include开eShot,
     );
     const curIncludeAutomated = untrack(
       () => analytics.includeAutomated,
     );
 
     let changed = false;
-    if (curProject !== headerProject) {
-      analytics.project = headerProject;
+    if (cur项目 !== header项目) {
+      analytics.project = header项目;
       changed = true;
     }
-    if (curMachine !== headerMachine) {
-      analytics.machine = headerMachine;
+    if (cur机器 !== header机器) {
+      analytics.machine = header机器;
       changed = true;
     }
-    if (curAgent !== headerAgent) {
-      analytics.agent = headerAgent;
+    if (cur代理 !== header代理) {
+      analytics.agent = header代理;
       changed = true;
     }
     if (curTermination !== headerTermination) {
@@ -120,8 +120,8 @@
       changed = true;
     }
 
-    if (curIncludeOneShot !== headerIncludeOneShot) {
-      analytics.includeOneShot = headerIncludeOneShot;
+    if (curInclude开eShot !== headerInclude开eShot) {
+      analytics.include开eShot = headerInclude开eShot;
       changed = true;
     }
 
@@ -145,11 +145,11 @@
 
 <div class="analytics-page">
   <div class="analytics-toolbar">
-    {#if !ui.sidebarOpen}
+    {#if !ui.sidebar打开}
       <div class="toolbar-filter-anchor">
         <SessionFilterControl
           showDisplay={false}
-          showStarred={false}
+          show星标={false}
           align="left"
         />
       </div>
@@ -167,10 +167,10 @@
       class:querying={analytics.isQuerying}
       onclick={() => analytics.fetchAll()}
       disabled={analytics.isQuerying}
-      title="Refresh analytics"
-      aria-label="Refresh analytics"
+      title="刷新分析"
+      aria-label="刷新分析"
     >
-      <RefreshCwIcon size="14" strokeWidth="2" aria-hidden="true" />
+      <刷新CwIcon size="14" strokeWidth="2" aria-hidden="true" />
     </button>
     <button class="export-btn" onclick={handleExportCSV}>
       Export CSV
@@ -210,11 +210,11 @@
       </div>
 
       <div class="chart-panel">
-        <TopSessions />
+        <到p会话 />
       </div>
 
       <div class="chart-panel wide">
-        <ProjectBreakdown />
+        <项目Breakdown />
       </div>
 
       <div class="chart-panel">
@@ -222,7 +222,7 @@
       </div>
 
       <div class="chart-panel">
-        <ToolUsage />
+        <到ol用量 />
       </div>
 
       <div class="chart-panel wide">
@@ -230,7 +230,7 @@
       </div>
 
       <div class="chart-panel wide">
-        <AgentComparison />
+        <代理Comparison />
       </div>
     </div>
 
@@ -284,7 +284,7 @@
     opacity: 0.75;
   }
 
-  .refresh-btn.querying :global(svg) {
+  .refresh-btn.querying :全局(svg) {
     animation: spin 0.8s linear infinite;
   }
 

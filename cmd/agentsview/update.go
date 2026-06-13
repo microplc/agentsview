@@ -55,7 +55,7 @@ func runUpdate(cfg UpdateConfig) {
 				log.Fatalf("checking for updates: %v", err)
 			}
 			if info == nil {
-				fmt.Println("Up to date.")
+				fmt.Println("已是最新。")
 				return
 			}
 		}
@@ -81,7 +81,7 @@ func runUpdate(cfg UpdateConfig) {
 		answer, _ := reader.ReadString('\n')
 		answer = strings.TrimSpace(strings.ToLower(answer))
 		if answer != "y" && answer != "yes" {
-			fmt.Println("Update cancelled.")
+			fmt.Println("更新已取消。")
 			return
 		}
 	}

@@ -17,19 +17,19 @@
 
   const cards: Card[] = [
     {
-      label: "Sessions",
+      label: "会话",
       value: () =>
-        formatNum(analytics.summary?.total_sessions ?? 0),
+        formatNum(analytics.summary?.total_个会话 ?? 0),
     },
     {
       label: "Messages",
       value: () =>
-        formatNum(analytics.summary?.total_messages ?? 0),
+        formatNum(analytics.summary?.total_条消息 ?? 0),
     },
     {
-      label: "Projects",
+      label: "项目s",
       value: () =>
-        String(analytics.summary?.active_projects ?? 0),
+        String(analytics.summary?.active_个项目 ?? 0),
     },
     {
       label: "Active Days",
@@ -41,12 +41,12 @@
       value: () => {
         const s = analytics.summary;
         if (!s) return "-";
-        return `${s.avg_messages}`;
+        return `${s.avg_条消息}`;
       },
       sub: () => {
         const s = analytics.summary;
         if (!s) return "";
-        return `med ${s.median_messages} / p90 ${s.p90_messages}`;
+        return `med ${s.median_条消息} / p90 ${s.p90_条消息}`;
       },
     },
     {
@@ -86,7 +86,7 @@
       class="retry-btn"
       onclick={() => analytics.fetchSummary()}
     >
-      Retry
+      重试
     </button>
   </div>
 {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CheckIcon, CopyIcon } from "../../icons.js";
+  import { CheckIcon, 复制Icon } from "../../icons.js";
 
   interface Props {
     copied: boolean;
@@ -32,7 +32,7 @@
   {#if copied}
     <CheckIcon size="14" strokeWidth="2.4" aria-hidden="true" />
   {:else}
-    <CopyIcon size="14" strokeWidth="2" aria-hidden="true" />
+    <复制Icon size="14" strokeWidth="2" aria-hidden="true" />
   {/if}
 </button>
 

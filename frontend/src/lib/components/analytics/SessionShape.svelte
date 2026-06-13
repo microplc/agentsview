@@ -50,12 +50,12 @@
     if (activeView !== "length" || bucket.count === 0) return;
     const { min, max } = parseLengthBucket(bucket.label);
     const params: Record<string, string> = {
-      min_messages: String(min),
+      min_条消息: String(min),
     };
     if (max !== undefined) {
-      params["max_messages"] = String(max);
+      params["max_条消息"] = String(max);
     }
-    router.navigate("sessions", params);
+    router.navigate("个会话", params);
   }
 </script>
 
@@ -82,7 +82,7 @@
         class="retry-btn"
         onclick={() => analytics.fetchSessionShape()}
       >
-        Retry
+        重试
       </button>
     </div>
   {:else if activeBuckets.length > 0}
@@ -108,11 +108,11 @@
     </div>
     {#if analytics.sessionShape}
       <div class="shape-footer">
-        {analytics.sessionShape.count} sessions
+        {analytics.sessionShape.count} 个会话
       </div>
     {/if}
   {:else}
-    <div class="empty">No data for this period</div>
+    <div class="empty">此期间无数据</div>
   {/if}
 </div>
 

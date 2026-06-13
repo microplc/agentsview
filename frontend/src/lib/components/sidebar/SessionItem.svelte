@@ -1,15 +1,15 @@
 <script lang="ts">
   import {
-    sessions,
+    个会话,
     type SessionGroupInput,
-  } from "../../stores/sessions.svelte.js";
+  } from "../../stores/个会话.svelte.js";
   import { starred } from "../../stores/starred.svelte.js";
   import { formatRelativeTime, truncate } from "../../utils/format.js";
-  import { agentColor as getAgentColor, agentLabel } from "../../utils/agents.js";
+  import { agentColor as get代理Color, agentLabel } from "../../utils/agents.js";
   import {
     normalizeMessagePreview,
     previewMessage,
-  } from "../../utils/messages.js";
+  } from "../../utils/条消息.js";
   import {
     ChevronDownIcon,
     ChevronRightIcon,
@@ -17,7 +17,7 @@
     UserRoundIcon,
     UsersRoundIcon,
   } from "../../icons.js";
-  import StatusDot from "../common/StatusDot.svelte";
+  import 状态Dot from "../common/状态Dot.svelte";
 
   interface Props {
     session: SessionGroupInput;
@@ -30,15 +30,15 @@
      * instead of decaying to stale. The parent's parser status
      * still wins over freshness for awaiting_user (a fork running
      * in parallel doesn't change that the parent is waiting). */
-    groupSessions?: SessionGroupInput[];
-    hideAgent?: boolean;
-    hideProject?: boolean;
-    /** Render in compact mode (smaller, used for child sessions). */
+    group会话?: SessionGroupInput[];
+    hide代理?: boolean;
+    hide项目?: boolean;
+    /** Render in compact mode (smaller, used for child 个会话). */
     compact?: boolean;
     /** Whether this item's continuation chain is expanded. */
     expanded?: boolean;
     /** Callback to toggle continuation chain expand/collapse. */
-    onToggleExpand?: () => void;
+    on到ggle展开?: () => void;
     /** Nesting depth: 0 = root, 1 = child, 2 = grandchild. */
     depth?: number;
     /** Whether this is the last sibling at its depth level. */
@@ -53,12 +53,12 @@
     session,
     continuationCount = 1,
     groupSessionIds,
-    groupSessions,
-    hideAgent = false,
-    hideProject = false,
+    group会话,
+    hide代理 = false,
+    hide项目 = false,
     compact = false,
     expanded = false,
-    onToggleExpand,
+    on到ggle展开,
     depth = 0,
     isLastChild = false,
     hasSubagents = false,
@@ -66,7 +66,7 @@
   }: Props = $props();
 
   let isActive = $derived.by(() => {
-    const aid = sessions.activeSessionId;
+    const aid = 个会话.activeSessionId;
     if (!aid) return false;
     // Direct match (child rows, or root with no group).
     if (aid === session.id) return true;
@@ -79,10 +79,10 @@
   });
 
   let agentColor = $derived(
-    getAgentColor(session.agent),
+    get代理Color(session.agent),
   );
 
-  let showMachine = $derived(
+  let show机器 = $derived(
     !compact &&
     !!session.machine &&
     session.machine !== "local",
@@ -96,7 +96,7 @@
   );
 
   /**
-   * Clean display name: for teammate sessions, extract the unique task
+   * Clean display name: for teammate 个会话, extract the unique task
    * description (e.g. "Task #2: Align ROADMAP.md...") instead of the
    * repetitive "You are a teammate on..." boilerplate.
    */
@@ -132,13 +132,13 @@
     formatRelativeTime(session.ended_at ?? session.started_at),
   );
 
-  let isStarred = $derived(starred.isStarred(session.id));
+  let is星标 = $derived(starred.is星标(session.id));
 
   let childCount = $derived(
     continuationCount > 1 ? continuationCount - 1 : 0,
   );
 
-  let hasChildren = $derived(childCount > 0 && !!onToggleExpand);
+  let hasChildren = $derived(childCount > 0 && !!on到ggle展开);
 
   /** Whether this is an orphaned teammate showing at root level. */
   let isOrphanedTeammate = $derived(
@@ -150,15 +150,15 @@
     starred.toggle(session.id);
   }
 
-  function handleToggle(e: MouseEvent) {
+  function handle到ggle(e: MouseEvent) {
     e.stopPropagation();
-    onToggleExpand?.();
+    on到ggle展开?.();
   }
 
   // Context menu state
   let contextMenu: { x: number; y: number } | null = $state(null);
 
-  // Rename state
+  // 重命名 state
   let renaming = $state(false);
   let renameValue = $state("");
   let renameInput: HTMLInputElement | undefined = $state(undefined);
@@ -173,7 +173,7 @@
   }
 
   function handleContextMenu(e: MouseEvent) {
-    e.preventDefault();
+    e.prevent默认();
     contextMenu = { x: e.clientX, y: e.clientY };
   }
 
@@ -181,7 +181,7 @@
     contextMenu = null;
   }
 
-  function startRename() {
+  function start重命名() {
     renameValue =
       session.display_name
       ?? normalizeMessagePreview(session.first_message)
@@ -191,29 +191,29 @@
     requestAnimationFrame(() => renameInput?.select());
   }
 
-  async function submitRename() {
+  async function submit重命名() {
     if (!renaming) return;
     renaming = false;
     const name = renameValue.trim() || null;
     try {
-      await sessions.renameSession(session.id, name);
+      await 个会话.renameSession(session.id, name);
     } catch {
       // silently fail
     }
   }
 
-  async function handleDelete() {
+  async function handle删除() {
     closeContextMenu();
     try {
-      await sessions.deleteSession(session.id);
+      await 个会话.deleteSession(session.id);
     } catch {
       // silently fail
     }
   }
 
   function handleDblClick(e: MouseEvent) {
-    e.preventDefault();
-    startRename();
+    e.prevent默认();
+    start重命名();
   }
 
   $effect(() => {
@@ -257,8 +257,8 @@
   role="button"
   tabindex="0"
   style:padding-left="{8 + depth * 16}px"
-  onclick={() => sessions.selectSession(session.id)}
-  onkeydown={(e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sessions.selectSession(session.id); } }}
+  onclick={() => 个会话.selectSession(session.id)}
+  onkeydown={(e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.prevent默认(); 个会话.selectSession(session.id); } }}
   oncontextmenu={handleContextMenu}
 >
   <!-- Tree expand/collapse or connector -->
@@ -266,9 +266,9 @@
     <button
       type="button"
       class="tree-toggle"
-      onclick={handleToggle}
+      onclick={handle到ggle}
       tabindex="-1"
-      aria-label={expanded ? "Collapse" : "Expand"}
+      aria-label={expanded ? "折叠" : "展开"}
     >
       {#if expanded}
         <ChevronDownIcon class="tree-arrow" size="10" strokeWidth="2.5" aria-hidden="true" />
@@ -282,7 +282,7 @@
     <span class="tree-spacer"></span>
   {/if}
 
-  <StatusDot {session} {groupSessions} size={6} />
+  <状态Dot {session} {group会话} size={6} />
 
 
   <div class="session-info">
@@ -294,11 +294,11 @@
         class="rename-input"
         autofocus
         onclick={(e) => e.stopPropagation()}
-        onblur={submitRename}
+        onblur={submit重命名}
         onkeydown={(e) => {
           if (e.key === "Enter") {
             e.stopPropagation();
-            submitRename();
+            submit重命名();
           }
           if (e.key === "Escape") {
             e.stopPropagation();
@@ -321,7 +321,7 @@
       </div>
     {/if}
     <div class="session-meta">
-      {#if !hideProject}
+      {#if !hide项目}
         <span class="session-project">{session.project}</span>
       {/if}
       <span class="session-time">{timeStr}</span>
@@ -332,7 +332,7 @@
       {#if hasTeammates}
         <UsersRoundIcon class="group-hint-icon" size="11" strokeWidth="2" aria-hidden="true" />
       {/if}
-      {#if childCount > 0 && !onToggleExpand}
+      {#if childCount > 0 && !on到ggle展开}
         <span class="continuation-badge">x{continuationCount}</span>
       {/if}
     </div>
@@ -341,24 +341,24 @@
   {#if !compact}
     <button
       class="star-btn"
-      class:starred={isStarred}
+      class:starred={is星标}
       onclick={handleStar}
-      title={isStarred ? "Unstar session" : "Star session"}
-      aria-label={isStarred ? "Unstar session" : "Star session"}
+      title={is星标 ? "取消星标" : "标记星标"}
+      aria-label={is星标 ? "取消星标" : "标记星标"}
     >
-      {#if isStarred}
+      {#if is星标}
         <StarIcon size="12" fill="currentColor" strokeWidth="0" aria-hidden="true" />
       {:else}
         <StarIcon size="12" strokeWidth="1.4" aria-hidden="true" />
       {/if}
     </button>
   {/if}
-  {#if !compact && (!hideAgent || showMachine)}
+  {#if !compact && (!hide代理 || show机器)}
     <div class="side-meta">
-      {#if !hideAgent}
+      {#if !hide代理}
         <span class="agent-tag" style:color={agentColor}>{agentLabel(session.agent)}</span>
       {/if}
-      {#if showMachine}
+      {#if show机器}
         <span class="machine-tag" title={session.machine}>
           {truncate(session.machine, 18)}
         </span>
@@ -373,11 +373,11 @@
     use:portal
     style="left: {contextMenu.x}px; top: {contextMenu.y}px;"
   >
-    <button class="context-menu-item" onclick={startRename}>
-      Rename
+    <button class="context-menu-item" onclick={start重命名}>
+      重命名
     </button>
-    <button class="context-menu-item danger" onclick={handleDelete}>
-      Delete
+    <button class="context-menu-item danger" onclick={handle删除}>
+      删除
     </button>
   </div>
 {/if}
@@ -440,7 +440,7 @@
     color: var(--text-primary);
   }
 
-  :global(.tree-arrow) {
+  :全局(.tree-arrow) {
     flex-shrink: 0;
   }
 
@@ -466,7 +466,7 @@
     margin-left: 4px;
   }
 
-  /* Agent tag on the right side */
+  /* 代理 tag on the right side */
   .agent-tag {
     font-size: 8px;
     font-weight: 600;
@@ -561,7 +561,7 @@
     flex-shrink: 0;
   }
 
-  :global(.group-hint-icon) {
+  :全局(.group-hint-icon) {
     flex-shrink: 0;
     color: var(--text-muted);
     opacity: 0.5;
@@ -618,7 +618,7 @@
     background: var(--bg-surface-hover);
   }
 
-  :global(.context-menu) {
+  :全局(.context-menu) {
     position: fixed;
     z-index: 9999;
     background: var(--bg-surface);
@@ -629,7 +629,7 @@
     min-width: 120px;
   }
 
-  :global(.context-menu .context-menu-item) {
+  :全局(.context-menu .context-menu-item) {
     display: block;
     width: 100%;
     padding: 6px 14px;
@@ -642,15 +642,15 @@
     font-family: var(--font-sans);
   }
 
-  :global(.context-menu .context-menu-item:hover) {
+  :全局(.context-menu .context-menu-item:hover) {
     background: var(--bg-surface-hover);
   }
 
-  :global(.context-menu .context-menu-item.danger) {
+  :全局(.context-menu .context-menu-item.danger) {
     color: var(--accent-red, #e55);
   }
 
-  :global(.context-menu .context-menu-item.danger:hover) {
+  :全局(.context-menu .context-menu-item.danger:hover) {
     background: color-mix(in srgb, var(--accent-red, #e55) 10%, transparent);
   }
 </style>

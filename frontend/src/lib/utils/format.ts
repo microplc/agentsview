@@ -12,10 +12,10 @@ export function formatRelativeTime(
   const date = new Date(isoString);
   const diffSec = Math.floor((Date.now() - date.getTime()) / 1000);
 
-  if (diffSec < MINUTE) return "just now";
-  if (diffSec < HOUR) return `${Math.floor(diffSec / MINUTE)}m ago`;
-  if (diffSec < DAY) return `${Math.floor(diffSec / HOUR)}h ago`;
-  if (diffSec < WEEK) return `${Math.floor(diffSec / DAY)}d ago`;
+  if (diffSec < MINUTE) return "刚刚";
+  if (diffSec < HOUR) return `${Math.floor(diffSec / MINUTE)}m 前`;
+  if (diffSec < DAY) return `${Math.floor(diffSec / HOUR)}h 前`;
+  if (diffSec < WEEK) return `${Math.floor(diffSec / DAY)}d 前`;
 
   return date.toLocaleDateString(undefined, {
     month: "short",
@@ -44,7 +44,7 @@ export function truncate(s: string, maxLen: number): string {
 }
 
 /** Formats an agent name for display */
-export function formatAgentName(
+export function format代理Name(
   agent: string | null | undefined,
 ): string {
   if (!agent) return "Unknown";
@@ -58,7 +58,7 @@ export function formatNumber(n: number): string {
 }
 
 /** Formats a token count as a compact string (e.g. 1.2k, 3.5M) */
-export function formatTokenCount(n: number): string {
+export function format到kenCount(n: number): string {
   if (n < 1000) return String(n);
   if (n < 1_000_000) {
     const k = Math.floor(n / 100) / 10;
@@ -68,19 +68,19 @@ export function formatTokenCount(n: number): string {
   return m % 1 === 0 ? `${Math.floor(m)}M` : `${m}M`;
 }
 
-export function formatTokenUsage(
-  contextTokens: number,
-  hasContextTokens: boolean,
-  outputTokens: number,
-  hasOutputTokens: boolean,
+export function format到ken用量(
+  context到kens: number,
+  hasContext到kens: boolean,
+  output到kens: number,
+  hasOutput到kens: boolean,
 ): string | null {
-  if (!hasContextTokens && !hasOutputTokens) return null;
+  if (!hasContext到kens && !hasOutput到kens) return null;
 
-  const contextLabel = hasContextTokens
-    ? `${formatTokenCount(contextTokens)} ctx`
+  const contextLabel = hasContext到kens
+    ? `${format到kenCount(context到kens)} ctx`
     : "— ctx";
-  const outputLabel = hasOutputTokens
-    ? `${formatTokenCount(outputTokens)} out`
+  const outputLabel = hasOutput到kens
+    ? `${format到kenCount(output到kens)} out`
     : "— out";
 
   return `${contextLabel} / ${outputLabel}`;
@@ -102,7 +102,7 @@ export function _resetNonceCounter(value = 0): void {
 
 /**
  * Sanitize an HTML snippet from FTS search results.
- * Only allows <mark> tags for highlighting; strips everything else.
+ * 开ly allows <mark> tags for highlighting; strips everything else.
  */
 export function sanitizeSnippet(html: string): string {
   let nonce: string;

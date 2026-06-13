@@ -77,7 +77,7 @@
 
   function handleKey(e: KeyboardEvent, id: string) {
     if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
+      e.prevent默认();
       onSelect?.(id);
     }
   }
@@ -108,7 +108,7 @@
       class="tile"
       tabindex="0"
       role="button"
-      aria-label="Hide {tile.label} from chart"
+      aria-label="隐藏 {tile.label} from chart"
       onclick={() => onSelect?.(tile.id)}
       onkeydown={(e) => handleKey(e, tile.id)}
       clip-path="url(#{clipId})"

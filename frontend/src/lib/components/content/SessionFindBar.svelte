@@ -15,7 +15,7 @@
     navigator.platform.toUpperCase().includes("MAC");
 
   $effect(() => {
-    if (inSessionSearch.isOpen) {
+    if (inSessionSearch.is打开) {
       tick().then(() => inputRef?.focus());
     }
   });
@@ -25,7 +25,7 @@
       e.stopPropagation();
       inSessionSearch.close();
     } else if (e.key === "Enter") {
-      e.preventDefault();
+      e.prevent默认();
       if (e.shiftKey) {
         inSessionSearch.prev();
       } else {
@@ -41,13 +41,13 @@
   let counterText = $derived.by(() => {
     if (!hasQuery) return "";
     if (inSessionSearch.loading) return "…";
-    if (inSessionSearch.matches.length === 0) return "No results";
+    if (inSessionSearch.matches.length === 0) return "无结果";
     return `${inSessionSearch.currentMatchIndex + 1} of ${inSessionSearch.matches.length}`;
   });
 </script>
 
-{#if inSessionSearch.isOpen}
-  <div class="find-bar" role="search" aria-label="Find in session">
+{#if inSessionSearch.is打开}
+  <div class="find-bar" role="search" aria-label="在会话中查找">
     <SearchIcon class="find-icon" size="13" strokeWidth="2" aria-hidden="true" />
 
     <input
@@ -55,14 +55,14 @@
       class="find-input"
       class:no-results={noResults}
       type="text"
-      placeholder="Find in session…"
+      placeholder="在会话中查找…"
       spellcheck="false"
       autocomplete="off"
       value={inSessionSearch.query}
       oninput={(e) =>
         (inSessionSearch.query = (e.currentTarget as HTMLInputElement).value)}
       onkeydown={handleKeydown}
-      aria-label="Search query"
+      aria-label="搜索查询"
     />
 
     {#if hasQuery}
@@ -74,21 +74,21 @@
     <div class="nav-buttons">
       <button
         class="nav-btn"
-        title="Previous match (Shift+Enter)"
+        title="上一个匹配 (Shift+Enter)"
         disabled={!hasMatches}
         onclick={() => inSessionSearch.prev()}
         tabindex="0"
-        aria-label="Previous match"
+        aria-label="上一个匹配"
       >
         <ChevronUpIcon size="11" strokeWidth="2.4" aria-hidden="true" />
       </button>
       <button
         class="nav-btn"
-        title="Next match (Enter)"
+        title="下一个匹配 (Enter)"
         disabled={!hasMatches}
         onclick={() => inSessionSearch.next()}
         tabindex="0"
-        aria-label="Next match"
+        aria-label="下一个匹配"
       >
         <ChevronDownIcon size="11" strokeWidth="2.4" aria-hidden="true" />
       </button>
@@ -98,10 +98,10 @@
 
     <button
       class="close-btn"
-      title="Close (Esc)"
+      title="关闭 (Esc)"
       onclick={() => inSessionSearch.close()}
       tabindex="0"
-      aria-label="Close find bar"
+      aria-label="关闭 find bar"
     >
       <XIcon size="12" strokeWidth="2.4" aria-hidden="true" />
     </button>
@@ -131,7 +131,7 @@
     }
   }
 
-  :global(.find-icon) {
+  :全局(.find-icon) {
     color: var(--text-muted);
     flex-shrink: 0;
   }

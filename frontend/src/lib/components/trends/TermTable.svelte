@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { TrendsSeries } from "../../api/types.js";
+  import type { 趋势Series } from "../../api/types.js";
 
   interface Props {
-    series: TrendsSeries[];
+    series: 趋势Series[];
     colorFor: (term: string, index: number) => string;
     activeTerm: string | null;
     normalized: boolean;
@@ -19,7 +19,7 @@
     onHover,
   }: Props = $props();
 
-  function displayTotal(item: TrendsSeries): number {
+  function display到tal(item: 趋势Series): number {
     if (!normalized) return item.total;
     if (messageCount <= 0) return 0;
     return (item.total / messageCount) * 1000;
@@ -38,7 +38,7 @@
     <thead>
       <tr>
         <th>Term</th>
-        <th class="count-col">{normalized ? "Per 1k messages" : "Count"}</th>
+        <th class="count-col">{normalized ? "Per 1k 条消息" : "Count"}</th>
       </tr>
     </thead>
     <tbody>
@@ -62,7 +62,7 @@
               </div>
             {/if}
           </td>
-          <td class="count-col">{formatMetric(displayTotal(item))}</td>
+          <td class="count-col">{formatMetric(display到tal(item))}</td>
         </tr>
       {/each}
     </tbody>

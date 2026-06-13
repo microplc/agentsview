@@ -2,28 +2,28 @@
   import { onMount, onDestroy, tick, untrack } from "svelte";
   import {
     usage,
-    buildUsageUrlParams,
-    mergeUsageAndSessionUrlParams,
+    build用量UrlParams,
+    merge用量AndSessionUrlParams,
     parseWindowDays,
   } from "../../stores/usage.svelte.js";
   import {
-    sessions,
-    filtersToParams,
-    parseFiltersFromParams,
-    splitExcludeProjectParam,
-  } from "../../stores/sessions.svelte.js";
+    个会话,
+    filters到Params,
+    parseFilters从Params,
+    splitExclude项目Param,
+  } from "../../stores/个会话.svelte.js";
   import { router } from "../../stores/router.svelte.js";
   import { events } from "../../stores/events.svelte.js";
-  import UsageSummaryCards from "./UsageSummaryCards.svelte";
+  import 用量SummaryCards from "./用量SummaryCards.svelte";
   import CostTimeSeriesChart from "./CostTimeSeriesChart.svelte";
   import AttributionPanel from "./AttributionPanel.svelte";
-  import TopSessionsTable from "./TopSessionsTable.svelte";
+  import 到p会话Table from "./到p会话Table.svelte";
   import CacheEfficiencyPanel from "./CacheEfficiencyPanel.svelte";
   import DateRangeSelector from "../shared/DateRangeSelector.svelte";
   import SessionFilterControl from "../filters/SessionFilterControl.svelte";
   import SessionActiveFilters from "../filters/SessionActiveFilters.svelte";
   import FilterDropdown from "./FilterDropdown.svelte";
-  import { RefreshCwIcon } from "../../icons.js";
+  import { 刷新CwIcon } from "../../icons.js";
 
   const REFRESH_MS = 5 * 60 * 1000;
   let refreshTimer: ReturnType<typeof setInterval> | undefined;
@@ -31,7 +31,7 @@
   let mounted = false;
 
   const projectItems = $derived(
-    sessions.projects.map((p) => ({
+    个会话.个项目.map((p) => ({
       name: p.name,
       count: p.session_count,
     })),
@@ -59,7 +59,7 @@
 
   // Seed from the filtered summary response.
   $effect(() => {
-    const fromSummary = (usage.summary?.modelTotals ?? [])
+    const fromSummary = (usage.summary?.model到tals ?? [])
       .map((m) => m.model);
     untrack(() => mergeIntoKnownModels(fromSummary));
   });
@@ -84,7 +84,7 @@
       : [],
   );
   const sessionUrlParams = $derived(
-    filtersToParams(sessions.filters),
+    filters到Params(个会话.filters),
   );
   const sessionFilterSignature = $derived(
     JSON.stringify(sessionUrlParams),
@@ -92,7 +92,7 @@
 
   // URL-init: seed store filters from URL params when landing
   // on /usage with a deep-link. A bare /usage preserves the
-  // current store state (restored from localStorage). Only
+  // current store state (restored from localStorage). 开ly
   // apply params that are actually present in the URL.
   const USAGE_FILTER_KEYS = new Set([
     "from", "to", "window_days",
@@ -102,7 +102,7 @@
     "project", "machine", "agent",
     "date", "date_from", "date_to",
     "active_since", "exclude_project",
-    "min_messages", "max_messages", "min_user_messages",
+    "min_条消息", "max_条消息", "min_user_条消息",
     "include_one_shot", "include_automated",
   ]);
   let urlInitRan = $state(false);
@@ -128,10 +128,10 @@
       let sessionChanged = false;
 
       // Sync pin state from URL: dated URL pins, undated URL unpins.
-      // Runs before the !hasFilterKeys early return so a fully bare URL
+      // 运行s before the !hasFilterKeys early return so a fully bare URL
       // (no exclude_* either) still flips the pin off.
-      if (usage.isPinned !== hasDateParam) {
-        usage.isPinned = hasDateParam;
+      if (usage.is已固定 !== hasDateParam) {
+        usage.is已固定 = hasDateParam;
         changed = true;
       }
 
@@ -152,17 +152,17 @@
         return;
       }
       if (hasSessionFilterKeys) {
-        const nextSessionParams = filtersToParams(
-          parseFiltersFromParams(params),
+        const nextSessionParams = filters到Params(
+          parseFilters从Params(params),
         );
-        const currentSessionParams = filtersToParams(
-          sessions.filters,
+        const currentSessionParams = filters到Params(
+          个会话.filters,
         );
         if (
           JSON.stringify(nextSessionParams) !==
           JSON.stringify(currentSessionParams)
         ) {
-          sessions.initFromParams(params);
+          个会话.init从Params(params);
           sessionChanged = true;
         }
       }
@@ -174,11 +174,11 @@
         usage.to = params["to"];
         changed = true;
       }
-      const newExProject = splitExcludeProjectParam(
+      const newEx项目 = splitExclude项目Param(
         params["exclude_project"],
-      ).usageExcludedProjects;
-      if (newExProject !== usage.excludedProjects) {
-        usage.excludedProjects = newExProject;
+      ).usageExcluded项目s;
+      if (newEx项目 !== usage.excluded项目s) {
+        usage.excluded项目s = newEx项目;
         changed = true;
       }
       if (usage.excludedModels) {
@@ -204,15 +204,15 @@
     const state = {
       from: usage.from,
       to: usage.to,
-      isPinned: usage.isPinned,
+      is已固定: usage.is已固定,
       windowDays: usage.windowDays,
-      excludedProjects: usage.excludedProjects,
-      excludedAgents: usage.excludedAgents,
+      excluded项目s: usage.excluded项目s,
+      excluded代理s: usage.excluded代理s,
       excludedModels: usage.excludedModels,
       selectedModels: usage.selectedModels,
     };
-    const nextParams = mergeUsageAndSessionUrlParams(
-      buildUsageUrlParams(state),
+    const nextParams = merge用量AndSessionUrlParams(
+      build用量UrlParams(state),
       sessionUrlParams,
     );
     const ready = urlInitRan && urlWritebackReady;
@@ -264,11 +264,11 @@
       <div class="usage-filter-anchor">
         <SessionFilterControl
           showDisplay={false}
-          showStarred={false}
+          show星标={false}
           align="left"
-          extraActive={usage.hasActiveFilters || !!sessions.filters.project}
-          onClearExtra={() => {
-            sessions.filters.project = "";
+          extraActive={usage.hasActiveFilters || !!个会话.filters.project}
+          on清除Extra={() => {
+            个会话.filters.project = "";
             usage.clearFilters();
           }}
         />
@@ -283,13 +283,13 @@
       />
 
       <FilterDropdown
-        label="Project"
+        label="项目"
         items={projectItems}
-        excludedCsv={usage.excludedProjects}
-        onToggle={(name) => usage.toggleProject(name)}
-        onSelectAll={() => usage.selectAllProjects()}
+        excludedCsv={usage.excluded项目s}
+        on到ggle={(name) => usage.toggle项目(name)}
+        onSelectAll={() => usage.selectAll项目s()}
         onDeselectAll={() =>
-          usage.deselectAllProjects(projectItems.map((p) => p.name))}
+          usage.deselectAll项目s(projectItems.map((p) => p.name))}
       />
 
       <FilterDropdown
@@ -297,7 +297,7 @@
         items={modelItems}
         excludedCsv={usage.selectedModels}
         mode="include"
-        onToggle={(name) => usage.toggleModel(name)}
+        on到ggle={(name) => usage.toggleModel(name)}
         onSelectAll={() => usage.selectAllModels()}
         onDeselectAll={() =>
           usage.deselectAllModels(modelItems.map((m) => m.name))}
@@ -308,10 +308,10 @@
         class:querying={usage.isQuerying}
         onclick={() => usage.fetchAll()}
         disabled={usage.isQuerying}
-        title="Refresh"
-        aria-label="Refresh usage data"
+        title="刷新"
+        aria-label="刷新 usage data"
       >
-        <RefreshCwIcon size="14" strokeWidth="2" aria-hidden="true" />
+        <刷新CwIcon size="14" strokeWidth="2" aria-hidden="true" />
       </button>
 
     </div>
@@ -319,9 +319,9 @@
 
   <SessionActiveFilters
     modelFilters={selectedModels}
-    onClearProjects={() => usage.selectAllProjects()}
+    on清除项目s={() => usage.selectAll项目s()}
     onRemoveModel={(model) => usage.toggleModel(model)}
-    onClearModels={() => usage.selectAllModels()}
+    on清除Models={() => usage.selectAllModels()}
   />
 
   <div
@@ -333,7 +333,7 @@
       <div class="query-progress" aria-hidden="true"></div>
     {/if}
 
-    <UsageSummaryCards />
+    <用量SummaryCards />
 
     <div class="chart-panel wide">
       <CostTimeSeriesChart />
@@ -345,7 +345,7 @@
 
     <div class="bottom-grid">
       <div class="chart-panel">
-        <TopSessionsTable />
+        <到p会话Table />
       </div>
       <div class="chart-panel">
         <CacheEfficiencyPanel />
@@ -408,7 +408,7 @@
     opacity: 0.75;
   }
 
-  .refresh-btn.querying :global(svg) {
+  .refresh-btn.querying :全局(svg) {
     animation: spin 0.8s linear infinite;
   }
 
